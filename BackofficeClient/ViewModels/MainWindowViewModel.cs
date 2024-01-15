@@ -1,5 +1,5 @@
 ﻿using BackofficeClient.Views.MainWindowPages;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using System.Windows.Input;
 

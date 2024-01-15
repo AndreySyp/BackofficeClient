@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Positions">
+      Title="Positions" Background="BlanchedAlmond">
 
     <Grid>
         
