@@ -20,7 +20,6 @@ namespace BackofficeClient
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
         }
     }
 }

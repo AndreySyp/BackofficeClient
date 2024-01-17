@@ -6,9 +6,84 @@
       xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Requests">
+      Title="Requests"
+      >
 
-    <Grid Background="Black">
+    
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid Grid.Column="0" Name="dataGrid"></DataGrid>
         
+        <TabControl Grid.Column="1">
+            <TabItem Header="Поиск">
+                <StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Номер заявки"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Контрагент"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Наименование заявки"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Направление ЦЗС"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Статус"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <Button Content="Поиск"></Button>
+                        <Button Content="Очистить фильтр"></Button>
+                    </StackPanel>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Редакирование">
+                <StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Приоритет"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Приоритет"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Коментраий"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Направление ЦЗС"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Признак сделки"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Закупка на складе"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <TextBlock Text="Бронь"></TextBlock>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                    <StackPanel Width="120">
+                        <Button Content="Сохранить изменения"></Button>
+                        <Button Content="Сбросить"></Button>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Page>

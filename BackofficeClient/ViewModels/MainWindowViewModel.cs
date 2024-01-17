@@ -1,4 +1,5 @@
-﻿using BackofficeClient.Views.MainWindowPages;
+﻿using BackofficeClient.Infrastructure;
+using BackofficeClient.Views.MainWindowPages;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,9 +15,14 @@ public class MainWindowViewModel : ViewModel
         set { _CurrentPage = value; OnPropertyChanged(); }
     }
 
-    private readonly Page p1 = new Requests();
-    private readonly Page p2 = new Positions();
+    private readonly Page pageRequests = new Requests();
+    private readonly Page pagePositions = new Positions();
 
-    public ICommand p1_c => new RelayCommand(() => CurrentPage = p1);
-    public ICommand p2_c => new RelayCommand(() => CurrentPage = p2);
+    public ICommand PageRequestsClick => new RelayCommand(() => CurrentPage = pageRequests);
+    public ICommand PagePositionsClick => new RelayCommand(() => CurrentPage = pagePositions);
+
+    public MainWindowViewModel()
+    {
+        SQLWorker.ConconnectionSQl = "Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111;";
+    }
 }

@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Controls;
 
-namespace BackofficeClient.Views.MainWindowPages
+namespace BackofficeClient.Views.MainWindowPages;
+
+/// <summary>
+/// Логика взаимодействия для Requests.xaml
+/// </summary>
+public partial class Requests : Page
 {
-    /// <summary>
-    /// Логика взаимодействия для Requests.xaml
-    /// </summary>
-    public partial class Requests : Page
+    public Requests()
     {
-        public Requests()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        using DatabaseContext db = new();
+        var t1 = db.VRequestForms.ToList();
+        var t2 = db.Requests.ToList();
+
+        var c = t1.Join(t2,
+            t1 => t1.RequestId,
+            t2 => t2.RequestId,
+            (t1, t2) => new { t1.RequestId, t1.RequestNum, t1.RequestDate, t1.RequestName, t1.Customer, t1.NameShort, t1.GroupMtr, t1.SupState, t1.Np, t1.Nl, t1.RequestComment, t1.Priority, t1.SumIncPrice, t1.PersonManager, t2.TradeSign}); 
+
+        dataGrid.ItemsSource = c;
     }
 }

@@ -3,9 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BackofficeClient"
+        xmlns:local="clr-namespace:BackofficeClient" 
+        xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+    <Window.DataContext>
+        <viewmodels:MainWindowViewModel/>
+    </Window.DataContext>
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="40"/>
@@ -13,8 +20,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <Button Background="Red" Content="Заявки" Command="{Binding p1_c}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
-            <Button Background="Red" Content="Позиции" Command="{Binding p2_c}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Background="Red" Content="Заявки" Command="{Binding PageRequestsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Background="Red" Content="Позиции" Command="{Binding PagePositionsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Процедуры" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Условия сделок" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Спецификации" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
@@ -23,7 +30,7 @@
             <Button Background="Red" Content="Контрагенты" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
         </StackPanel>
 
-        <Frame Grid.Row="1" Content="{Binding CurrentPage}"></Frame>
+        <Frame Grid.Row="1" Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"></Frame>
         
     </Grid>
 </Window>
