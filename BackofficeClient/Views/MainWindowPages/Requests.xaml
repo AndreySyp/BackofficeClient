@@ -19,74 +19,77 @@
             <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Column="0" ItemsSource="{Binding Items}" x:Name="qwe"></DataGrid>
-        
-        <TabControl Grid.Column="1">
-            <TabItem Header="Поиск">
-                <StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Номер заявки"></TextBlock>
-                        <TextBox></TextBox>
+        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}"></DataGrid>
+        <StackPanel Grid.Column="1">
+            <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
+            <TabControl>
+                <TabItem Header="Поиск">
+                    <StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Номер заявки"></TextBlock>
+                            <TextBox Text="{Binding RequestNumberFilter}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Контрагент"></TextBlock>
+                            <TextBox Text="{Binding RequestCustomerFilter}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Наименование заявки"></TextBlock>
+                            <TextBox Text="{Binding RequestNameFilter}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Направление ЦЗС"></TextBlock>
+                            <TextBox Text="{Binding RequestDirectioFilter}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Статус"></TextBlock>
+                            <TextBox Text="{Binding RequestStatusFilter}"></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
+                            <Button Content="Очистить фильтр"></Button>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Контрагент"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Наименование заявки"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Направление ЦЗС"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Статус"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <Button Content="Поиск"></Button>
-                        <Button Content="Очистить фильтр"></Button>
-                    </StackPanel>
-                </StackPanel>
 
-            </TabItem>
-            <TabItem Header="Редакирование">
-                <StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Приоритет"></TextBlock>
-                        <TextBox></TextBox>
+                </TabItem>
+                <TabItem Header="Редакирование">
+                    <StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Приоритет"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Приоритет"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Коментраий"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Направление ЦЗС"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Признак сделки"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Закупка на складе"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Бронь"></TextBlock>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <Button Content="Сохранить изменения"></Button>
+                            <Button Content="Сбросить"></Button>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Приоритет"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Коментраий"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Направление ЦЗС"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Признак сделки"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Закупка на складе"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <TextBlock Text="Бронь"></TextBlock>
-                        <TextBox></TextBox>
-                    </StackPanel>
-                    <StackPanel Width="120">
-                        <Button Content="Сохранить изменения"></Button>
-                        <Button Content="Сбросить"></Button>
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+
     </Grid>
 </Page>
