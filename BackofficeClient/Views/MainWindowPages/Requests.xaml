@@ -5,18 +5,21 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       mc:Ignorable="d" 
+      xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Requests"
       >
-
+    <Page.DataContext>
+        <viewmodels:RequestsViewModel/>
+    </Page.DataContext>
     
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Column="0" Name="dataGrid"></DataGrid>
+        <DataGrid Grid.Column="0" ItemsSource="{Binding Items}" x:Name="qwe"></DataGrid>
         
         <TabControl Grid.Column="1">
             <TabItem Header="Поиск">

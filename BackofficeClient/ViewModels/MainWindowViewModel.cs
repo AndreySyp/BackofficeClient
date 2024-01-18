@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace BackofficeClient.ViewModels;
 
-public class MainWindowViewModel : ViewModel
+public class MainWindowViewModel : ViewModelBase
 {
     public Page _CurrentPage;
     public Page CurrentPage

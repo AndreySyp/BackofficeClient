@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace BackofficeClient.ViewModels;
 
 
-public abstract class ViewModel : INotifyPropertyChanged
+public abstract class ViewModelBase : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
