@@ -12,16 +12,38 @@
     <Page.DataContext>
         <viewmodels:RequestsViewModel/>
     </Page.DataContext>
-    
+
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}"></DataGrid>
+        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}" SelectedItem="{Binding SelectedItems}" SelectionChanged="{Binding asd}">
+        </DataGrid>
         <StackPanel Grid.Column="1">
-            <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                <Image Source="1.png" Height="50" Width="50">
+                    <!--<Image.RenderTransform>
+                        <RotateTransform x:Name="rotate"
+                         CenterX="25"
+                         CenterY="25"/>
+                    </Image.RenderTransform>-->
+                    <!--<Image.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="rotate"
+                                     Storyboard.TargetProperty="Angle"
+                                     By="360" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Image.Triggers>-->
+                </Image>
+                <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
+            </StackPanel>
+            
             <TabControl>
                 <TabItem Header="Поиск">
                     <StackPanel>
@@ -52,35 +74,36 @@
                     </StackPanel>
 
                 </TabItem>
+                
                 <TabItem Header="Редакирование">
                     <StackPanel>
                         <StackPanel Width="120">
-                            <TextBlock Text="Приоритет"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBlock Text="Приоритет" ></TextBlock>
+                            <TextBox Text="{Binding RequestPriorityEdit}" Name="qqqq"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Приоритет"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestCommentEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Коментраий"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestCustomerEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Направление ЦЗС"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestDirectionEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Признак сделки"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestTradeSignEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Закупка на складе"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestToWarehouseEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Бронь"></TextBlock>
-                            <TextBox></TextBox>
+                            <TextBox Text="{Binding RequestToReserveEdit}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <Button Content="Сохранить изменения"></Button>

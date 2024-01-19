@@ -17,9 +17,11 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<VRequestForm> VRequestForms { get; set; }
     public virtual DbSet<Request> Requests { get; set; }
+    public virtual DbSet<TradeSign> TradeSigns { get; set; }
+    public virtual DbSet<SqlLog> asd { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=192.168.201.15; Port=5432; Database=base_1; ApplicationName = 'BackOfficeDBClient';  Password=1111; Pooling=false; Timeout=15; CommandTimeout=300; User Id= asamoilov; ");
+    static string str = "Server=192.168.201.15; Port=5432; Database=base_1; ApplicationName = 'BackOfficeDBClient';  Password=1111; Pooling=false; Timeout=15; CommandTimeout=300; User Id= asamoilov; ";
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111; User Id= asamoilov; ");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1895,43 +1897,43 @@ public partial class DatabaseContext : DbContext
         });
 
         modelBuilder.Entity<SupState>(entity =>
-         {
-             entity.HasKey(e => e.SupStateId).HasName("sup_state_pkey");
+        {
+            entity.HasKey(e => e.SupStateId).HasName("sup_state_pkey");
 
-             entity.ToTable("sup_state", "src", tb => tb.HasComment("Статусы позиции МТР"));
+            entity.ToTable("sup_state", "src", tb => tb.HasComment("Статусы позиции МТР"));
 
-             entity.HasIndex(e => e.PositionId, "ix_src_sup_state_position_id");
+            entity.HasIndex(e => e.PositionId, "ix_src_sup_state_position_id");
 
-             entity.HasIndex(e => e.SupStateName, "ix_src_sup_state_sup_state_name");
+            entity.HasIndex(e => e.SupStateName, "ix_src_sup_state_sup_state_name");
 
-             entity.HasIndex(e => new { e.PositionId, e.SupStateName, e.SupStateDate }, "uix_src_sup_state_position_id_sup_state_name_sup_state_date").IsUnique();
+            entity.HasIndex(e => new { e.PositionId, e.SupStateName, e.SupStateDate }, "uix_src_sup_state_position_id_sup_state_name_sup_state_date").IsUnique();
 
-             entity.Property(e => e.SupStateId).HasColumnName("sup_state_id");
-             entity.Property(e => e.IsAutomaticInit)
-                 .HasDefaultValue(false)
-                 .HasColumnName("is_automatic_init");
-             entity.Property(e => e.MtrName).HasColumnName("mtr_name");
-             entity.Property(e => e.PositionId).HasColumnName("position_id");
-             entity.Property(e => e.PositionNum).HasColumnName("position_num");
-             entity.Property(e => e.ProcedureGpb).HasColumnName("procedure_gpb");
-             entity.Property(e => e.RequestNum).HasColumnName("request_num");
-             entity.Property(e => e.SupStateDate).HasColumnName("sup_state_date");
-             entity.Property(e => e.SupStateName)
-                 .HasDefaultValueSql("'подготовка к публикации закупки'::text")
-                 .HasColumnName("sup_state_name");
-             entity.Property(e => e.UpdateOnReport2022)
-                 .HasColumnType("timestamp without time zone")
-                 .HasColumnName("update_on_report2022");
-             entity.Property(e => e.UpdatedAt)
-                 .HasDefaultValueSql("now()")
-                 .HasColumnType("timestamp without time zone")
-                 .HasColumnName("updated_at");
-             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+            entity.Property(e => e.SupStateId).HasColumnName("sup_state_id");
+            entity.Property(e => e.IsAutomaticInit)
+                .HasDefaultValue(false)
+                .HasColumnName("is_automatic_init");
+            entity.Property(e => e.MtrName).HasColumnName("mtr_name");
+            entity.Property(e => e.PositionId).HasColumnName("position_id");
+            entity.Property(e => e.PositionNum).HasColumnName("position_num");
+            entity.Property(e => e.ProcedureGpb).HasColumnName("procedure_gpb");
+            entity.Property(e => e.RequestNum).HasColumnName("request_num");
+            entity.Property(e => e.SupStateDate).HasColumnName("sup_state_date");
+            entity.Property(e => e.SupStateName)
+                .HasDefaultValueSql("'подготовка к публикации закупки'::text")
+                .HasColumnName("sup_state_name");
+            entity.Property(e => e.UpdateOnReport2022)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("update_on_report2022");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
-             entity.HasOne(d => d.Position).WithMany(p => p.SupStates)
-                 .HasForeignKey(d => d.PositionId)
-                 .HasConstraintName("position_id_fkey");
-         });
+            entity.HasOne(d => d.Position).WithMany(p => p.SupStates)
+                .HasForeignKey(d => d.PositionId)
+                .HasConstraintName("position_id_fkey");
+        });
 
         modelBuilder.Entity<SupStateDeleted>(entity =>
         {
