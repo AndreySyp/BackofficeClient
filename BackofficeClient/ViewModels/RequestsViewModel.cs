@@ -11,6 +11,8 @@ public class RequestsViewModel : ViewModelBase
     public ObservableCollection<Request> AllItems { get; set; } = [];
 
     public ObservableCollection<Request> FilteredItems { get; set; } = [];
+    
+    public ObservableCollection<Request> SelectedItems { get; set; } = [];
 
     #region Поиск
 
@@ -27,8 +29,6 @@ public class RequestsViewModel : ViewModelBase
     #endregion
 
     #region Редактирование
-
-    public Request? SelectedItems { get; set; }
 
     public string? RequestPriorityEdit { get; set; }
 
@@ -75,6 +75,8 @@ public class RequestsViewModel : ViewModelBase
 
     public RelayCommand DataFilteredCommand => new(async () =>
     {
+        ;
+        return;
         if (AllItems == null || FilteredItems == null)
         {
             return;
