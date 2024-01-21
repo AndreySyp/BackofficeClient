@@ -12,7 +12,6 @@ public class RequestsViewModel : ViewModelBase
 
     public ObservableCollection<Request> FilteredItems { get; set; } = [];
 
-
     #region Поиск
 
     public string? RequestNumberFilter { get; set; }
@@ -114,49 +113,52 @@ public class RequestsViewModel : ViewModelBase
 
     public RelayCommand FillingEditFields => new(async () =>
     {
-        RequestPriorityEdit = "asdsad";
-        OnPropertyChanged("RequestPriorityEdit");
+        await Task.Run(() =>
+        {
+            RequestPriorityEdit = "asdsad";
+            OnPropertyChanged("RequestPriorityEdit");
 
-        RequestCommentEdit = "asdsad";
-        OnPropertyChanged("RequestCommentEdit");
+            RequestCommentEdit = "asdsad";
+            OnPropertyChanged("RequestCommentEdit");
 
-        RequestCustomerEdit = "asdsad";
-        OnPropertyChanged("RequestCustomerEdit");
+            RequestCustomerEdit = "asdsad";
+            OnPropertyChanged("RequestCustomerEdit");
 
-        RequestDirectionEdit = "asdsad";
-        OnPropertyChanged("RequestDirectionEdit");
+            RequestDirectionEdit = "asdsad";
+            OnPropertyChanged("RequestDirectionEdit");
 
-        RequestTradeSignEdit = "asdsad";
-        OnPropertyChanged("RequestTradeSignEdit");
+            RequestTradeSignEdit = "asdsad";
+            OnPropertyChanged("RequestTradeSignEdit");
 
-        RequestToWarehouseEdit = true;
-        OnPropertyChanged("RequestToWarehouseEdit");
+            RequestToWarehouseEdit = true;
+            OnPropertyChanged("RequestToWarehouseEdit");
 
-        RequestToReserveEdit = true;
-        OnPropertyChanged("RequestToReserveEdit");
+            RequestToReserveEdit = true;
+            OnPropertyChanged("RequestToReserveEdit");
 
-        //if (SelectedItems == null) { return; }
+            //if (SelectedItems == null) { return; }
 
-        //RequestPriorityEdit = SelectedItems.Priority;
-        //OnPropertyChanged("RequestPriorityEdit");
+            //RequestPriorityEdit = SelectedItems.Priority;
+            //OnPropertyChanged("RequestPriorityEdit");
 
-        //RequestCommentEdit = SelectedItems.RequestComment;
-        //OnPropertyChanged("RequestCommentEdit");
+            //RequestCommentEdit = SelectedItems.RequestComment;
+            //OnPropertyChanged("RequestCommentEdit");
 
-        //RequestCustomerEdit = SelectedItems.Customer;
-        //OnPropertyChanged("RequestCustomerEdit");
+            //RequestCustomerEdit = SelectedItems.Customer;
+            //OnPropertyChanged("RequestCustomerEdit");
 
-        //RequestDirectionEdit = SelectedItems.PersonManager;
-        //OnPropertyChanged("RequestDirectionEdit");
+            //RequestDirectionEdit = SelectedItems.PersonManager;
+            //OnPropertyChanged("RequestDirectionEdit");
 
-        //RequestTradeSignEdit = SelectedItems.TradeSign;
-        //OnPropertyChanged("RequestTradeSignEdit");
+            //RequestTradeSignEdit = SelectedItems.TradeSign;
+            //OnPropertyChanged("RequestTradeSignEdit");
 
-        //RequestToWarehouseEdit = SelectedItems.ToWarehouse;
-        //OnPropertyChanged("RequestToWarehouseEdit");
+            //RequestToWarehouseEdit = SelectedItems.ToWarehouse;
+            //OnPropertyChanged("RequestToWarehouseEdit");
 
-        //RequestToReserveEdit = SelectedItems.ToReserve;
-        //OnPropertyChanged("RequestToReserveEdit");
+            //RequestToReserveEdit = SelectedItems.ToReserve;
+            //OnPropertyChanged("RequestToReserveEdit");
+        });
     });
 
     #endregion

@@ -8,8 +8,8 @@ namespace BackofficeClient.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public Page _CurrentPage;
-    public Page CurrentPage
+    public Page? _CurrentPage;
+    public Page? CurrentPage
     {
         get => _CurrentPage;
         set { _CurrentPage = value; OnPropertyChanged(); }
@@ -23,6 +23,6 @@ public class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        SQLWorker.ConconnectionSQl = "Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111;";
+
     }
 }
