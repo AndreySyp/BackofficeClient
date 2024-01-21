@@ -16,12 +16,18 @@ public partial class DatabaseContext : DbContext
     }
 
     public virtual DbSet<VRequestForm> VRequestForms { get; set; }
-    public virtual DbSet<Request> Requests { get; set; }
-    public virtual DbSet<TradeSign> TradeSigns { get; set; }
-    public virtual DbSet<SqlLog> asd { get; set; }
 
-    static string str = "Server=192.168.201.15; Port=5432; Database=base_1; ApplicationName = 'BackOfficeDBClient';  Password=1111; Pooling=false; Timeout=15; CommandTimeout=300; User Id= asamoilov; ";
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111; User Id= asamoilov; ");
+    public virtual DbSet<Request> Requests { get; set; }
+
+    public virtual DbSet<TradeSign> TradeSigns { get; set; }
+
+#if DEBUG
+    private static readonly string str = "Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111; User Id= asamoilov; ";
+#else
+    private static readonly string str = "Server=192.168.201.15; Port=5432; Database=base_1; ApplicationName = 'BackOfficeDBClient';  Password=1111; Pooling=false; Timeout=15; CommandTimeout=300; User Id= asamoilov; ";
+#endif
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql(str);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

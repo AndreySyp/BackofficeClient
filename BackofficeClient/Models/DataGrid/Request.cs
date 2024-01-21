@@ -2,24 +2,26 @@
 
 public class Request
 {
-    public long? RequestId { get; }
-    public string? RequestNum { get; }
-    public DateOnly? RequestDate { get; }
-    public string? RequestName { get; }
-    public string? Customer { get; }
-    public string? NameShort { get; }
-    public string? GroupMtr { get; }
-    public string? SupState { get; }
-    public long? Np { get; }
-    public long? Nl { get; }
-    public string? RequestComment { get; }
-    public string? Priority { get; }
-    public decimal? SumIncPrice { get; }
-    public string? PersonManager { get; }
-    public string TradeSign { get; }
-    public string? TradeSignFullname { get; }
-    public bool ToWarehouse { get; }
-    public bool ToReserve { get; }
+    public long? RequestId { get; set; }
+    public string? RequestNum { get; set; }
+    public DateOnly? RequestDate { get; set; }
+    public string? RequestName { get; set; }
+    public string? Customer { get; set; }
+    public string? NameShort { get; set; }
+    public string? GroupMtr { get; set; }
+    public string? SupState { get; set; }
+    public long? Np { get; set; }
+    public long? Nl { get; set; }
+    public string? RequestComment { get; set; }
+    public string? Priority { get; set; }
+    public decimal? SumIncPrice { get; set; }
+    public string? PersonManager { get; set; }
+    public string TradeSign { get; set; }
+    public string? TradeSignFullname { get; set; }
+    public bool ToWarehouse { get; set; }
+    public bool ToReserve { get; set; }
+
+    public Request() { }
 
     public Request(long? requestId, string? requestNum, DateOnly? requestDate, string? requestName, string? customer, string? nameShort, string? groupMtr, string? supState, long? np, long? nl, string? requestComment, string? priority, decimal? sumIncPrice, string? personManager, string tradeSign, string? tradeSignFullname, bool toWarehouse, bool toReserve)
     {

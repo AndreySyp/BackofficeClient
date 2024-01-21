@@ -1,6 +1,6 @@
 ﻿using BackofficeClient.Models.DataGrid;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Controls;
+using System.Collections.ObjectModel;
 
 namespace BackofficeClient.ViewModels;
 
@@ -8,20 +8,22 @@ public class RequestsViewModel : ViewModelBase
 {
     #region Объекты для привязки
 
+    public ObservableCollection<Request> AllItems { get; set; } = [];
+
+    public ObservableCollection<Request> FilteredItems { get; set; } = [];
+
+
     #region Поиск
-    public IEnumerable<Request> AllItems { get; set; } = new List<Request>();
 
-    public IEnumerable<Request> FilteredItems { get; set; } = new List<Request>();
+    public string? RequestNumberFilter { get; set; }
 
-    public string RequestNumberFilter { get; set; }
+    public string? RequestCustomerFilter { get; set; }
 
-    public string RequestCustomerFilter { get; set; }
+    public string? RequestNameFilter { get; set; }
 
-    public string RequestNameFilter { get; set; }
+    public string? RequestDirectioFilter { get; set; }
 
-    public string RequestDirectioFilter { get; set; }
-
-    public string RequestStatusFilter { get; set; }
+    public string? RequestStatusFilter { get; set; }
 
     #endregion
 
@@ -47,12 +49,14 @@ public class RequestsViewModel : ViewModelBase
 
     #endregion
 
-    public RelayCommand DataLoadingCommand => new(async () =>
+    #region Команды
+
+    public AsyncRelayCommand DataLoadingCommand => new(async () =>
     {
         using DatabaseContext db = new();
 
         // Legacy request join v_request
-        await Task.Run(() => AllItems =
+        await Task.Run(() => AllItems = new(
         db.Requests.Join(
             db.TradeSigns,
             r => r.TradeSign,
@@ -64,11 +68,12 @@ public class RequestsViewModel : ViewModelBase
             vr => vr.RequestId,
             (rts, vr) => new Request(vr.RequestId, vr.RequestNum, vr.RequestDate, vr.RequestName, vr.Customer, vr.NameShort, vr.GroupMtr, vr.SupState, vr.Np, vr.Nl, vr.RequestComment, vr.Priority, vr.SumIncPrice, vr.PersonManager, rts.TradeSign, rts.TradeSignFullname, rts.ToWarehouse, rts.ToReserve))
         .ToList()
-        .OrderByDescending(r => r.RequestDate));
+        .OrderByDescending(r => r.RequestDate)));
 
         FilteredItems = AllItems;
         OnPropertyChanged("FilteredItems");
     });
+
     public RelayCommand DataFilteredCommand => new(async () =>
     {
         if (AllItems == null || FilteredItems == null)
@@ -78,72 +83,88 @@ public class RequestsViewModel : ViewModelBase
 
         await Task.Run(() =>
         {
-            FilteredItems = AllItems;
+            IEnumerable<Request> filteredItems = AllItems.ToList();
 
             if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
             {
-                FilteredItems = FilteredItems.Where(x => x.RequestNum == RequestNumberFilter);
+                filteredItems = filteredItems.Where(x => x.RequestNum == RequestNumberFilter);
             }
             if (!string.IsNullOrWhiteSpace(RequestCustomerFilter))
             {
-                FilteredItems = FilteredItems.Where(x => x.Customer == RequestCustomerFilter);
+                filteredItems = filteredItems.Where(x => x.Customer == RequestCustomerFilter);
             }
             if (!string.IsNullOrWhiteSpace(RequestNameFilter))
             {
-                FilteredItems = FilteredItems.Where(x => x.RequestName == RequestNameFilter);
+                filteredItems = filteredItems.Where(x => x.RequestName == RequestNameFilter);
             }
             if (!string.IsNullOrWhiteSpace(RequestDirectioFilter))
             {
-                FilteredItems = FilteredItems.Where(x => x.PersonManager == RequestDirectioFilter);
+                filteredItems = filteredItems.Where(x => x.PersonManager == RequestDirectioFilter);
             }
             if (!string.IsNullOrWhiteSpace(RequestStatusFilter))
             {
-                FilteredItems = FilteredItems.Where(x => x.SupState == RequestStatusFilter);
+                filteredItems = filteredItems.Where(x => x.SupState == RequestStatusFilter);
             }
+
+            FilteredItems = new(filteredItems);
         });
 
         OnPropertyChanged("FilteredItems");
     });
 
-    /// <summary>
-    /// /////////////////////////////////////////////////////////////
-    /// </summary>
-    public SelectionChangedEventHandler asd;
-    public void DataGrid_Selected(object sender, System.Windows.RoutedEventArgs e)
+    public RelayCommand FillingEditFields => new(async () =>
     {
-        dd();
-    }
-
-    public void dd()
-    {
-        if (SelectedItems == null) { return; }
-
-        RequestPriorityEdit = SelectedItems.Priority;
+        RequestPriorityEdit = "asdsad";
         OnPropertyChanged("RequestPriorityEdit");
 
-        RequestCommentEdit = SelectedItems.RequestComment;
+        RequestCommentEdit = "asdsad";
         OnPropertyChanged("RequestCommentEdit");
 
-        RequestCustomerEdit = SelectedItems.Customer;
+        RequestCustomerEdit = "asdsad";
         OnPropertyChanged("RequestCustomerEdit");
 
-        RequestDirectionEdit = SelectedItems.PersonManager;
+        RequestDirectionEdit = "asdsad";
         OnPropertyChanged("RequestDirectionEdit");
 
-        RequestTradeSignEdit = SelectedItems.TradeSign;
+        RequestTradeSignEdit = "asdsad";
         OnPropertyChanged("RequestTradeSignEdit");
 
-        RequestToWarehouseEdit = SelectedItems.ToWarehouse;
+        RequestToWarehouseEdit = true;
         OnPropertyChanged("RequestToWarehouseEdit");
 
-        RequestToReserveEdit = SelectedItems.ToReserve;
+        RequestToReserveEdit = true;
         OnPropertyChanged("RequestToReserveEdit");
 
+        //if (SelectedItems == null) { return; }
 
-    }
+        //RequestPriorityEdit = SelectedItems.Priority;
+        //OnPropertyChanged("RequestPriorityEdit");
+
+        //RequestCommentEdit = SelectedItems.RequestComment;
+        //OnPropertyChanged("RequestCommentEdit");
+
+        //RequestCustomerEdit = SelectedItems.Customer;
+        //OnPropertyChanged("RequestCustomerEdit");
+
+        //RequestDirectionEdit = SelectedItems.PersonManager;
+        //OnPropertyChanged("RequestDirectionEdit");
+
+        //RequestTradeSignEdit = SelectedItems.TradeSign;
+        //OnPropertyChanged("RequestTradeSignEdit");
+
+        //RequestToWarehouseEdit = SelectedItems.ToWarehouse;
+        //OnPropertyChanged("RequestToWarehouseEdit");
+
+        //RequestToReserveEdit = SelectedItems.ToReserve;
+        //OnPropertyChanged("RequestToReserveEdit");
+    });
+
+    #endregion
+
+
     public RequestsViewModel()
     {
-        ///////////////////////////////////////////////
-        asd += DataGrid_Selected;
+        FilteredItems = [new() { Customer = "asd" }, new() { Priority = "asd" }];
+        OnPropertyChanged("FilteredItems");
     }
 }
