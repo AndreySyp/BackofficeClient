@@ -10,39 +10,112 @@ public class RequestsViewModel : ViewModelBase
 
     public ObservableCollection<Request> AllItems { get; set; } = [];
 
-    public ObservableCollection<Request> FilteredItems { get; set; } = [];
-    
     public ObservableCollection<Request> SelectedItems { get; set; } = [];
+
+
+    private ObservableCollection<Request> filteredItems = [];
+    public ObservableCollection<Request> FilteredItems
+    {
+        get => filteredItems;
+        set {filteredItems = value; OnPropertyChanged("FilteredItems"); }
+    }
+
+    private bool isLoading = false;
+    public bool IsLoading
+    {
+        get => isLoading;
+        set { isLoading = value; OnPropertyChanged("IsLoading"); }
+    }
 
     #region Поиск
 
-    public string? RequestNumberFilter { get; set; }
+    private string? requestNumberFilter;
+    public string? RequestNumberFilter
+    {
+        get => requestNumberFilter;
+        set { requestNumberFilter = value; OnPropertyChanged("RequestNumberFilter"); }
+    }
 
-    public string? RequestCustomerFilter { get; set; }
+    private string? requestCustomerFilter;
+    public string? RequestCustomerFilter
+    {
+        get => requestCustomerFilter;
+        set { requestCustomerFilter = value; OnPropertyChanged("RequestCustomerFilter"); }
+    }
 
-    public string? RequestNameFilter { get; set; }
+    private string? requestNameFilter;
+    public string? RequestNameFilter
+    {
+        get => requestNameFilter;
+        set { requestNameFilter = value; OnPropertyChanged("RequestNameFilter"); }
+    }
 
-    public string? RequestDirectioFilter { get; set; }
+    private string? requestDirectioFilter;
+    public string? RequestDirectioFilter
+    {
+        get => requestDirectioFilter;
+        set { requestDirectioFilter = value; OnPropertyChanged("RequestDirectioFilter"); }
+    }
 
-    public string? RequestStatusFilter { get; set; }
+    private string? requestStatusFilter;
+    public string? RequestStatusFilter
+    {
+        get => requestStatusFilter;
+        set { requestStatusFilter = value; OnPropertyChanged("RequestStatusFilter"); }
+    }
 
     #endregion
 
     #region Редактирование
 
-    public string? RequestPriorityEdit { get; set; }
+    private string? requestPriorityEdit;
+    public string? RequestPriorityEdit
+    { 
+        get => requestPriorityEdit; 
+        set { requestPriorityEdit = value; OnPropertyChanged("RequestPriorityEdit"); } 
+    }
 
-    public string? RequestCommentEdit { get; set; }
+    private string? requestCommentEdit;
+    public string? RequestCommentEdit
+    { 
+        get => requestCommentEdit; 
+        set { requestCommentEdit = value; OnPropertyChanged("RequestCommentEdit"); } 
+    }
 
-    public string? RequestCustomerEdit { get; set; }
+    private string? requestCustomerEdit;
+    public string? RequestCustomerEdit
+    { 
+        get => requestCustomerEdit; 
+        set { requestCustomerEdit = value; OnPropertyChanged("RequestCustomerEdit"); } 
+    }
 
-    public string? RequestDirectionEdit { get; set; }
+    private string? requestDirectionEdit;
+    public string? RequestDirectionEdit
+    { 
+        get => requestDirectionEdit; 
+        set { requestDirectionEdit = value; OnPropertyChanged("RequestDirectionEdit"); } 
+    }
 
-    public string? RequestTradeSignEdit { get; set; }
+    private string? requestTradeSignEdit;
+    public string? RequestTradeSignEdit
+    { 
+        get => requestTradeSignEdit; 
+        set { requestTradeSignEdit = value; OnPropertyChanged("RequestTradeSignEdit"); } 
+    }
 
-    public bool? RequestToWarehouseEdit { get; set; }
+    private bool? requestToWarehouseEdit;
+    public bool? RequestToWarehouseEdit
+    { 
+        get => requestToWarehouseEdit; 
+        set { requestToWarehouseEdit = value; OnPropertyChanged("RequestToWarehouseEdit"); } 
+    }
 
-    public bool? RequestToReserveEdit { get; set; }
+    private bool? requestToReserveEdit;
+    public bool? RequestToReserveEdit
+    { 
+        get => requestToReserveEdit; 
+        set { requestToReserveEdit = value; OnPropertyChanged("RequestToReserveEdit"); } 
+    }
 
     #endregion
 
@@ -70,11 +143,21 @@ public class RequestsViewModel : ViewModelBase
         .OrderByDescending(r => r.RequestDate)));
 
         FilteredItems = AllItems;
-        OnPropertyChanged("FilteredItems");
     });
 
     public RelayCommand DataFilteredCommand => new(async () =>
     {
+        IsLoading = true;
+
+        await Task.Run(() =>
+        {
+
+            Task.Delay(2000000);
+
+        });
+
+        //IsLoading = false;
+        //OnPropertyChanged("IsLoading");
         ;
         return;
         if (AllItems == null || FilteredItems == null)
@@ -110,7 +193,6 @@ public class RequestsViewModel : ViewModelBase
             FilteredItems = new(filteredItems);
         });
 
-        OnPropertyChanged("FilteredItems");
     });
 
     public RelayCommand FillingEditFields => new(async () =>
@@ -118,48 +200,21 @@ public class RequestsViewModel : ViewModelBase
         await Task.Run(() =>
         {
             RequestPriorityEdit = "asdsad";
-            OnPropertyChanged("RequestPriorityEdit");
-
             RequestCommentEdit = "asdsad";
-            OnPropertyChanged("RequestCommentEdit");
-
             RequestCustomerEdit = "asdsad";
-            OnPropertyChanged("RequestCustomerEdit");
-
             RequestDirectionEdit = "asdsad";
-            OnPropertyChanged("RequestDirectionEdit");
-
             RequestTradeSignEdit = "asdsad";
-            OnPropertyChanged("RequestTradeSignEdit");
-
             RequestToWarehouseEdit = true;
-            OnPropertyChanged("RequestToWarehouseEdit");
-
             RequestToReserveEdit = true;
-            OnPropertyChanged("RequestToReserveEdit");
 
             //if (SelectedItems == null) { return; }
-
             //RequestPriorityEdit = SelectedItems.Priority;
-            //OnPropertyChanged("RequestPriorityEdit");
-
             //RequestCommentEdit = SelectedItems.RequestComment;
-            //OnPropertyChanged("RequestCommentEdit");
-
             //RequestCustomerEdit = SelectedItems.Customer;
-            //OnPropertyChanged("RequestCustomerEdit");
-
             //RequestDirectionEdit = SelectedItems.PersonManager;
-            //OnPropertyChanged("RequestDirectionEdit");
-
             //RequestTradeSignEdit = SelectedItems.TradeSign;
-            //OnPropertyChanged("RequestTradeSignEdit");
-
             //RequestToWarehouseEdit = SelectedItems.ToWarehouse;
-            //OnPropertyChanged("RequestToWarehouseEdit");
-
             //RequestToReserveEdit = SelectedItems.ToReserve;
-            //OnPropertyChanged("RequestToReserveEdit");
         });
     });
 
@@ -169,6 +224,5 @@ public class RequestsViewModel : ViewModelBase
     public RequestsViewModel()
     {
         FilteredItems = [new() { Customer = "asd" }, new() { Priority = "asd" }];
-        OnPropertyChanged("FilteredItems");
     }
 }
