@@ -19,6 +19,10 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<Request> Requests { get; set; }
 
+    public virtual DbSet<VPosition> VPositions { get; set; }
+
+    public virtual DbSet<Position> Positions { get; set; }
+
     public virtual DbSet<TradeSign> TradeSigns { get; set; }
 
 #if DEBUG
@@ -38,6 +42,51 @@ public partial class DatabaseContext : DbContext
             .HasPostgresExtension("pgrowlocks")
             .HasPostgresExtension("uuid-ossp");
 
+        modelBuilder.Entity<VPosition>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_position", "src");
+
+            entity.Property(e => e.ExchangeRate).HasColumnName("exchange_rate");
+            entity.Property(e => e.PositionId).HasColumnName("ID");
+            entity.Property(e => e.IncPriceCur).HasColumnName("inc_price_cur");
+            entity.Property(e => e.IncPriceCurNds).HasColumnName("inc_price_cur_nds");
+            entity.Property(e => e.OutPrice).HasColumnName("out_price");
+            entity.Property(e => e.OutPriceCur).HasColumnName("out_price_cur");
+            entity.Property(e => e.OutPriceCurNds).HasColumnName("out_price_cur_nds");
+            entity.Property(e => e.OutPriceNds).HasColumnName("out_price_nds");
+            entity.Property(e => e.Basis).HasColumnName("Базис поставки");
+            entity.Property(e => e.IncPrice).HasColumnName("Вх. стоимость товара без НДС, руб.");
+            entity.Property(e => e.IncPriceNds)
+                .HasPrecision(20, 2)
+                .HasColumnName("Вх. стоимость товара с НДС, руб.");
+            entity.Property(e => e.GroupMtr).HasColumnName("Группа МТР");
+            entity.Property(e => e.DateCustomerQuery).HasColumnName("Дата запроса в адрес Заказчика ТТ");
+            entity.Property(e => e.DateAgreement).HasColumnName("Дата отправки Заказчику на согл-е");
+            entity.Property(e => e.DateDocs).HasColumnName("Дата получения от Заказчика ТТ/ТУ");
+            entity.Property(e => e.DateAs).HasColumnName("Дата согласования АС Заказчиком");
+            entity.Property(e => e.RequestDate).HasColumnName("Дата создания заявки");
+            entity.Property(e => e.DocNtd).HasColumnName("Документ (НТД)");
+            entity.Property(e => e.Measure).HasColumnName("Ед. измерения");
+            entity.Property(e => e.Amount).HasColumnName("Кол-во");
+            entity.Property(e => e.TimingMax).HasColumnName("Максимальный срок поставки по АС");
+            entity.Property(e => e.MtrName).HasColumnName("Наименование МТР");
+            entity.Property(e => e.Nmck).HasColumnName("Начальная максимальная цена");
+            entity.Property(e => e.DeliveryTime).HasColumnName("Необходимый срок поставки");
+            entity.Property(e => e.RequestNum).HasColumnName("Номер заявки");
+            entity.Property(e => e.PositionNum).HasColumnName("№ позиции");
+            entity.Property(e => e.ProcedureGpb).HasColumnName("Процедура ГПБ");
+            entity.Property(e => e.ProcedureGpb4).HasColumnName("Процедура ГПБ на 4");
+            entity.Property(e => e.Timing).HasColumnName("Сроки поставки по АС");
+            entity.Property(e => e.SupState).HasColumnName("Статус закупки");
+            entity.Property(e => e.Condition).HasColumnName("Условия оплаты");
+            entity.Property(e => e.Currency).HasColumnName("Валюта");
+            entity.Property(e => e.Manufacturer).HasColumnName("Изготовитель");
+            entity.Property(e => e.Person).HasColumnName("Ответственный");
+            entity.Property(e => e.SupName).HasColumnName("Победитель");
+
+        });
 
         modelBuilder.Entity<Bidder>(entity =>
         {
