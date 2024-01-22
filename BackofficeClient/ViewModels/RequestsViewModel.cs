@@ -6,18 +6,18 @@ namespace BackofficeClient.ViewModels;
 
 public class RequestsViewModel : ViewModelBase
 {
+
     #region Объекты для привязки
 
     public ObservableCollection<Request> AllItems { get; set; } = [];
 
     public ObservableCollection<Request> SelectedItems { get; set; } = [];
 
-
     private ObservableCollection<Request> filteredItems = [];
     public ObservableCollection<Request> FilteredItems
     {
         get => filteredItems;
-        set {filteredItems = value; OnPropertyChanged("FilteredItems"); }
+        set { filteredItems = value; OnPropertyChanged("FilteredItems"); }
     }
 
     private bool isLoading = false;
@@ -68,53 +68,74 @@ public class RequestsViewModel : ViewModelBase
 
     #region Редактирование
 
+    private string? requestNumberEdit;
+    public string? RequestNumberEdit
+    {
+        get => requestNumberEdit;
+        set { requestNumberEdit = value; OnPropertyChanged("RequestNumberEdit"); }
+    }
+
+    private DateOnly? requestDateEdit;
+    public DateOnly? RequestDateEdit
+    {
+        get => requestDateEdit;
+        set { requestDateEdit = value; OnPropertyChanged("RequestDateEdit"); }
+    }
+
+    private string? requestNameEdit;
+    public string? RequestNameEdit
+    {
+        get => requestNameEdit;
+        set { requestNameEdit = value; OnPropertyChanged("RequestNameEdit"); }
+    }
+
     private string? requestPriorityEdit;
     public string? RequestPriorityEdit
-    { 
-        get => requestPriorityEdit; 
-        set { requestPriorityEdit = value; OnPropertyChanged("RequestPriorityEdit"); } 
+    {
+        get => requestPriorityEdit;
+        set { requestPriorityEdit = value; OnPropertyChanged("RequestPriorityEdit"); }
     }
 
     private string? requestCommentEdit;
     public string? RequestCommentEdit
-    { 
-        get => requestCommentEdit; 
-        set { requestCommentEdit = value; OnPropertyChanged("RequestCommentEdit"); } 
+    {
+        get => requestCommentEdit;
+        set { requestCommentEdit = value; OnPropertyChanged("RequestCommentEdit"); }
     }
 
     private string? requestCustomerEdit;
     public string? RequestCustomerEdit
-    { 
-        get => requestCustomerEdit; 
-        set { requestCustomerEdit = value; OnPropertyChanged("RequestCustomerEdit"); } 
+    {
+        get => requestCustomerEdit;
+        set { requestCustomerEdit = value; OnPropertyChanged("RequestCustomerEdit"); }
     }
 
     private string? requestDirectionEdit;
     public string? RequestDirectionEdit
-    { 
-        get => requestDirectionEdit; 
-        set { requestDirectionEdit = value; OnPropertyChanged("RequestDirectionEdit"); } 
+    {
+        get => requestDirectionEdit;
+        set { requestDirectionEdit = value; OnPropertyChanged("RequestDirectionEdit"); }
     }
 
     private string? requestTradeSignEdit;
     public string? RequestTradeSignEdit
-    { 
-        get => requestTradeSignEdit; 
-        set { requestTradeSignEdit = value; OnPropertyChanged("RequestTradeSignEdit"); } 
+    {
+        get => requestTradeSignEdit;
+        set { requestTradeSignEdit = value; OnPropertyChanged("RequestTradeSignEdit"); }
     }
 
     private bool? requestToWarehouseEdit;
     public bool? RequestToWarehouseEdit
-    { 
-        get => requestToWarehouseEdit; 
-        set { requestToWarehouseEdit = value; OnPropertyChanged("RequestToWarehouseEdit"); } 
+    {
+        get => requestToWarehouseEdit;
+        set { requestToWarehouseEdit = value; OnPropertyChanged("RequestToWarehouseEdit"); }
     }
 
     private bool? requestToReserveEdit;
     public bool? RequestToReserveEdit
-    { 
-        get => requestToReserveEdit; 
-        set { requestToReserveEdit = value; OnPropertyChanged("RequestToReserveEdit"); } 
+    {
+        get => requestToReserveEdit;
+        set { requestToReserveEdit = value; OnPropertyChanged("RequestToReserveEdit"); }
     }
 
     #endregion
@@ -125,48 +146,52 @@ public class RequestsViewModel : ViewModelBase
 
     public AsyncRelayCommand DataLoadingCommand => new(async () =>
     {
-        using DatabaseContext db = new();
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+            IsLoading = true;
 
-        // Legacy request join v_request
-        await Task.Run(() => AllItems = new(
-        db.Requests.Join(
-            db.TradeSigns,
-            r => r.TradeSign,
-            ts => ts.TradeSign1,
-            (r, ts) => new { r.RequestId, r.TradeSign, ts.TradeSignFullname, r.ToWarehouse, r.ToReserve })
-        .Join(
-            db.VRequestForms,
-            rts => rts.RequestId,
-            vr => vr.RequestId,
-            (rts, vr) => new Request(vr.RequestId, vr.RequestNum, vr.RequestDate, vr.RequestName, vr.Customer, vr.NameShort, vr.GroupMtr, vr.SupState, vr.Np, vr.Nl, vr.RequestComment, vr.Priority, vr.SumIncPrice, vr.PersonManager, rts.TradeSign, rts.TradeSignFullname, rts.ToWarehouse, rts.ToReserve))
-        .ToList()
-        .OrderByDescending(r => r.RequestDate)));
+            AllItems = new(
+                    // Legacy request join v_request
+                    db.Requests.Join(
+                        db.TradeSigns,
+                        r => r.TradeSign,
+                        ts => ts.TradeSign1,
+                        (r, ts) => new { r.RequestId, r.TradeSign, ts.TradeSignFullname, r.ToWarehouse, r.ToReserve })
+                    .Join(
+                        db.VRequestForms,
+                        rts => rts.RequestId,
+                        vr => vr.RequestId,
+                        (rts, vr) => new Request(vr.RequestId, vr.RequestNum, vr.RequestDate, vr.RequestName, vr.Customer, vr.NameShort, vr.GroupMtr, vr.SupState, vr.Np, vr.Nl, vr.RequestComment, vr.Priority, vr.SumIncPrice, vr.PersonManager, rts.TradeSign, rts.TradeSignFullname, rts.ToWarehouse, rts.ToReserve))
+                    .ToList()
+                    .OrderByDescending(r => r.RequestDate));
 
-        FilteredItems = AllItems;
+            FilteredItems = AllItems;
+        });
     });
 
-    public RelayCommand DataFilteredCommand => new(async () =>
+    public RelayCommand ClearFilterCommand => new(() =>
     {
-        IsLoading = true;
+        RequestNumberFilter = null;
+        RequestCustomerFilter = null;
+        RequestNameFilter = null;
+        RequestDirectioFilter = null;
+        RequestStatusFilter = null;
+    });
 
+    public AsyncRelayCommand DataFilteredCommand => new(async () =>
+    {
         await Task.Run(() =>
         {
+            if (AllItems == null || AllItems.Count == 0)
+            {
+                DataLoadingCommand.Execute(null);
+            }
+            if (AllItems == null)
+            {
+                return;
+            }
 
-            Task.Delay(2000000);
-
-        });
-
-        //IsLoading = false;
-        //OnPropertyChanged("IsLoading");
-        ;
-        return;
-        if (AllItems == null || FilteredItems == null)
-        {
-            return;
-        }
-
-        await Task.Run(() =>
-        {
             IEnumerable<Request> filteredItems = AllItems.ToList();
 
             if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
@@ -192,37 +217,41 @@ public class RequestsViewModel : ViewModelBase
 
             FilteredItems = new(filteredItems);
         });
-
     });
 
-    public RelayCommand FillingEditFields => new(async () =>
+    public RelayCommand FillingEditFields => new(() =>
     {
-        await Task.Run(() =>
+        if (SelectedItems == null)
         {
-            RequestPriorityEdit = "asdsad";
-            RequestCommentEdit = "asdsad";
-            RequestCustomerEdit = "asdsad";
-            RequestDirectionEdit = "asdsad";
-            RequestTradeSignEdit = "asdsad";
-            RequestToWarehouseEdit = true;
-            RequestToReserveEdit = true;
+            return;
+        }
 
-            //if (SelectedItems == null) { return; }
-            //RequestPriorityEdit = SelectedItems.Priority;
-            //RequestCommentEdit = SelectedItems.RequestComment;
-            //RequestCustomerEdit = SelectedItems.Customer;
-            //RequestDirectionEdit = SelectedItems.PersonManager;
-            //RequestTradeSignEdit = SelectedItems.TradeSign;
-            //RequestToWarehouseEdit = SelectedItems.ToWarehouse;
-            //RequestToReserveEdit = SelectedItems.ToReserve;
-        });
+        if (SelectedItems.Count == 1)
+        {
+            RequestNumberEdit = SelectedItems[0].RequestNum;
+            RequestNameEdit = SelectedItems[0].RequestName;
+            RequestDateEdit = SelectedItems[0].RequestDate;
+        }
+        else
+        {
+            RequestNumberEdit = null;
+            RequestNameEdit = null;
+            RequestDateEdit = null;
+        }
+
+        RequestPriorityEdit = SelectedItems[0].Priority;
+        RequestCommentEdit = SelectedItems[0].RequestComment;
+        RequestCustomerEdit = SelectedItems[0].Customer;
+        RequestDirectionEdit = SelectedItems[0].PersonManager;
+        RequestTradeSignEdit = SelectedItems[0].TradeSign;
+        RequestToWarehouseEdit = SelectedItems[0].ToWarehouse;
+        RequestToReserveEdit = SelectedItems[0].ToReserve;
     });
 
     #endregion
 
-
     public RequestsViewModel()
     {
-        FilteredItems = [new() { Customer = "asd" }, new() { Priority = "asd" }];
+
     }
 }

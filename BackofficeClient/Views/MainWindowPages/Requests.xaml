@@ -13,7 +13,8 @@
       >
     <Page.DataContext>
         <viewmodels:RequestsViewModel/>
-    </Page.DataContext>
+    </Page.DataContext>
+
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -60,7 +61,7 @@
                         </StackPanel>
                         <StackPanel Width="120">
                             <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
-                            <Button Content="Очистить фильтр"></Button>
+                            <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
                         </StackPanel>
                     </StackPanel>
 
@@ -68,37 +69,76 @@
 
                 <TabItem Header="Редакирование">
                     <StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Приоритет" ></TextBlock>
-                            <TextBox Text="{Binding RequestPriorityEdit}" Name="qqqq"></TextBox>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Номер заявки" ></TextBlock>
+                                    <TextBox Text="{Binding RequestNumberEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Дата заявки" ></TextBlock>
+                                    <TextBox Text="{Binding RequestDateEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Наименование" ></TextBlock>
+                                    <TextBox Text="{Binding RequestNameEdit}"></TextBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Приоритет" ></TextBlock>
+                                <TextBox Text="{Binding RequestPriorityEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Приоритет"></TextBlock>
+                                <TextBox Text="{Binding RequestCommentEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Коментраий"></TextBlock>
+                                <TextBox Text="{Binding RequestCustomerEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Направление ЦЗС"></TextBlock>
+                                <TextBox Text="{Binding RequestDirectionEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Признак сделки"></TextBlock>
+                                <TextBox Text="{Binding RequestTradeSignEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Закупка на складе"></TextBlock>
+                                <TextBox Text="{Binding RequestToWarehouseEdit}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Бронь"></TextBlock>
+                                <TextBox Text="{Binding RequestToReserveEdit}"></TextBox>
+                            </StackPanel>
                         </StackPanel>
+                        </Border>
+
                         <StackPanel Width="120">
-                            <TextBlock Text="Приоритет"></TextBlock>
-                            <TextBox Text="{Binding RequestCommentEdit}"></TextBox>
+                            <Button Background="Red" Content="Сохранить изменения"></Button>
+                            <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
                         </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Коментраий"></TextBlock>
-                            <TextBox Text="{Binding RequestCustomerEdit}"></TextBox>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Background="Red" >
+                                <TextBlock Text="Добавить" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </Button>
+                            <Button Background="Red" >
+                                <TextBlock Text="Удалить" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </Button>
                         </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="Остальное">
+                    <StackPanel>
                         <StackPanel Width="120">
-                            <TextBlock Text="Направление ЦЗС"></TextBlock>
-                            <TextBox Text="{Binding RequestDirectionEdit}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Признак сделки"></TextBlock>
-                            <TextBox Text="{Binding RequestTradeSignEdit}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Закупка на складе"></TextBlock>
-                            <TextBox Text="{Binding RequestToWarehouseEdit}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Бронь"></TextBlock>
-                            <TextBox Text="{Binding RequestToReserveEdit}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <Button Content="Сохранить изменения"></Button>
-                            <Button Content="Сбросить"></Button>
+                            <Button Background="Red" Content="Импорт данных Процессора (файл)"></Button>
+                            <Button Background="Red" Content="Импорт данных Процессора (сайт)"></Button>
+                            <Button Background="Red" Content="Экспорт в excel"></Button>
                         </StackPanel>
                     </StackPanel>
                 </TabItem>

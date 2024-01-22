@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <Button Background="Red" Content="Заявки" Command="{Binding PageRequestsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Content="Заявки" Command="{Binding PageRequestsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Позиции" Command="{Binding PagePositionsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Процедуры" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Условия сделок" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
