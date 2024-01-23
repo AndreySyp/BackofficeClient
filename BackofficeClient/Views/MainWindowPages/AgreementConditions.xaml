@@ -1,0 +1,131 @@
+﻿<Page x:Class="BackofficeClient.Views.MainWindowPages.AgreementConditions"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AgreementConditions"
+            xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
+      xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:fa="http://schemas.fontawesome.io/icons/"
+      >
+
+    <Page.DataContext>
+        <viewmodels:PositionsViewModel/>
+    </Page.DataContext>
+
+    <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="1.5*" MaxWidth="200" MinWidth="130"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}"
+                  a:Extension.SelectedItems="{Binding SelectedItems}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </DataGrid>
+
+        <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
+                <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
+                <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
+            </StackPanel>
+
+            <TabControl>
+                <TabItem Header="Поиск">
+                    <StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Номер заявки" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Процедура ЭТП" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Рег. Номер" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Статус" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Дата изменения" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Идентификатор сделки" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Напрвление ЦЗС" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        <StackPanel Width="120">
+                            <TextBlock Text="Ответственный" ></TextBlock>
+                            <TextBox Text=""></TextBox>
+                        </StackPanel>
+                        
+                        <StackPanel Width="120">
+                            <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
+                            <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="Редакирование">
+                    <StackPanel>
+                        <Expander Header="Одиночное редактирование" IsExpanded="False">
+                            <StackPanel>
+                                <Button Background="Red" Content="Редактировать условия выбранной сделки"></Button>
+                            </StackPanel>
+                        </Expander>
+                        <Expander Header="Множественное редактирование" IsExpanded="True">
+                            <StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Корректировка статуса сделки" ></TextBlock>
+                                    <TextBox Text=""></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Корректировка Даты сделки" ></TextBlock>
+                                    <TextBox Text=""></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Изменение Ответсвенного по сделке" ></TextBlock>
+                                    <TextBox Text=""></TextBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+                        <StackPanel Width="120">
+                            <Button Background="Red" Content="Сохранить изменения"></Button>
+                            <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Background="Red" Header="Экспорт/Импорт">
+                    <StackPanel>
+                        <StackPanel Width="120">
+                            <Button Background="Red" Content="Импорт данных(Условия сделок)" Command=""></Button>
+                            <Button Background="Red" Content="Свод по поставкам" Command=""></Button>
+                            <Button Background="Red" Content="Перечень сделок" Command=""></Button>
+                            <Button Background="Red" Content="Перечень сделок и условий" Command=""></Button>
+                            <Button Background="Red" Content="Условия сложной сделки" Command=""></Button>
+                            <Button Background="Red" Content="Экспорт в СЭД" Command=""></Button>
+                            <Button Background="Red" Content="Экспорт в 1С-ЕРП" Command=""></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+
+            </TabControl>
+        </StackPanel>
+
+    </Grid>
+</Page>

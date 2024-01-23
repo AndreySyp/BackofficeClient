@@ -21,10 +21,10 @@
 
         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
             <Button Content="Заявки" Command="{Binding PageRequestsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
-            <Button Background="Red" Content="Позиции" Command="{Binding PagePositionsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
-            <Button Background="Red" Content="Процедуры" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
-            <Button Background="Red" Content="Условия сделок" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
-            <Button Background="Red" Content="Спецификации" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Content="Позиции" Command="{Binding PagePositionsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Content="Процедуры" Command="{Binding PageProceduresClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Content="Условия сделок" Command="{Binding PageAgreementConditionsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+            <Button Content="Спецификации" Command="{Binding PageSpecificationsClick}" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Поставки" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Договоры" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Контрагенты" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
