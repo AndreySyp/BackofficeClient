@@ -69,7 +69,7 @@
 
                 <TabItem Header="Редакирование">
                     <StackPanel>
-                        <Border BorderBrush="Black" BorderThickness="1">
+                        <Expander Header="Одиночное редактирование" IsExpanded="False">
                             <StackPanel>
                                 <StackPanel Width="120">
                                     <TextBlock Text="Номер заявки" ></TextBlock>
@@ -84,8 +84,8 @@
                                     <TextBox Text="{Binding RequestNameEdit}"></TextBox>
                                 </StackPanel>
                             </StackPanel>
-                        </Border>
-                        <Border BorderBrush="Black" BorderThickness="1">
+                        </Expander>
+                        <Expander Header="Множественное редактирование" IsExpanded="True">
                             <StackPanel>
                             <StackPanel Width="120">
                                 <TextBlock Text="Приоритет" ></TextBlock>
@@ -116,7 +116,7 @@
                                 <TextBox Text="{Binding RequestToReserveEdit}"></TextBox>
                             </StackPanel>
                         </StackPanel>
-                        </Border>
+                        </Expander>
 
                         <StackPanel Width="120">
                             <Button Background="Red" Content="Сохранить изменения"></Button>
