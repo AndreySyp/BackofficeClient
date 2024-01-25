@@ -4,18 +4,22 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
-      mc:Ignorable="d" 
-      xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
+      mc:Ignorable="d"
+      
+      xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+      d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
       xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:fa="http://schemas.fontawesome.io/icons/"
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      d:DesignHeight="450" 
+      d:DesignWidth="800"
       Title="Requests"
       >
     <Page.DataContext>
         <viewmodels:RequestsViewModel/>
     </Page.DataContext>
 
-    <Grid Background="White">
+    <Grid Background="White" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
@@ -41,23 +45,23 @@
                     <StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Номер заявки"></TextBlock>
-                            <TextBox Text="{Binding RequestNumberFilter}"></TextBox>
+                            <TextBox Text="{Binding NumberFilter}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Контрагент"></TextBlock>
-                            <TextBox Text="{Binding RequestCustomerFilter}"></TextBox>
+                            <TextBox Text="{Binding CustomerFilter}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Наименование заявки"></TextBlock>
-                            <TextBox Text="{Binding RequestNameFilter}"></TextBox>
+                            <TextBox Text="{Binding NameFilter}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Направление ЦЗС"></TextBlock>
-                            <TextBox Text="{Binding RequestDirectioFilter}"></TextBox>
+                            <TextBox Text="{Binding DirectioFilter}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Статус"></TextBlock>
-                            <TextBox Text="{Binding RequestStatusFilter}"></TextBox>
+                            <TextBox Text="{Binding StatusFilter}"></TextBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
@@ -69,67 +73,74 @@
 
                 <TabItem Header="Редакирование">
                     <StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Command="{Binding ShowAddRequestWindowCommnad}" 
+                                    ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
+                                <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
+                            </Button>
+                            <Button Command="{Binding DeleteRequestCommnad}"
+                                    ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
+                                <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
+                            </Button>
+                            <Button Command="{Binding SaveDataCommand}"
+                                    ToolTip="Сохранить изменения" ToolTipService.InitialShowDelay="1500">
+                                <fa:ImageAwesome Icon="FloppyOutline" Height="20" Width="20"/>
+                            </Button>
+                            <Button Command="{Binding FillingEditFields}"
+                                    ToolTip="Сбросить изменнеия" ToolTipService.InitialShowDelay="1500">
+                                <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
+                            </Button>
+                        </StackPanel>
+                        
                         <Expander Header="Одиночное редактирование" IsExpanded="False">
                             <StackPanel>
                                 <StackPanel Width="120">
                                     <TextBlock Text="Номер заявки" ></TextBlock>
-                                    <TextBox Text="{Binding RequestNumberEdit}"></TextBox>
+                                    <TextBox Text="{Binding NumberEdit}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Width="120">
                                     <TextBlock Text="Дата заявки" ></TextBlock>
-                                    <TextBox Text="{Binding RequestDateEdit}"></TextBox>
+                                    <TextBox Text="{Binding DateEdit}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Width="120">
                                     <TextBlock Text="Наименование" ></TextBlock>
-                                    <TextBox Text="{Binding RequestNameEdit}"></TextBox>
+                                    <TextBox Text="{Binding NameEdit}"></TextBox>
                                 </StackPanel>
                             </StackPanel>
                         </Expander>
+                        
                         <Expander Header="Множественное редактирование" IsExpanded="True">
                             <StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Приоритет" ></TextBlock>
-                                <TextBox Text="{Binding RequestPriorityEdit}"></TextBox>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Приоритет" ></TextBlock>
+                                    <TextBox Text="{Binding PriorityEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Комментарий"></TextBlock>
+                                    <TextBox Text="{Binding CommentEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Контрагент"></TextBlock>
+                                    <TextBox Text="{Binding CustomerEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Направление ЦЗС"></TextBlock>
+                                    <TextBox Text="{Binding DirectionEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Признак сделки"></TextBlock>
+                                    <TextBox Text="{Binding TradeSignEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Закупка на складе"></TextBlock>
+                                    <TextBox Text="{Binding ToWarehouseEdit}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Width="120">
+                                    <TextBlock Text="Бронь"></TextBlock>
+                                    <TextBox Text="{Binding ToReserveEdit}"></TextBox>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Приоритет"></TextBlock>
-                                <TextBox Text="{Binding RequestCommentEdit}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Коментраий"></TextBlock>
-                                <TextBox Text="{Binding RequestCustomerEdit}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Направление ЦЗС"></TextBlock>
-                                <TextBox Text="{Binding RequestDirectionEdit}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Признак сделки"></TextBlock>
-                                <TextBox Text="{Binding RequestTradeSignEdit}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Закупка на складе"></TextBlock>
-                                <TextBox Text="{Binding RequestToWarehouseEdit}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Бронь"></TextBlock>
-                                <TextBox Text="{Binding RequestToReserveEdit}"></TextBox>
-                            </StackPanel>
-                        </StackPanel>
                         </Expander>
-
-                        <StackPanel Width="120">
-                            <Button Background="Red" Content="Сохранить изменения"></Button>
-                            <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Background="Red" >
-                                <TextBlock Text="Добавить" TextWrapping="Wrap" TextAlignment="Center"/>
-                            </Button>
-                            <Button Background="Red" >
-                                <TextBlock Text="Удалить" TextWrapping="Wrap" TextAlignment="Center"/>
-                            </Button>
-                        </StackPanel>
                     </StackPanel>
                 </TabItem>
 
@@ -144,6 +155,5 @@
                 </TabItem>
             </TabControl>
         </StackPanel>
-
     </Grid>
 </Page>

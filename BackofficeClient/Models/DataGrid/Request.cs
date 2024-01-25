@@ -21,8 +21,6 @@ public class Request
     public bool ToWarehouse { get; set; }
     public bool ToReserve { get; set; }
 
-    public Request() { }
-
     public Request(long? requestId, string? requestNum, DateOnly? requestDate, string? requestName, string? customer, string? nameShort, string? groupMtr, string? supState, long? np, long? nl, string? requestComment, string? priority, decimal? sumIncPrice, string? personManager, string tradeSign, string? tradeSignFullname, bool toWarehouse, bool toReserve)
     {
         RequestId = requestId;

@@ -1,13 +1,17 @@
 ﻿using BackofficeClient.Models.DataGrid;
+using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace BackofficeClient.ViewModels;
 
-public class RequestsViewModel : ViewModelBase
+public class RequestsViewModel : ViewModelBase, INterface1
 {
 
     #region Объекты для привязки
+
+    #region Общие
 
     public ObservableCollection<Request> AllItems { get; set; } = [];
 
@@ -17,126 +21,182 @@ public class RequestsViewModel : ViewModelBase
     public ObservableCollection<Request> FilteredItems
     {
         get => filteredItems;
-        set { filteredItems = value; OnPropertyChanged("FilteredItems"); }
+        set { filteredItems = value; OnPropertyChanged(); }
     }
 
     private bool isLoading = false;
     public bool IsLoading
     {
         get => isLoading;
-        set { isLoading = value; OnPropertyChanged("IsLoading"); }
+        set { isLoading = value; OnPropertyChanged(); }
     }
+
+    #endregion
 
     #region Поиск
 
-    private string? requestNumberFilter;
-    public string? RequestNumberFilter
+    private string? numberFilter;
+    public string? NumberFilter
     {
-        get => requestNumberFilter;
-        set { requestNumberFilter = value; OnPropertyChanged("RequestNumberFilter"); }
+        get => numberFilter;
+        set { numberFilter = value; OnPropertyChanged(); }
     }
 
-    private string? requestCustomerFilter;
-    public string? RequestCustomerFilter
+    private string? customerFilter;
+    public string? CustomerFilter
     {
-        get => requestCustomerFilter;
-        set { requestCustomerFilter = value; OnPropertyChanged("RequestCustomerFilter"); }
+        get => customerFilter;
+        set { customerFilter = value; OnPropertyChanged(); }
     }
 
-    private string? requestNameFilter;
-    public string? RequestNameFilter
+    private string? nameFilter;
+    public string? NameFilter
     {
-        get => requestNameFilter;
-        set { requestNameFilter = value; OnPropertyChanged("RequestNameFilter"); }
+        get => nameFilter;
+        set { nameFilter = value; OnPropertyChanged(); }
     }
 
-    private string? requestDirectioFilter;
-    public string? RequestDirectioFilter
+    private string? directioFilter;
+    public string? DirectioFilter
     {
-        get => requestDirectioFilter;
-        set { requestDirectioFilter = value; OnPropertyChanged("RequestDirectioFilter"); }
+        get => directioFilter;
+        set { directioFilter = value; OnPropertyChanged(); }
     }
 
-    private string? requestStatusFilter;
-    public string? RequestStatusFilter
+    private string? statusFilter;
+    public string? StatusFilter
     {
-        get => requestStatusFilter;
-        set { requestStatusFilter = value; OnPropertyChanged("RequestStatusFilter"); }
+        get => statusFilter;
+        set { statusFilter = value; OnPropertyChanged(); }
     }
 
     #endregion
 
     #region Редактирование
 
-    private string? requestNumberEdit;
-    public string? RequestNumberEdit
+    #region Одиночное
+
+    private string? numberEdit;
+    public string? NumberEdit
     {
-        get => requestNumberEdit;
-        set { requestNumberEdit = value; OnPropertyChanged("RequestNumberEdit"); }
+        get => numberEdit;
+        set { numberEdit = value; OnPropertyChanged(); }
     }
 
-    private DateOnly? requestDateEdit;
-    public DateOnly? RequestDateEdit
+    private DateOnly? dateEdit;
+    public DateOnly? DateEdit
     {
-        get => requestDateEdit;
-        set { requestDateEdit = value; OnPropertyChanged("RequestDateEdit"); }
+        get => dateEdit;
+        set { dateEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestNameEdit;
-    public string? RequestNameEdit
+    private string? nameEdit;
+    public string? NameEdit
     {
-        get => requestNameEdit;
-        set { requestNameEdit = value; OnPropertyChanged("RequestNameEdit"); }
+        get => nameEdit;
+        set { nameEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestPriorityEdit;
-    public string? RequestPriorityEdit
+    #endregion
+
+    #region Множественное
+
+    private string? priorityEdit;
+    public string? PriorityEdit
     {
-        get => requestPriorityEdit;
-        set { requestPriorityEdit = value; OnPropertyChanged("RequestPriorityEdit"); }
+        get => priorityEdit;
+        set { priorityEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestCommentEdit;
-    public string? RequestCommentEdit
+    private string? commentEdit;
+    public string? CommentEdit
     {
-        get => requestCommentEdit;
-        set { requestCommentEdit = value; OnPropertyChanged("RequestCommentEdit"); }
+        get => commentEdit;
+        set { commentEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestCustomerEdit;
-    public string? RequestCustomerEdit
+    private string? customerEdit;
+    public string? CustomerEdit
     {
-        get => requestCustomerEdit;
-        set { requestCustomerEdit = value; OnPropertyChanged("RequestCustomerEdit"); }
+        get => customerEdit;
+        set { customerEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestDirectionEdit;
-    public string? RequestDirectionEdit
+    private string? directionEdit;
+    public string? DirectionEdit
     {
-        get => requestDirectionEdit;
-        set { requestDirectionEdit = value; OnPropertyChanged("RequestDirectionEdit"); }
+        get => directionEdit;
+        set { directionEdit = value; OnPropertyChanged(); }
     }
 
-    private string? requestTradeSignEdit;
-    public string? RequestTradeSignEdit
+    private string? tradeSignEdit;
+    public string? TradeSignEdit
     {
-        get => requestTradeSignEdit;
-        set { requestTradeSignEdit = value; OnPropertyChanged("RequestTradeSignEdit"); }
+        get => tradeSignEdit;
+        set { tradeSignEdit = value; OnPropertyChanged(); }
     }
 
-    private bool? requestToWarehouseEdit;
-    public bool? RequestToWarehouseEdit
+    private bool? toWarehouseEdit;
+    public bool? ToWarehouseEdit
     {
-        get => requestToWarehouseEdit;
-        set { requestToWarehouseEdit = value; OnPropertyChanged("RequestToWarehouseEdit"); }
+        get => toWarehouseEdit;
+        set { toWarehouseEdit = value; OnPropertyChanged(); }
     }
 
-    private bool? requestToReserveEdit;
-    public bool? RequestToReserveEdit
+    private bool? toReserveEdit;
+    public bool? ToReserveEdit
     {
-        get => requestToReserveEdit;
-        set { requestToReserveEdit = value; OnPropertyChanged("RequestToReserveEdit"); }
+        get => toReserveEdit;
+        set { toReserveEdit = value; OnPropertyChanged(); }
     }
+
+    #endregion
+
+    #region Добавление
+
+    private string? numberAdd;
+    public string? NumberAdd
+    {
+        get => numberAdd;
+        set { numberAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? customerAdd;
+    public string? CustomerAdd
+    {
+        get => customerAdd;
+        set { customerAdd = value; OnPropertyChanged(); }
+    }
+
+    private DateOnly? dateAdd;
+    public DateOnly? DateAdd
+    {
+        get => dateAdd;
+        set { dateAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? nameAdd;
+    public string? NameAdd
+    {
+        get => nameAdd;
+        set { nameAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? commentAdd;
+    public string? CommentAdd
+    {
+        get => commentAdd;
+        set { commentAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? priorityAdd;
+    public string? PriorityAdd
+    {
+        get => priorityAdd;
+        set { priorityAdd = value; OnPropertyChanged(); }
+    }
+
+    #endregion
 
     #endregion
 
@@ -172,21 +232,18 @@ public class RequestsViewModel : ViewModelBase
 
     public RelayCommand ClearFilterCommand => new(() =>
     {
-        RequestNumberFilter = null;
-        RequestCustomerFilter = null;
-        RequestNameFilter = null;
-        RequestDirectioFilter = null;
-        RequestStatusFilter = null;
+        NumberFilter = null;
+        CustomerFilter = null;
+        NameFilter = null;
+        DirectioFilter = null;
+        StatusFilter = null;
     });
 
     public AsyncRelayCommand DataFilteredCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            if (AllItems == null || AllItems.Count == 0)
-            {
-                DataLoadingCommand.Execute(null);
-            }
+            DataLoadingCommand.Execute(null);
             if (AllItems == null)
             {
                 return;
@@ -194,25 +251,25 @@ public class RequestsViewModel : ViewModelBase
 
             IEnumerable<Request> filteredItems = AllItems.ToList();
 
-            if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
+            if (!string.IsNullOrWhiteSpace(NumberFilter))
             {
-                filteredItems = filteredItems.Where(x => x.RequestNum == RequestNumberFilter);
+                filteredItems = filteredItems.Where(x => x.RequestNum == NumberFilter);
             }
-            if (!string.IsNullOrWhiteSpace(RequestCustomerFilter))
+            if (!string.IsNullOrWhiteSpace(CustomerFilter))
             {
-                filteredItems = filteredItems.Where(x => x.Customer == RequestCustomerFilter);
+                filteredItems = filteredItems.Where(x => x.Customer == CustomerFilter);
             }
-            if (!string.IsNullOrWhiteSpace(RequestNameFilter))
+            if (!string.IsNullOrWhiteSpace(NameFilter))
             {
-                filteredItems = filteredItems.Where(x => x.RequestName == RequestNameFilter);
+                filteredItems = filteredItems.Where(x => x.RequestName == NameFilter);
             }
-            if (!string.IsNullOrWhiteSpace(RequestDirectioFilter))
+            if (!string.IsNullOrWhiteSpace(DirectioFilter))
             {
-                filteredItems = filteredItems.Where(x => x.PersonManager == RequestDirectioFilter);
+                filteredItems = filteredItems.Where(x => x.PersonManager == DirectioFilter);
             }
-            if (!string.IsNullOrWhiteSpace(RequestStatusFilter))
+            if (!string.IsNullOrWhiteSpace(StatusFilter))
             {
-                filteredItems = filteredItems.Where(x => x.SupState == RequestStatusFilter);
+                filteredItems = filteredItems.Where(x => x.SupState == StatusFilter);
             }
 
             FilteredItems = new(filteredItems);
@@ -221,37 +278,135 @@ public class RequestsViewModel : ViewModelBase
 
     public RelayCommand FillingEditFields => new(() =>
     {
-        if (SelectedItems == null)
+        if (SelectedItems == null || SelectedItems.Count < 1)
         {
             return;
         }
 
         if (SelectedItems.Count == 1)
         {
-            RequestNumberEdit = SelectedItems[0].RequestNum;
-            RequestNameEdit = SelectedItems[0].RequestName;
-            RequestDateEdit = SelectedItems[0].RequestDate;
+            NumberEdit = SelectedItems[0].RequestNum;
+            NameEdit = SelectedItems[0].RequestName;
+            DateEdit = SelectedItems[0].RequestDate;
         }
         else
         {
-            RequestNumberEdit = null;
-            RequestNameEdit = null;
-            RequestDateEdit = null;
+            NumberEdit = null;
+            NameEdit = null;
+            DateEdit = null;
         }
 
-        RequestPriorityEdit = SelectedItems[0].Priority;
-        RequestCommentEdit = SelectedItems[0].RequestComment;
-        RequestCustomerEdit = SelectedItems[0].Customer;
-        RequestDirectionEdit = SelectedItems[0].PersonManager;
-        RequestTradeSignEdit = SelectedItems[0].TradeSign;
-        RequestToWarehouseEdit = SelectedItems[0].ToWarehouse;
-        RequestToReserveEdit = SelectedItems[0].ToReserve;
+        PriorityEdit = SelectedItems[0].Priority;
+        CommentEdit = SelectedItems[0].RequestComment;
+        CustomerEdit = SelectedItems[0].Customer;
+        DirectionEdit = SelectedItems[0].PersonManager;
+        TradeSignEdit = SelectedItems[0].TradeSign;
+        ToWarehouseEdit = SelectedItems[0].ToWarehouse;
+        ToReserveEdit = SelectedItems[0].ToReserve;
+    });
+
+    public AsyncRelayCommand SaveDataCommand => new(async () =>
+    {
+        if (SelectedItems == null || SelectedItems.Count == 0)
+        {
+            return;
+        }
+
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+            var c = db.Requests;
+
+            foreach (var item in SelectedItems)
+            {
+                var c1 = c.Where(c => c.RequestId == item.RequestId).FirstOrDefault();
+
+                
+                if (c1 == null)
+                {
+                    
+                    return;
+                }
+
+                c1.Priority = PriorityEdit;
+                c1.RequestComment = CommentEdit;
+                c1.Customer = CustomerEdit;
+                c1.PersonManager = DirectionEdit;
+                c1.TradeSign = TradeSignEdit;
+                c1.ToWarehouse = ToWarehouseEdit ?? false;
+                c1.ToReserve = ToReserveEdit ?? false;
+
+                if (SelectedItems.Count == 1)
+                {
+                    continue;
+                }
+
+                c1.RequestNum =NumberEdit;
+                c1.RequestName = NameEdit;
+                c1.RequestDate = DateEdit;
+            }
+
+            db.SaveChanges();
+        });
+
+        DataLoadingCommand.Execute(null);
+    });
+
+    public RelayCommand ShowAddRequestWindowCommnad => new(() =>
+    {
+        var dlg = new AddRequest()
+        {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
+
+        dlg.Show();
+    });
+
+    public AsyncRelayCommand AddRequestCommnad => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+
+            Models.Database.Request request = new()
+            {
+                RequestNum = NumberAdd,
+                Customer = CustomerAdd,
+                RequestDate = DateAdd,
+                RequestName = NameAdd,
+                RequestComment = CommentAdd,
+                Priority = PriorityAdd,
+            };
+
+            db.Requests.Add(request);
+            db.SaveChanges();
+
+            DataFilteredCommand.Execute(null);
+        });
+    });
+
+    public AsyncRelayCommand DeleteRequestCommnad => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+
+            foreach (var delete in from selectedItem in SelectedItems
+                                   let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
+                                   where delete != null
+                                   select delete)
+            {
+                db.Requests.Remove(delete);
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
     });
 
     #endregion
 
     public RequestsViewModel()
     {
-
     }
 }

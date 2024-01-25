@@ -1,0 +1,47 @@
+﻿<Window x:Class="BackofficeClient.Views.Windows.AddRequest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
+        mc:Ignorable="d"
+        Title="AddRequest" Height="300" Width="300">
+
+    <Window.DataContext>
+        <viewmodels:RequestsViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Заказчик"></TextBlock>
+                <TextBox Text="{Binding CustomerAdd}"></TextBox>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Номер заявки"></TextBlock>
+                <TextBox Text="{Binding NumberAdd}"></TextBox>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Дата заявки"></TextBlock>
+                <TextBox Text="{Binding DateAdd}"></TextBox>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Наименование заявки"></TextBlock>
+                <TextBox Text="{Binding NameAdd}"></TextBox>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="комментарий"></TextBlock>
+                <TextBox Text="{Binding CommentAdd}"></TextBox>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Приоритет"></TextBlock>
+                <TextBox Text="{Binding PriorityAdd}"></TextBox>
+            </StackPanel>
+            
+            <StackPanel Width="120">
+                <Button Content="Добавить" Command="{Binding AddRequestCommnad}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
