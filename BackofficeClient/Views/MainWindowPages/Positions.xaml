@@ -92,8 +92,7 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
-
-                <TabItem Header="Редакирование">
+                <TabItem Header="Редакирование" Name="asd">
                     <StackPanel>
                         <Expander Header="Одиночное редактирование" IsExpanded="False">
                             <StackPanel>
