@@ -5,7 +5,7 @@ namespace BackofficeClient.ViewModels;
 public interface INterface1
 {
     /// <summary>
-    /// Загрузка и отображение данных
+    /// Загрузка данных
     /// </summary>
     public AsyncRelayCommand DataLoadingCommand { get; }
 
@@ -23,4 +23,24 @@ public interface INterface1
     /// Заполнение полей редактирования
     /// </summary>
     public RelayCommand FillingEditFields { get; }
+
+    /// <summary>
+    /// Сохранение изменений
+    /// </summary>
+    public AsyncRelayCommand SaveDataCommand { get; }
+
+    /// <summary>
+    /// Показать окно для добавления
+    /// </summary>
+    public RelayCommand ShowAddWindowCommnad { get; }
+
+    /// <summary>
+    /// Добавление данных
+    /// </summary>
+    public AsyncRelayCommand AddCommnad { get; }
+
+    /// <summary>
+    /// Удаление данных
+    /// </summary>
+    public AsyncRelayCommand DeleteCommnad { get; }
 }

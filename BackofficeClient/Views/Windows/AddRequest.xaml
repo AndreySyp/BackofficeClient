@@ -16,7 +16,10 @@
         <StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Заказчик"></TextBlock>
-                <TextBox Text="{Binding CustomerAdd}"></TextBox>
+                <ComboBox ItemsSource="{Binding CustomerItems}" 
+                          SelectedValue="{Binding CustomerEdit}"
+                          IsEditable="True"/>
+
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Номер заявки"></TextBlock>
@@ -24,7 +27,7 @@
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Дата заявки"></TextBlock>
-                <TextBox Text="{Binding DateAdd}"></TextBox>
+                <DatePicker SelectedDate="{Binding DateAdd}"></DatePicker>
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Наименование заявки"></TextBlock>
@@ -36,11 +39,13 @@
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Приоритет"></TextBlock>
-                <TextBox Text="{Binding PriorityAdd}"></TextBox>
+                <ComboBox ItemsSource="{Binding PriorityItems}" 
+                          SelectedValue="{Binding PriorityEdit}"
+                          IsEditable="True"></ComboBox>
             </StackPanel>
             
             <StackPanel Width="120">
-                <Button Content="Добавить" Command="{Binding AddRequestCommnad}"/>
+                <Button Content="Добавить" Command="{Binding AddCommnad}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

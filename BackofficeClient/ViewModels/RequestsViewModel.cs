@@ -1,10 +1,16 @@
-﻿using BackofficeClient.Models.DataGrid;
+﻿using BackofficeClient.Infrastructure.Extensions;
+using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace BackofficeClient.ViewModels;
+
+/// <summary>
+/// Scroll
+/// Name
+/// </summary>
+
 
 public class RequestsViewModel : ViewModelBase, INterface1
 {
@@ -83,8 +89,8 @@ public class RequestsViewModel : ViewModelBase, INterface1
         set { numberEdit = value; OnPropertyChanged(); }
     }
 
-    private DateOnly? dateEdit;
-    public DateOnly? DateEdit
+    private DateTime? dateEdit;
+    public DateTime? DateEdit
     {
         get => dateEdit;
         set { dateEdit = value; OnPropertyChanged(); }
@@ -136,15 +142,15 @@ public class RequestsViewModel : ViewModelBase, INterface1
         set { tradeSignEdit = value; OnPropertyChanged(); }
     }
 
-    private bool? toWarehouseEdit;
-    public bool? ToWarehouseEdit
+    private bool toWarehouseEdit;
+    public bool ToWarehouseEdit
     {
         get => toWarehouseEdit;
         set { toWarehouseEdit = value; OnPropertyChanged(); }
     }
 
-    private bool? toReserveEdit;
-    public bool? ToReserveEdit
+    private bool toReserveEdit;
+    public bool ToReserveEdit
     {
         get => toReserveEdit;
         set { toReserveEdit = value; OnPropertyChanged(); }
@@ -168,8 +174,8 @@ public class RequestsViewModel : ViewModelBase, INterface1
         set { customerAdd = value; OnPropertyChanged(); }
     }
 
-    private DateOnly? dateAdd;
-    public DateOnly? DateAdd
+    private DateTime? dateAdd;
+    public DateTime? DateAdd
     {
         get => dateAdd;
         set { dateAdd = value; OnPropertyChanged(); }
@@ -211,20 +217,36 @@ public class RequestsViewModel : ViewModelBase, INterface1
             using DatabaseContext db = new();
             IsLoading = true;
 
+            // Legacy request join v_request
             AllItems = new(
-                    // Legacy request join v_request
-                    db.Requests.Join(
-                        db.TradeSigns,
-                        r => r.TradeSign,
-                        ts => ts.TradeSign1,
-                        (r, ts) => new { r.RequestId, r.TradeSign, ts.TradeSignFullname, r.ToWarehouse, r.ToReserve })
-                    .Join(
-                        db.VRequestForms,
-                        rts => rts.RequestId,
-                        vr => vr.RequestId,
-                        (rts, vr) => new Request(vr.RequestId, vr.RequestNum, vr.RequestDate, vr.RequestName, vr.Customer, vr.NameShort, vr.GroupMtr, vr.SupState, vr.Np, vr.Nl, vr.RequestComment, vr.Priority, vr.SumIncPrice, vr.PersonManager, rts.TradeSign, rts.TradeSignFullname, rts.ToWarehouse, rts.ToReserve))
-                    .ToList()
-                    .OrderByDescending(r => r.RequestDate));
+            from requests in db.Requests
+            join tradeSigns in db.TradeSigns on new
+            {
+                requests.TradeSign
+            } equals new
+            {
+                TradeSign = tradeSigns.TradeSign1
+            }
+            join viewRequests in db.VRequestForms on requests.RequestId equals viewRequests.RequestId
+            orderby requests.RequestDate
+            select new Request(viewRequests.RequestId,
+                                viewRequests.RequestNum,
+                                viewRequests.RequestDate,
+                                viewRequests.RequestName,
+                                viewRequests.Customer,
+                                viewRequests.NameShort,
+                                viewRequests.GroupMtr,
+                                viewRequests.SupState,
+                                viewRequests.Np,
+                                viewRequests.Nl,
+                                viewRequests.RequestComment,
+                                viewRequests.Priority,
+                                viewRequests.SumIncPrice,
+                                viewRequests.PersonManager,
+                                requests.TradeSign,
+                                tradeSigns.TradeSignFullname,
+                                requests.ToWarehouse,
+                                requests.ToReserve));
 
             FilteredItems = AllItems;
         });
@@ -243,13 +265,16 @@ public class RequestsViewModel : ViewModelBase, INterface1
     {
         await Task.Run(() =>
         {
-            DataLoadingCommand.Execute(null);
+            if (AllItems == null)
+            {
+                DataLoadingCommand.Execute(null);
+            }
             if (AllItems == null)
             {
                 return;
             }
 
-            IEnumerable<Request> filteredItems = AllItems.ToList();
+            IEnumerable<Request> filteredItems = AllItems.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(NumberFilter))
             {
@@ -282,12 +307,17 @@ public class RequestsViewModel : ViewModelBase, INterface1
         {
             return;
         }
+        var selectedItem = SelectedItems[0];
 
         if (SelectedItems.Count == 1)
         {
-            NumberEdit = SelectedItems[0].RequestNum;
-            NameEdit = SelectedItems[0].RequestName;
-            DateEdit = SelectedItems[0].RequestDate;
+            NumberEdit = selectedItem.RequestNum;
+            NameEdit = selectedItem.RequestName;
+
+            if (selectedItem.RequestDate != null)
+            {
+                DateEdit = selectedItem.RequestDate.ToDateTime();
+            }
         }
         else
         {
@@ -296,63 +326,58 @@ public class RequestsViewModel : ViewModelBase, INterface1
             DateEdit = null;
         }
 
-        PriorityEdit = SelectedItems[0].Priority;
-        CommentEdit = SelectedItems[0].RequestComment;
-        CustomerEdit = SelectedItems[0].Customer;
-        DirectionEdit = SelectedItems[0].PersonManager;
-        TradeSignEdit = SelectedItems[0].TradeSign;
-        ToWarehouseEdit = SelectedItems[0].ToWarehouse;
-        ToReserveEdit = SelectedItems[0].ToReserve;
+        PriorityEdit = selectedItem.Priority;
+        CommentEdit = selectedItem.RequestComment;
+        CustomerEdit = selectedItem.Customer;
+        DirectionEdit = selectedItem.PersonManager;
+        TradeSignEdit = selectedItem.TradeSign;
+        ToWarehouseEdit = selectedItem.ToWarehouse;
+        ToReserveEdit = selectedItem.ToReserve;
     });
 
     public AsyncRelayCommand SaveDataCommand => new(async () =>
     {
-        if (SelectedItems == null || SelectedItems.Count == 0)
-        {
-            return;
-        }
-
         await Task.Run(() =>
         {
-            using DatabaseContext db = new();
-            var c = db.Requests;
-
-            foreach (var item in SelectedItems)
+            if (SelectedItems == null || SelectedItems.Count == 0)
             {
-                var c1 = c.Where(c => c.RequestId == item.RequestId).FirstOrDefault();
+                return;
+            }
 
-                
-                if (c1 == null)
+            using DatabaseContext db = new();
+            foreach (var update in from selectedItem in SelectedItems
+                                   let update = db.Requests.FirstOrDefault(r => r.RequestId == selectedItem.RequestId)
+                                   select update)
+            {
+                if (update == null)
                 {
-                    
                     return;
                 }
 
-                c1.Priority = PriorityEdit;
-                c1.RequestComment = CommentEdit;
-                c1.Customer = CustomerEdit;
-                c1.PersonManager = DirectionEdit;
-                c1.TradeSign = TradeSignEdit;
-                c1.ToWarehouse = ToWarehouseEdit ?? false;
-                c1.ToReserve = ToReserveEdit ?? false;
+                update.RequestComment = update.RequestComment.OldOrNew(CommentEdit);
+                update.PersonManager = update.PersonManager.OldOrNew(DirectionEdit);
+                update.ToWarehouse = update.ToWarehouse.OldOrNew(ToWarehouseEdit);
+                update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
+                update.Customer = update.Customer.OldOrNew(CustomerEdit);
+                update.Priority = update.Priority.OldOrNew(PriorityEdit);
+                update.TradeSign = update.TradeSign.OldOrNewNotNull(TradeSignEdit);
 
                 if (SelectedItems.Count == 1)
                 {
-                    continue;
-                }
+                    update.RequestNum = update.RequestNum.OldOrNew(NumberEdit);
+                    update.RequestName = update.RequestName.OldOrNew(NameEdit);
+                    update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
+                    update.RequestDate = update.RequestDate.OldOrNew(DateEdit.ToDateOnly());
 
-                c1.RequestNum =NumberEdit;
-                c1.RequestName = NameEdit;
-                c1.RequestDate = DateEdit;
+                }
             }
 
             db.SaveChanges();
+            DataLoadingCommand.Execute(null);
         });
-
-        DataLoadingCommand.Execute(null);
     });
 
-    public RelayCommand ShowAddRequestWindowCommnad => new(() =>
+    public RelayCommand ShowAddWindowCommnad => new(() =>
     {
         var dlg = new AddRequest()
         {
@@ -362,7 +387,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
         dlg.Show();
     });
 
-    public AsyncRelayCommand AddRequestCommnad => new(async () =>
+    public AsyncRelayCommand AddCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -372,20 +397,28 @@ public class RequestsViewModel : ViewModelBase, INterface1
             {
                 RequestNum = NumberAdd,
                 Customer = CustomerAdd,
-                RequestDate = DateAdd,
+                RequestDate = DateAdd.ToDateOnly(),
                 RequestName = NameAdd,
                 RequestComment = CommentAdd,
                 Priority = PriorityAdd,
             };
 
-            db.Requests.Add(request);
+            var asd = db.Requests.FirstOrDefault(x => x.RequestNum == request.RequestNum);
+            if (asd == null)
+            {
+                db.Requests.Add(request);
+            }
+            else
+            {
+                // Feature оповещение что заявка уже существует
+            }
             db.SaveChanges();
 
             DataFilteredCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand DeleteRequestCommnad => new(async () =>
+    public AsyncRelayCommand DeleteCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -406,7 +439,61 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #endregion
 
+    public ObservableCollection<string> PriorityItems { get; private set; }
+
+    public ObservableCollection<string> CustomerItems { get; private set; }
+
+    public ObservableCollection<string> DirectionItems { get; private set; }
+
+    public ObservableCollection<string> StatusItems { get; private set; }
+
+    public ObservableCollection<string> TradeSignItems { get; private set; }
+
+
+    //public ObservableCollection<string> CustomerFilterItems { get; private set; }
+
+    //public ObservableCollection<string> CustomerFilterItems { get; private set; }
+
+
     public RequestsViewModel()
     {
+
+#pragma warning disable CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
+        using DatabaseContext db = new();
+
+        IEnumerable<string?> priority = db.Requests
+            .Select(r => r.Priority)
+            .Where(r => !string.IsNullOrWhiteSpace(r))
+            .Distinct();
+        PriorityItems = new(priority);
+
+        IEnumerable<string?> customer = db.Requests
+            .Select(r => r.Customer)
+            .Where(r => !string.IsNullOrWhiteSpace(r))
+            .Distinct()
+            .OrderBy(r => r);
+        CustomerItems = new(customer);
+
+        IEnumerable<string?> directionFilter = db.Requests
+            .Select(r => r.PersonManager)
+            .Where(r => !string.IsNullOrWhiteSpace(r))
+            .Distinct()
+            .OrderBy(r => r);
+        DirectionItems = new(directionFilter);
+
+        IEnumerable<string?> statusFilter = db.Requests
+            .Select(r => r.RequestState)
+            .Where(r => !string.IsNullOrWhiteSpace(r))
+            .Distinct()
+            .OrderBy(r => r);
+        StatusItems = new(statusFilter);
+
+        IEnumerable<string?> tradeSignItems = db.Requests
+            .Select(r => r.TradeSign)
+            .Where(r => !string.IsNullOrWhiteSpace(r))
+            .Distinct()
+            .OrderBy(r => r);
+        TradeSignItems = new(tradeSignItems);
+#pragma warning restore CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
     }
 }

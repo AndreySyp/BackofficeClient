@@ -7,7 +7,9 @@
         xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        MinHeight="200" MinWidth="400"
+        Height="450" Width="800">
 
     <Window.DataContext>
         <viewmodels:MainWindowViewModel/>

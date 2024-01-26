@@ -263,6 +263,7 @@ public class PositionsViewModel : ViewModelBase
             IsLoading = true;
 
             // LEGACY В одной таблице id инт в другой текст, что это ***********
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             AllItems = new(db.VPositions.ToList().Join(
                     db.Positions.ToList(),
                     v => long.Parse(v.PositionId),
@@ -271,6 +272,7 @@ public class PositionsViewModel : ViewModelBase
                     .OrderBy(x => x.RequestNum)
                     .ThenBy(x => x.ProcedureGpb)
                     .ThenBy(x => x.PositionNum));
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
 
             FilteredItems = AllItems;
         });

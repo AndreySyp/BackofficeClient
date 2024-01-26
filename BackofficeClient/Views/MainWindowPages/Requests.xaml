@@ -49,7 +49,9 @@
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Контрагент"></TextBlock>
-                            <TextBox Text="{Binding CustomerFilter}"></TextBox>
+                            <ComboBox ItemsSource="{Binding CustomerItems}" 
+                                      SelectedValue ="{Binding CustomerFilter}"
+                                      IsEditable="True"></ComboBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Наименование заявки"></TextBlock>
@@ -57,11 +59,15 @@
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Направление ЦЗС"></TextBlock>
-                            <TextBox Text="{Binding DirectioFilter}"></TextBox>
+                            <ComboBox ItemsSource="{Binding DirectionItems}" 
+                                      SelectedValue="{Binding DirectioFilter}"
+                                      IsEditable="True"></ComboBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <TextBlock Text="Статус"></TextBlock>
-                            <TextBox Text="{Binding StatusFilter}"></TextBox>
+                            <ComboBox ItemsSource="{Binding StatusItems}"
+                                      SelectedValue="{Binding StatusFilter}"
+                                      IsEditable="True"></ComboBox>
                         </StackPanel>
                         <StackPanel Width="120">
                             <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
@@ -74,11 +80,11 @@
                 <TabItem Header="Редакирование">
                     <StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Command="{Binding ShowAddRequestWindowCommnad}" 
+                            <Button Command="{Binding ShowAddWindowCommnad}" 
                                     ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
                                 <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
                             </Button>
-                            <Button Command="{Binding DeleteRequestCommnad}"
+                            <Button Command="{Binding DeleteCommnad}"
                                     ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
                                 <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
                             </Button>
@@ -91,56 +97,68 @@
                                 <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
                             </Button>
                         </StackPanel>
-                        
-                        <Expander Header="Одиночное редактирование" IsExpanded="False">
                             <StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Номер заявки" ></TextBlock>
-                                    <TextBox Text="{Binding NumberEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Дата заявки" ></TextBlock>
-                                    <TextBox Text="{Binding DateEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Наименование" ></TextBlock>
-                                    <TextBox Text="{Binding NameEdit}"></TextBox>
-                                </StackPanel>
+
+                                <Expander Header="Одиночное редактирование" IsExpanded="False">
+                                    <StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Номер заявки" ></TextBlock>
+                                            <TextBox Text="{Binding NumberEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Дата заявки" ></TextBlock>
+                                            <DatePicker SelectedDate="{Binding DateEdit}" ></DatePicker>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Наименование" ></TextBlock>
+                                            <TextBox Text="{Binding NameEdit}"></TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+
+                                <Expander Header="Множественное редактирование" IsExpanded="True">
+                                    <StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Приоритет" ></TextBlock>
+                                            <ComboBox ItemsSource="{Binding PriorityItems}" 
+                                              SelectedValue="{Binding PriorityEdit}"
+                                              IsEditable="True"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Комментарий"></TextBlock>
+                                            <TextBox Text="{Binding CommentEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Контрагент"></TextBlock>
+                                            <ComboBox ItemsSource="{Binding CustomerItems}" 
+                                              SelectedValue="{Binding CustomerEdit}"
+                                              IsEditable="True"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Направление ЦЗС"></TextBlock>
+                                            <ComboBox ItemsSource="{Binding DirectionItems}" 
+                                              SelectedValue="{Binding DirectionEdit}"
+                                              IsEditable="True"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Признак сделки"></TextBlock>
+                                            <ComboBox ItemsSource="{Binding TradeSignItems}" 
+                                              SelectedValue="{Binding TradeSignEdit}"
+                                              IsEditable="True"></ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <CheckBox Content="Закупка на складе" 
+                                              IsThreeState="False"
+                                              IsChecked="{Binding ToWarehouseEdit}"></CheckBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <CheckBox Content="Бронь" 
+                                              IsThreeState="False"
+                                              IsChecked="{Binding ToReserveEdit}"></CheckBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
                             </StackPanel>
-                        </Expander>
-                        
-                        <Expander Header="Множественное редактирование" IsExpanded="True">
-                            <StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Приоритет" ></TextBlock>
-                                    <TextBox Text="{Binding PriorityEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Комментарий"></TextBlock>
-                                    <TextBox Text="{Binding CommentEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Контрагент"></TextBlock>
-                                    <TextBox Text="{Binding CustomerEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Направление ЦЗС"></TextBlock>
-                                    <TextBox Text="{Binding DirectionEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Признак сделки"></TextBlock>
-                                    <TextBox Text="{Binding TradeSignEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Закупка на складе"></TextBlock>
-                                    <TextBox Text="{Binding ToWarehouseEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Бронь"></TextBlock>
-                                    <TextBox Text="{Binding ToReserveEdit}"></TextBox>
-                                </StackPanel>
-                            </StackPanel>
-                        </Expander>
                     </StackPanel>
                 </TabItem>
 

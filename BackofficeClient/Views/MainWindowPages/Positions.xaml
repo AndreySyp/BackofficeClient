@@ -93,92 +93,92 @@
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Редакирование" Name="asd">
-                    <StackPanel>
-                        <Expander Header="Одиночное редактирование" IsExpanded="False">
-                            <StackPanel>
+                                <StackPanel>
+                                <Expander Header="Одиночное редактирование" IsExpanded="False">
+                                    <StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Наименование МТР" ></TextBlock>
+                                            <TextBox Text="{Binding NameMtrEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Документ изготовления (НТД: ГОСТ/ТУ, ТЗ и т.п." ></TextBlock>
+                                            <TextBox Text="{Binding DocNtd}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Количество" ></TextBlock>
+                                            <TextBox Text="{Binding Amount}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Единица измерения" ></TextBlock>
+                                            <TextBox Text="{Binding MeasureEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Базис" ></TextBlock>
+                                            <TextBox Text="{Binding BasisEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Номер позиции" ></TextBlock>
+                                            <TextBox Text="{Binding PositionNumberEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Изготовитель" ></TextBlock>
+                                            <TextBox Text="{Binding ManufacturerEdit}"></TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander Header="Множественное редактирование" IsExpanded="True">
+                                    <StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Группа МТР" ></TextBlock>
+                                            <TextBox Text="{Binding GroupMtrEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Процедура ЭТП" ></TextBlock>
+                                            <TextBox Text="{Binding ProcedureGpbEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Победитель/Поставщик" ></TextBlock>
+                                            <TextBox Text="{Binding WinnerEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Срок поставки" ></TextBlock>
+                                            <TextBox Text="{Binding TimingEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Максимальный срок поставки" ></TextBlock>
+                                            <TextBox Text="{Binding TimingMaxEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Валюта" ></TextBlock>
+                                            <TextBox Text="{Binding CurrencyEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Вх. ст. товара, руб. без НДС" ></TextBlock>
+                                            <TextBox Text="{Binding IncPriceEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Ст. в валюте, без НДС" ></TextBlock>
+                                            <TextBox Text="{Binding IncPriceCurrencyEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Вх. ст. товара, руб. с НДС" ></TextBlock>
+                                            <TextBox Text="{Binding IncPriceNdsEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Ст. в валюте, с НДС" ></TextBlock>
+                                            <TextBox Text="{Binding IncPriceNdsCurrencyEdit}"></TextBox>
+                                        </StackPanel>
+                                        <StackPanel Width="120">
+                                            <TextBlock Text="Ответственный" ></TextBlock>
+                                            <TextBox Text="{Binding ResponsibleEdit}"></TextBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
                                 <StackPanel Width="120">
-                                    <TextBlock Text="Наименование МТР" ></TextBlock>
-                                    <TextBox Text="{Binding NameMtrEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Документ изготовления (НТД: ГОСТ/ТУ, ТЗ и т.п." ></TextBlock>
-                                    <TextBox Text="{Binding DocNtd}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Количество" ></TextBlock>
-                                    <TextBox Text="{Binding Amount}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Единица измерения" ></TextBlock>
-                                    <TextBox Text="{Binding MeasureEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Базис" ></TextBlock>
-                                    <TextBox Text="{Binding BasisEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Номер позиции" ></TextBlock>
-                                    <TextBox Text="{Binding PositionNumberEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Изготовитель" ></TextBlock>
-                                    <TextBox Text="{Binding ManufacturerEdit}"></TextBox>
+                                    <Button Background="Red" Content="Сохранить изменения"></Button>
+                                    <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
                                 </StackPanel>
                             </StackPanel>
-                        </Expander>
-                        <Expander Header="Множественное редактирование" IsExpanded="True">
-                            <StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Группа МТР" ></TextBlock>
-                                    <TextBox Text="{Binding GroupMtrEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Процедура ЭТП" ></TextBlock>
-                                    <TextBox Text="{Binding ProcedureGpbEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Победитель/Поставщик" ></TextBlock>
-                                    <TextBox Text="{Binding WinnerEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Срок поставки" ></TextBlock>
-                                    <TextBox Text="{Binding TimingEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Максимальный срок поставки" ></TextBlock>
-                                    <TextBox Text="{Binding TimingMaxEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Валюта" ></TextBlock>
-                                    <TextBox Text="{Binding CurrencyEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Вх. ст. товара, руб. без НДС" ></TextBlock>
-                                    <TextBox Text="{Binding IncPriceEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Ст. в валюте, без НДС" ></TextBlock>
-                                    <TextBox Text="{Binding IncPriceCurrencyEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Вх. ст. товара, руб. с НДС" ></TextBlock>
-                                    <TextBox Text="{Binding IncPriceNdsEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Ст. в валюте, с НДС" ></TextBlock>
-                                    <TextBox Text="{Binding IncPriceNdsCurrencyEdit}"></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Ответственный" ></TextBlock>
-                                    <TextBox Text="{Binding ResponsibleEdit}"></TextBox>
-                                </StackPanel>
-                            </StackPanel>
-                        </Expander>
-                        <StackPanel Width="120">
-                            <Button Background="Red" Content="Сохранить изменения"></Button>
-                            <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
-                        </StackPanel>
-                    </StackPanel>
                 </TabItem>
 
                 <TabItem Background="Red" Header="Статусы">
