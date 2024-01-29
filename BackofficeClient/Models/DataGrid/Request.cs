@@ -1,8 +1,13 @@
-﻿namespace BackofficeClient.Models.DataGrid;
+﻿using System.ComponentModel;
+using static BackofficeClient.Views.MainWindowPages.Requests;
+
+namespace BackofficeClient.Models.DataGrid;
 
 public class Request
 {
+    [ColumnName("User Name")]
     public long? RequestId { get; set; }
+    [ColumnName("User Id")]
     public string? RequestNum { get; set; }
     public DateOnly? RequestDate { get; set; }
     public string? RequestName { get; set; }

@@ -7,7 +7,6 @@ using System.Collections.ObjectModel;
 namespace BackofficeClient.ViewModels;
 
 /// <summary>
-/// Scroll
 /// Name
 /// </summary>
 

@@ -1,104 +1,109 @@
 ﻿<Page x:Class="BackofficeClient.Views.MainWindowPages.Requests"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
-      mc:Ignorable="d"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       
-      xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
-      d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
-      xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
-      xmlns:fa="http://schemas.fontawesome.io/icons/"
-      d:DesignHeight="450" 
-      d:DesignWidth="800"
-      Title="Requests"
-      >
+	xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:fa="http://schemas.fontawesome.io/icons/"
+	xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
+    d:DesignHeight="450" 
+    d:DesignWidth="800"
+    Title="Requests">
+    
     <Page.DataContext>
         <viewmodels:RequestsViewModel/>
     </Page.DataContext>
-
+    
     <Grid Background="White" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-
-        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}"
-                  a:Extension.SelectedItems="{Binding SelectedItems}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <DataGrid Grid.RowSpan="2" Grid.Column="0" ItemsSource="{Binding FilteredItems}"
+                  a:Extension.SelectedItems="{Binding SelectedItems}" Name="dgPrimaryGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
-
-        <StackPanel Grid.Column="1">
-            <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
-                <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
-                <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
-            </StackPanel>
-
+        
+        <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
+            <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
+            <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1" Grid.Column="1" Name="page">
             <TabControl>
                 <TabItem Header="Поиск">
-                    <StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Номер заявки"></TextBlock>
-                            <TextBox Text="{Binding NumberFilter}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Контрагент"></TextBlock>
-                            <ComboBox ItemsSource="{Binding CustomerItems}" 
+                    <ScrollViewer MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}">
+                        <StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Номер заявки"></TextBlock>
+                                <TextBox Text="{Binding NumberFilter}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Контрагент"></TextBlock>
+                                <ComboBox ItemsSource="{Binding CustomerItems}" 
                                       SelectedValue ="{Binding CustomerFilter}"
                                       IsEditable="True"></ComboBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Наименование заявки"></TextBlock>
-                            <TextBox Text="{Binding NameFilter}"></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Направление ЦЗС"></TextBlock>
-                            <ComboBox ItemsSource="{Binding DirectionItems}" 
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Наименование заявки"></TextBlock>
+                                <TextBox Text="{Binding NameFilter}"></TextBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Направление ЦЗС"></TextBlock>
+                                <ComboBox ItemsSource="{Binding DirectionItems}" 
                                       SelectedValue="{Binding DirectioFilter}"
                                       IsEditable="True"></ComboBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Статус"></TextBlock>
-                            <ComboBox ItemsSource="{Binding StatusItems}"
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <TextBlock Text="Статус"></TextBlock>
+                                <ComboBox ItemsSource="{Binding StatusItems}"
                                       SelectedValue="{Binding StatusFilter}"
                                       IsEditable="True"></ComboBox>
+                            </StackPanel>
+                            <StackPanel Width="120">
+                                <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
+                                <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
+                            </StackPanel>
                         </StackPanel>
-                        <StackPanel Width="120">
-                            <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
-                            <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
-                        </StackPanel>
-                    </StackPanel>
-
+                    </ScrollViewer>
                 </TabItem>
-
+                
                 <TabItem Header="Редакирование">
-                    <StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Command="{Binding ShowAddWindowCommnad}" 
+                    <ScrollViewer MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Command="{Binding ShowAddWindowCommnad}" 
                                     ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
-                                <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
-                            </Button>
-                            <Button Command="{Binding DeleteCommnad}"
+                                    <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
+                                </Button>
+                                <Button Command="{Binding DeleteCommnad}"
                                     ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
-                                <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
-                            </Button>
-                            <Button Command="{Binding SaveDataCommand}"
+                                    <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
+                                </Button>
+                                <Button Command="{Binding SaveDataCommand}"
                                     ToolTip="Сохранить изменения" ToolTipService.InitialShowDelay="1500">
-                                <fa:ImageAwesome Icon="FloppyOutline" Height="20" Width="20"/>
-                            </Button>
-                            <Button Command="{Binding FillingEditFields}"
+                                    <fa:ImageAwesome Icon="FloppyOutline" Height="20" Width="20"/>
+                                </Button>
+                                <Button Command="{Binding FillingEditFields}"
                                     ToolTip="Сбросить изменнеия" ToolTipService.InitialShowDelay="1500">
-                                <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
-                            </Button>
-                        </StackPanel>
+                                    <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
+                                </Button>
+                            </StackPanel>
                             <StackPanel>
-
                                 <Expander Header="Одиночное редактирование" IsExpanded="False">
                                     <StackPanel>
                                         <StackPanel Width="120">
@@ -115,7 +120,6 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>
-
                                 <Expander Header="Множественное редактирование" IsExpanded="True">
                                     <StackPanel>
                                         <StackPanel Width="120">
@@ -159,9 +163,10 @@
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>
-                    </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
                 </TabItem>
-
+                
                 <TabItem Header="Остальное">
                     <StackPanel>
                         <StackPanel Width="120">
@@ -172,6 +177,6 @@
                     </StackPanel>
                 </TabItem>
             </TabControl>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>
