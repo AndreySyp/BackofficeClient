@@ -3,6 +3,9 @@ using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using static BackofficeClient.Views.MainWindowPages.Requests;
+using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace BackofficeClient.ViewModels;
 
@@ -417,6 +420,24 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
+
+    public AsyncRelayCommand<DataGridAutoGeneratingColumnEventArgs> AddCommnadww => new(async (e) =>
+    {
+        await Task.Run(() =>
+        {
+            if (e == null)
+            {
+                return;
+            }
+
+            if (e.PropertyDescriptor is PropertyDescriptor desc
+                && desc.Attributes[typeof(ColumnNameAttribute)] is ColumnNameAttribute att)
+            {
+                e.Column.Header = att.Name;
+            }
+
+        });
+    });
     public AsyncRelayCommand DeleteCommnad => new(async () =>
     {
         await Task.Run(() =>

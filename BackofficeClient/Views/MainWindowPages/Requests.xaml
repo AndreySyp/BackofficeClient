@@ -35,6 +35,9 @@
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="AutoGeneratingColumn">
+                    <i:InvokeCommandAction Command="{Binding AddCommnadww}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
         
