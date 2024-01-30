@@ -36,15 +36,18 @@
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.RowSpan="2" Grid.Column="0" ItemsSource="{Binding FilteredItems}"
-                  a:Extension.SelectedItems="{Binding SelectedItems}" Name="dgPrimaryGrid">
+        <DataGrid Grid.RowSpan="2" Grid.Column="0" 
+                  ItemsSource="{Binding FilteredItems}"
+                  Name="dataGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
-                                           CommandParameter="{Binding SelectedItems}"/>
+                    <i:InvokeCommandAction 
+                                            Command="{Binding FillingEditFields}"
+                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                                           />
                 </i:EventTrigger>
 
-                <i:EventTrigger EventName="AutoGeneratingColumn" SourceObject="{Binding ElementName=dgPrimaryGrid}">
+                <i:EventTrigger EventName="AutoGeneratingColumn" SourceObject="{Binding ElementName=dataGrid}">
                     <i:InvokeCommandAction Command="{Binding Source={StaticResource SettingColumns}}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
@@ -99,19 +102,22 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Command="{Binding ShowAddWindowCommnad}" 
-                                    ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
+                                        ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
                                     <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
                                 </Button>
                                 <Button Command="{Binding DeleteCommnad}"
-                                    ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
+                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                                        ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
                                     <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
                                 </Button>
                                 <Button Command="{Binding SaveDataCommand}"
-                                    ToolTip="Сохранить изменения" ToolTipService.InitialShowDelay="1500">
+                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                                        ToolTip="Сохранить изменения" ToolTipService.InitialShowDelay="1500">
                                     <fa:ImageAwesome Icon="FloppyOutline" Height="20" Width="20"/>
                                 </Button>
                                 <Button Command="{Binding FillingEditFields}"
-                                    ToolTip="Сбросить изменнеия" ToolTipService.InitialShowDelay="1500">
+                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                                        ToolTip="Сбросить изменнеия" ToolTipService.InitialShowDelay="1500">
                                     <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
                                 </Button>
                             </StackPanel>

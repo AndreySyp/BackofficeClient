@@ -15,8 +15,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     public ObservableCollection<Request> AllItems { get; set; } = [];
 
-    public ObservableCollection<Request> SelectedItems { get; set; } = [];
-
     private ObservableCollection<Request> filteredItems = [];
     public ObservableCollection<Request> FilteredItems
     {
@@ -217,6 +215,123 @@ public class RequestsViewModel : ViewModelBase, INterface1
     #endregion
 
     #region Команды
+    public AsyncRelayCommand<object> FillingEditFields => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
+
+            var selectedItem = selectedItems[0];
+            if (selectedItems.Count == 1)
+            {
+                NumberEdit = selectedItem.RequestNum;
+                NameEdit = selectedItem.RequestName;
+
+                if (selectedItem.RequestDate != null)
+                {
+                    DateEdit = selectedItem.RequestDate.ToDateTime();
+                }
+            }
+            else
+            {
+                NumberEdit = null;
+                NameEdit = null;
+                DateEdit = null;
+            }
+
+            PriorityEdit = selectedItem.Priority;
+            CommentEdit = selectedItem.RequestComment;
+            CustomerEdit = selectedItem.Customer;
+            DirectionEdit = selectedItem.PersonManager;
+            TradeSignEdit = selectedItem.TradeSign;
+            ToWarehouseEdit = selectedItem.ToWarehouse;
+            ToReserveEdit = selectedItem.ToReserve;
+        });
+    });
+
+    public AsyncRelayCommand<object> SaveDataCommand => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
+
+            using DatabaseContext db = new();
+            foreach (var update in from selectedItem in selectedItems
+                                   let update = db.Requests.FirstOrDefault(r => r.RequestId == selectedItem.RequestId)
+                                   select update)
+            {
+                if (update == null)
+                {
+                    return;
+                }
+
+                update.RequestComment = update.RequestComment.OldOrNew(CommentEdit);
+                update.PersonManager = update.PersonManager.OldOrNew(DirectionEdit);
+                update.ToWarehouse = update.ToWarehouse.OldOrNew(ToWarehouseEdit);
+                update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
+                update.Customer = update.Customer.OldOrNew(CustomerEdit);
+                update.Priority = update.Priority.OldOrNew(PriorityEdit);
+                update.TradeSign = update.TradeSign.OldOrNewNotNull(TradeSignEdit);
+
+                if (selectedItems.Count == 1)
+                {
+                    update.RequestNum = update.RequestNum.OldOrNew(NumberEdit);
+                    update.RequestName = update.RequestName.OldOrNew(NameEdit);
+                    update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
+                    update.RequestDate = update.RequestDate.OldOrNew(DateEdit.ToDateOnly());
+
+                }
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
+    });
+
+    public AsyncRelayCommand<object> DeleteCommnad => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
+
+            using DatabaseContext db = new();
+            foreach (var delete in from selectedItem in selectedItems
+                                   let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
+                                   where delete != null
+                                   select delete)
+            {
+                db.Requests.Remove(delete);
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
+    });
+
+    public AsyncRelayCommand ShowAddWindowCommnad => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            var dlg = new AddRequest()
+            {
+                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+            };
+
+            dlg.Show();
+        });
+    });
 
     public AsyncRelayCommand DataFilteredCommand => new(async () =>
     {
@@ -255,6 +370,18 @@ public class RequestsViewModel : ViewModelBase, INterface1
             }
 
             FilteredItems = new(filteredItems);
+        });
+    });
+
+    public AsyncRelayCommand ClearFilterCommand => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            NumberFilter = null;
+            CustomerFilter = null;
+            NameFilter = null;
+            DirectioFilter = null;
+            StatusFilter = null;
         });
     });
 
@@ -300,67 +427,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public AsyncRelayCommand SaveDataCommand => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            if (SelectedItems == null || SelectedItems.Count == 0)
-            {
-                return;
-            }
-
-            using DatabaseContext db = new();
-            foreach (var update in from selectedItem in SelectedItems
-                                   let update = db.Requests.FirstOrDefault(r => r.RequestId == selectedItem.RequestId)
-                                   select update)
-            {
-                if (update == null)
-                {
-                    return;
-                }
-
-                update.RequestComment = update.RequestComment.OldOrNew(CommentEdit);
-                update.PersonManager = update.PersonManager.OldOrNew(DirectionEdit);
-                update.ToWarehouse = update.ToWarehouse.OldOrNew(ToWarehouseEdit);
-                update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
-                update.Customer = update.Customer.OldOrNew(CustomerEdit);
-                update.Priority = update.Priority.OldOrNew(PriorityEdit);
-                update.TradeSign = update.TradeSign.OldOrNewNotNull(TradeSignEdit);
-
-                if (SelectedItems.Count == 1)
-                {
-                    update.RequestNum = update.RequestNum.OldOrNew(NumberEdit);
-                    update.RequestName = update.RequestName.OldOrNew(NameEdit);
-                    update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
-                    update.RequestDate = update.RequestDate.OldOrNew(DateEdit.ToDateOnly());
-
-                }
-            }
-
-            db.SaveChanges();
-            DataLoadingCommand.Execute(null);
-        });
-    });
-
-    public AsyncRelayCommand DeleteCommnad => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            using DatabaseContext db = new();
-
-            foreach (var delete in from selectedItem in SelectedItems
-                                   let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
-                                   where delete != null
-                                   select delete)
-            {
-                db.Requests.Remove(delete);
-            }
-
-            db.SaveChanges();
-            DataLoadingCommand.Execute(null);
-        });
-    });
-
     public AsyncRelayCommand AddCommnad => new(async () =>
     {
         await Task.Run(() =>
@@ -392,61 +458,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public RelayCommand ShowAddWindowCommnad => new(() =>
-    {
-        var dlg = new AddRequest()
-        {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
-        };
-
-        dlg.Show();
-    });
-
-    public RelayCommand ClearFilterCommand => new(() =>
-    {
-        NumberFilter = null;
-        CustomerFilter = null;
-        NameFilter = null;
-        DirectioFilter = null;
-        StatusFilter = null;
-    });
-
-    public RelayCommand<object> FillingEditFields => new((parameter) =>
-    {
-        //var itemsList = (parameter as ObservableCollection<Request>);
-        if (SelectedItems == null || SelectedItems.Count < 1)
-        {
-            return;
-        }
-        var selectedItem = SelectedItems[0];
-
-        if (SelectedItems.Count == 1)
-        {
-            NumberEdit = selectedItem.RequestNum;
-            NameEdit = selectedItem.RequestName;
-
-            if (selectedItem.RequestDate != null)
-            {
-                DateEdit = selectedItem.RequestDate.ToDateTime();
-            }
-        }
-        else
-        {
-            NumberEdit = null;
-            NameEdit = null;
-            DateEdit = null;
-        }
-
-        PriorityEdit = selectedItem.Priority;
-        CommentEdit = selectedItem.RequestComment;
-        CustomerEdit = selectedItem.Customer;
-        DirectionEdit = selectedItem.PersonManager;
-        TradeSignEdit = selectedItem.TradeSign;
-        ToWarehouseEdit = selectedItem.ToWarehouse;
-        ToReserveEdit = selectedItem.ToReserve;
-    });
-
-    RelayCommand INterface1.FillingEditFields => throw new NotImplementedException();
 
     #endregion
 
