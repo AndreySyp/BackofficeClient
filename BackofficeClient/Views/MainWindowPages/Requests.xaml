@@ -9,16 +9,23 @@
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:fa="http://schemas.fontawesome.io/icons/"
 	xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+	xmlns:extension="clr-namespace:BackofficeClient.Infrastructure.Extensions" 
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
     d:DesignHeight="450" 
     d:DesignWidth="800"
     Title="Requests">
-    
+
+    <Page.Resources>
+        <ObjectDataProvider x:Key="SettingColumns"
+                            ObjectType="{x:Type extension:DataGridExtension}"
+                            MethodName="GetDataGridSettingColumns"/>
+    </Page.Resources>
+
     <Page.DataContext>
         <viewmodels:RequestsViewModel/>
     </Page.DataContext>
-    
+
     <Grid Background="White" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -28,24 +35,26 @@
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <DataGrid Grid.RowSpan="2" Grid.Column="0" ItemsSource="{Binding FilteredItems}"
                   a:Extension.SelectedItems="{Binding SelectedItems}" Name="dgPrimaryGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>
+                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
+                                           CommandParameter="{Binding SelectedItems}"/>
                 </i:EventTrigger>
-                <i:EventTrigger EventName="AutoGeneratingColumn">
-                    <i:InvokeCommandAction Command="{Binding AddCommnadww}" PassEventArgsToCommand="True"/>
+
+                <i:EventTrigger EventName="AutoGeneratingColumn" SourceObject="{Binding ElementName=dgPrimaryGrid}">
+                    <i:InvokeCommandAction Command="{Binding Source={StaticResource SettingColumns}}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
-        
+
         <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
             <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
             <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"/>
         </StackPanel>
-        
+
         <Grid Grid.Row="1" Grid.Column="1" Name="page">
             <TabControl>
                 <TabItem Header="Поиск">
@@ -84,7 +93,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                
+
                 <TabItem Header="Редакирование">
                     <ScrollViewer MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}">
                         <StackPanel>
@@ -169,7 +178,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
-                
+
                 <TabItem Header="Остальное">
                     <StackPanel>
                         <StackPanel Width="120">

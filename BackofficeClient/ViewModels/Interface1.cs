@@ -5,24 +5,14 @@ namespace BackofficeClient.ViewModels;
 public interface INterface1
 {
     /// <summary>
-    /// Загрузка данных
-    /// </summary>
-    public AsyncRelayCommand DataLoadingCommand { get; }
-
-    /// <summary>
-    /// Очистка фильтров в поиске
-    /// </summary>
-    public RelayCommand ClearFilterCommand { get; }
-
-    /// <summary>
     /// Фильтрация данных в поиске
     /// </summary>
     public AsyncRelayCommand DataFilteredCommand { get; }
 
     /// <summary>
-    /// Заполнение полей редактирования
+    /// Загрузка данных
     /// </summary>
-    public RelayCommand FillingEditFields { get; }
+    public AsyncRelayCommand DataLoadingCommand { get; }
 
     /// <summary>
     /// Сохранение изменений
@@ -30,9 +20,9 @@ public interface INterface1
     public AsyncRelayCommand SaveDataCommand { get; }
 
     /// <summary>
-    /// Показать окно для добавления
+    /// Удаление данных
     /// </summary>
-    public RelayCommand ShowAddWindowCommnad { get; }
+    public AsyncRelayCommand DeleteCommnad { get; }
 
     /// <summary>
     /// Добавление данных
@@ -40,7 +30,19 @@ public interface INterface1
     public AsyncRelayCommand AddCommnad { get; }
 
     /// <summary>
-    /// Удаление данных
+    /// Показать окно для добавления
     /// </summary>
-    public AsyncRelayCommand DeleteCommnad { get; }
+    public RelayCommand ShowAddWindowCommnad { get; }
+
+    /// <summary>
+    /// Очистка фильтров в поиске
+    /// </summary>
+    public RelayCommand ClearFilterCommand { get; }
+
+    /// <summary>
+    /// Заполнение полей редактирования
+    /// </summary>
+    public RelayCommand FillingEditFields { get; }
+
+
 }

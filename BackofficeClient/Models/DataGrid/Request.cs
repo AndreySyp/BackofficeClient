@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using static BackofficeClient.Views.MainWindowPages.Requests;
+﻿using static BackofficeClient.Infrastructure.Attributes;
 
 namespace BackofficeClient.Models.DataGrid;
 

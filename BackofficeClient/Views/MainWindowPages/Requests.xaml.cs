@@ -9,7 +9,6 @@ namespace BackofficeClient.Views.MainWindowPages;
 /// </summary>
 public partial class Requests : Page
 {
-
     public Requests()
     {
         InitializeComponent();

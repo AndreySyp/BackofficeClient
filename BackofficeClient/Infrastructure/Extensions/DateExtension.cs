@@ -4,7 +4,11 @@ public static class DateExtension
 {
     public static DateTime ToDateTime(this DateOnly? dateOnly)
     {
-        return dateOnly.ToDateTime();
+        if (dateOnly == null)
+        {
+            return default;
+        }
+        return dateOnly.Value.ToDateTime(new TimeOnly());
     }
 
     public static DateOnly? ToDateOnly(this DateTime? dateTime)

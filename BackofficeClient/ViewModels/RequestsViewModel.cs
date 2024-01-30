@@ -3,16 +3,8 @@ using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using static BackofficeClient.Views.MainWindowPages.Requests;
-using System.ComponentModel;
-using System.Windows.Controls;
 
 namespace BackofficeClient.ViewModels;
-
-/// <summary>
-/// Name
-/// </summary>
-
 
 public class RequestsViewModel : ViewModelBase, INterface1
 {
@@ -160,6 +152,8 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #endregion
 
+    #endregion
+
     #region Добавление
 
     private string? numberAdd;
@@ -206,62 +200,23 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #endregion
 
+    #region ComboBox
+
+    public ObservableCollection<string>? PriorityItems { get; private set; }
+
+    public ObservableCollection<string>? CustomerItems { get; private set; }
+
+    public ObservableCollection<string>? DirectionItems { get; private set; }
+
+    public ObservableCollection<string>? StatusItems { get; private set; }
+
+    public ObservableCollection<string>? TradeSignItems { get; private set; }
+
     #endregion
 
     #endregion
 
     #region Команды
-
-    public AsyncRelayCommand DataLoadingCommand => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            using DatabaseContext db = new();
-            IsLoading = true;
-
-            // Legacy request join v_request
-            AllItems = new(
-            from requests in db.Requests
-            join tradeSigns in db.TradeSigns on new
-            {
-                requests.TradeSign
-            } equals new
-            {
-                TradeSign = tradeSigns.TradeSign1
-            }
-            join viewRequests in db.VRequestForms on requests.RequestId equals viewRequests.RequestId
-            orderby requests.RequestDate
-            select new Request(viewRequests.RequestId,
-                                viewRequests.RequestNum,
-                                viewRequests.RequestDate,
-                                viewRequests.RequestName,
-                                viewRequests.Customer,
-                                viewRequests.NameShort,
-                                viewRequests.GroupMtr,
-                                viewRequests.SupState,
-                                viewRequests.Np,
-                                viewRequests.Nl,
-                                viewRequests.RequestComment,
-                                viewRequests.Priority,
-                                viewRequests.SumIncPrice,
-                                viewRequests.PersonManager,
-                                requests.TradeSign,
-                                tradeSigns.TradeSignFullname,
-                                requests.ToWarehouse,
-                                requests.ToReserve));
-
-            FilteredItems = AllItems;
-        });
-    });
-
-    public RelayCommand ClearFilterCommand => new(() =>
-    {
-        NumberFilter = null;
-        CustomerFilter = null;
-        NameFilter = null;
-        DirectioFilter = null;
-        StatusFilter = null;
-    });
 
     public AsyncRelayCommand DataFilteredCommand => new(async () =>
     {
@@ -303,38 +258,46 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public RelayCommand FillingEditFields => new(() =>
+    public AsyncRelayCommand DataLoadingCommand => new(async () =>
     {
-        if (SelectedItems == null || SelectedItems.Count < 1)
+        await Task.Run(() =>
         {
-            return;
-        }
-        var selectedItem = SelectedItems[0];
+            using DatabaseContext db = new();
+            IsLoading = true;
 
-        if (SelectedItems.Count == 1)
-        {
-            NumberEdit = selectedItem.RequestNum;
-            NameEdit = selectedItem.RequestName;
-
-            if (selectedItem.RequestDate != null)
+            // Legacy request join v_request
+            AllItems = new(
+            from requests in db.Requests
+            join tradeSigns in db.TradeSigns on new
             {
-                DateEdit = selectedItem.RequestDate.ToDateTime();
+                requests.TradeSign
+            } equals new
+            {
+                TradeSign = tradeSigns.TradeSign1
             }
-        }
-        else
-        {
-            NumberEdit = null;
-            NameEdit = null;
-            DateEdit = null;
-        }
+            join viewRequests in db.VRequestForms on requests.RequestId equals viewRequests.RequestId
+            orderby requests.RequestDate
+            select new Request(viewRequests.RequestId,
+                                viewRequests.RequestNum,
+                                viewRequests.RequestDate,
+                                viewRequests.RequestName,
+                                viewRequests.Customer,
+                                viewRequests.NameShort,
+                                viewRequests.GroupMtr,
+                                viewRequests.SupState,
+                                viewRequests.Np,
+                                viewRequests.Nl,
+                                viewRequests.RequestComment,
+                                viewRequests.Priority,
+                                viewRequests.SumIncPrice,
+                                viewRequests.PersonManager,
+                                requests.TradeSign,
+                                tradeSigns.TradeSignFullname,
+                                requests.ToWarehouse,
+                                requests.ToReserve));
 
-        PriorityEdit = selectedItem.Priority;
-        CommentEdit = selectedItem.RequestComment;
-        CustomerEdit = selectedItem.Customer;
-        DirectionEdit = selectedItem.PersonManager;
-        TradeSignEdit = selectedItem.TradeSign;
-        ToWarehouseEdit = selectedItem.ToWarehouse;
-        ToReserveEdit = selectedItem.ToReserve;
+            FilteredItems = AllItems;
+        });
     });
 
     public AsyncRelayCommand SaveDataCommand => new(async () =>
@@ -379,14 +342,23 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public RelayCommand ShowAddWindowCommnad => new(() =>
+    public AsyncRelayCommand DeleteCommnad => new(async () =>
     {
-        var dlg = new AddRequest()
+        await Task.Run(() =>
         {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
-        };
+            using DatabaseContext db = new();
 
-        dlg.Show();
+            foreach (var delete in from selectedItem in SelectedItems
+                                   let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
+                                   where delete != null
+                                   select delete)
+            {
+                db.Requests.Remove(delete);
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
     });
 
     public AsyncRelayCommand AddCommnad => new(async () =>
@@ -420,64 +392,66 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-
-    public AsyncRelayCommand<DataGridAutoGeneratingColumnEventArgs> AddCommnadww => new(async (e) =>
+    public RelayCommand ShowAddWindowCommnad => new(() =>
     {
-        await Task.Run(() =>
+        var dlg = new AddRequest()
         {
-            if (e == null)
-            {
-                return;
-            }
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
 
-            if (e.PropertyDescriptor is PropertyDescriptor desc
-                && desc.Attributes[typeof(ColumnNameAttribute)] is ColumnNameAttribute att)
-            {
-                e.Column.Header = att.Name;
-            }
-
-        });
+        dlg.Show();
     });
-    public AsyncRelayCommand DeleteCommnad => new(async () =>
+
+    public RelayCommand ClearFilterCommand => new(() =>
     {
-        await Task.Run(() =>
-        {
-            using DatabaseContext db = new();
-
-            foreach (var delete in from selectedItem in SelectedItems
-                                   let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
-                                   where delete != null
-                                   select delete)
-            {
-                db.Requests.Remove(delete);
-            }
-
-            db.SaveChanges();
-            DataLoadingCommand.Execute(null);
-        });
+        NumberFilter = null;
+        CustomerFilter = null;
+        NameFilter = null;
+        DirectioFilter = null;
+        StatusFilter = null;
     });
+
+    public RelayCommand<object> FillingEditFields => new((parameter) =>
+    {
+        //var itemsList = (parameter as ObservableCollection<Request>);
+        if (SelectedItems == null || SelectedItems.Count < 1)
+        {
+            return;
+        }
+        var selectedItem = SelectedItems[0];
+
+        if (SelectedItems.Count == 1)
+        {
+            NumberEdit = selectedItem.RequestNum;
+            NameEdit = selectedItem.RequestName;
+
+            if (selectedItem.RequestDate != null)
+            {
+                DateEdit = selectedItem.RequestDate.ToDateTime();
+            }
+        }
+        else
+        {
+            NumberEdit = null;
+            NameEdit = null;
+            DateEdit = null;
+        }
+
+        PriorityEdit = selectedItem.Priority;
+        CommentEdit = selectedItem.RequestComment;
+        CustomerEdit = selectedItem.Customer;
+        DirectionEdit = selectedItem.PersonManager;
+        TradeSignEdit = selectedItem.TradeSign;
+        ToWarehouseEdit = selectedItem.ToWarehouse;
+        ToReserveEdit = selectedItem.ToReserve;
+    });
+
+    RelayCommand INterface1.FillingEditFields => throw new NotImplementedException();
 
     #endregion
 
-    public ObservableCollection<string> PriorityItems { get; private set; }
-
-    public ObservableCollection<string> CustomerItems { get; private set; }
-
-    public ObservableCollection<string> DirectionItems { get; private set; }
-
-    public ObservableCollection<string> StatusItems { get; private set; }
-
-    public ObservableCollection<string> TradeSignItems { get; private set; }
-
-
-    //public ObservableCollection<string> CustomerFilterItems { get; private set; }
-
-    //public ObservableCollection<string> CustomerFilterItems { get; private set; }
-
-
-    public RequestsViewModel()
+    public void LoadComboBoxItems()
     {
-
 #pragma warning disable CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
         using DatabaseContext db = new();
 
@@ -515,5 +489,11 @@ public class RequestsViewModel : ViewModelBase, INterface1
             .OrderBy(r => r);
         TradeSignItems = new(tradeSignItems);
 #pragma warning restore CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
+
+    }
+
+    public RequestsViewModel()
+    {
+        LoadComboBoxItems();
     }
 }
