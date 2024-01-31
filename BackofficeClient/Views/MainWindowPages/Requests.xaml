@@ -26,157 +26,159 @@
         <viewmodels:RequestsViewModel/>
     </Page.DataContext>
 
-    <Grid Background="White" >
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
-            <ColumnDefinition Width="1*" MaxWidth="170" MinWidth="130"></ColumnDefinition>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*" MaxWidth="200" MinWidth="130"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
-        <DataGrid Grid.RowSpan="2" Grid.Column="0" 
+        <DataGrid Style="{StaticResource Main-Grid}"
                   ItemsSource="{Binding FilteredItems}"
                   Name="dataGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction 
-                                            Command="{Binding FillingEditFields}"
-                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                           />
+                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
+                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
                 </i:EventTrigger>
 
-                <i:EventTrigger EventName="AutoGeneratingColumn" SourceObject="{Binding ElementName=dataGrid}">
-                    <i:InvokeCommandAction Command="{Binding Source={StaticResource SettingColumns}}" PassEventArgsToCommand="True"/>
+                <i:EventTrigger EventName="AutoGeneratingColumn" 
+                                SourceObject="{Binding ElementName=dataGrid}">
+                    <i:InvokeCommandAction Command="{Binding Source={StaticResource SettingColumns}}" 
+                                           PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
-            <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
-            <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"/>
+        <StackPanel Style="{StaticResource ResourceKey=Load-Panel}">
+            <fa:ImageAwesome Icon="Spinner" 
+                             Spin="{Binding IsLoading}"/>
+            <Button Content="Загрузить" 
+                    Command="{Binding DataLoadingCommand}"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" Grid.Column="1" Name="page">
+        <Grid Style="{StaticResource ResourceKey=Main-Menu-Interactions}"
+              Name="page">
             <TabControl>
                 <TabItem Header="Поиск">
-                    <ScrollViewer MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}">
+                    <ScrollViewer>
                         <StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Номер заявки"></TextBlock>
-                                <TextBox Text="{Binding NumberFilter}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Контрагент"></TextBlock>
-                                <ComboBox ItemsSource="{Binding CustomerItems}" 
-                                      SelectedValue ="{Binding CustomerFilter}"
-                                      IsEditable="True"></ComboBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Наименование заявки"></TextBlock>
-                                <TextBox Text="{Binding NameFilter}"></TextBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Направление ЦЗС"></TextBlock>
-                                <ComboBox ItemsSource="{Binding DirectionItems}" 
-                                      SelectedValue="{Binding DirectioFilter}"
-                                      IsEditable="True"></ComboBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <TextBlock Text="Статус"></TextBlock>
-                                <ComboBox ItemsSource="{Binding StatusItems}"
-                                      SelectedValue="{Binding StatusFilter}"
-                                      IsEditable="True"></ComboBox>
-                            </StackPanel>
-                            <StackPanel Width="120">
-                                <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
-                                <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
+                            <StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Номер заявки"/>
+                                    <TextBox Text="{Binding NumberFilter}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Контрагент"/>
+                                    <ComboBox ItemsSource="{Binding CustomerItems}" 
+                                          SelectedValue ="{Binding CustomerFilter}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Наименование заявки"/>
+                                    <TextBox Text="{Binding NameFilter}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Направление ЦЗС"/>
+                                    <ComboBox ItemsSource="{Binding DirectionItems}" 
+                                          SelectedValue="{Binding DirectioFilter}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Статус"/>
+                                    <ComboBox ItemsSource="{Binding StatusItems}"
+                                          SelectedValue="{Binding StatusFilter}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <Button Content="Поиск" 
+                                        Command="{Binding DataFilteredCommand}"/>
+                                    <Button Content="Очистить фильтр" 
+                                        Command="{Binding ClearFilterCommand}"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
 
                 <TabItem Header="Редакирование">
-                    <ScrollViewer MaxHeight="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}">
+                    <ScrollViewer>
                         <StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Command="{Binding ShowAddWindowCommnad}" 
-                                        ToolTip="Добавить заявку" ToolTipService.InitialShowDelay="1500">
-                                    <fa:ImageAwesome Icon="PlusSquare" Height="20" Width="20"/>
+                            <StackPanel Style="{StaticResource ResourceKey=CURD}">
+                                <Button Command="{Binding ShowAddWindowCommnad}"
+                                        ToolTip="Добавить заявку">
+                                    <fa:ImageAwesome Icon="PlusSquare"/>
                                 </Button>
                                 <Button Command="{Binding DeleteCommnad}"
                                         CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Удалить заявку" ToolTipService.InitialShowDelay="1500">
-                                    <fa:ImageAwesome Icon="MinusSquare" Height="20" Width="20"/>
+                                        ToolTip="Удалить заявку">
+                                    <fa:ImageAwesome Icon="MinusSquare"/>
                                 </Button>
-                                <Button Command="{Binding SaveDataCommand}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Сохранить изменения" ToolTipService.InitialShowDelay="1500">
-                                    <fa:ImageAwesome Icon="FloppyOutline" Height="20" Width="20"/>
+                                    <Button Command="{Binding SaveDataCommand}"
+                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                                            ToolTip="Сохранить изменения">
+                                    <fa:ImageAwesome Icon="FloppyOutline"/>
                                 </Button>
                                 <Button Command="{Binding FillingEditFields}"
                                         CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Сбросить изменнеия" ToolTipService.InitialShowDelay="1500">
-                                    <fa:ImageAwesome Icon="Dropbox" Height="20" Width="20"/>
+                                        ToolTip="Сбросить изменнеия">
+                                    <fa:ImageAwesome Icon="Dropbox"/>
                                 </Button>
                             </StackPanel>
+
+                            <StackPanel>
+                            </StackPanel>
+
                             <StackPanel>
                                 <Expander Header="Одиночное редактирование" IsExpanded="False">
                                     <StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Номер заявки" ></TextBlock>
-                                            <TextBox Text="{Binding NumberEdit}"></TextBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Номер заявки"/>
+                                            <TextBox Text="{Binding NumberEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Дата заявки" ></TextBlock>
-                                            <DatePicker SelectedDate="{Binding DateEdit}" ></DatePicker>
+                                        <StackPanel>
+                                            <TextBlock Text="Дата заявки"/>
+                                            <DatePicker SelectedDate="{Binding DateEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Наименование" ></TextBlock>
-                                            <TextBox Text="{Binding NameEdit}"></TextBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Наименование"/>
+                                            <TextBox Text="{Binding NameEdit}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Header="Множественное редактирование" IsExpanded="True">
                                     <StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Приоритет" ></TextBlock>
-                                            <ComboBox ItemsSource="{Binding PriorityItems}" 
-                                              SelectedValue="{Binding PriorityEdit}"
-                                              IsEditable="True"></ComboBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Приоритет"/>
+                                            <ComboBox ItemsSource="{Binding PriorityItems}"
+                                                      SelectedValue="{Binding PriorityEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Комментарий"></TextBlock>
-                                            <TextBox Text="{Binding CommentEdit}"></TextBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Комментарий"/>
+                                            <TextBox Text="{Binding CommentEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Контрагент"></TextBlock>
-                                            <ComboBox ItemsSource="{Binding CustomerItems}" 
-                                              SelectedValue="{Binding CustomerEdit}"
-                                              IsEditable="True"></ComboBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Контрагент"/>
+                                            <ComboBox ItemsSource="{Binding CustomerItems}"
+                                                      SelectedValue="{Binding CustomerEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Направление ЦЗС"></TextBlock>
-                                            <ComboBox ItemsSource="{Binding DirectionItems}" 
-                                              SelectedValue="{Binding DirectionEdit}"
-                                              IsEditable="True"></ComboBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Направление ЦЗС"/>
+                                            <ComboBox ItemsSource="{Binding DirectionItems}"
+                                                      SelectedValue="{Binding DirectionEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <TextBlock Text="Признак сделки"></TextBlock>
-                                            <ComboBox ItemsSource="{Binding TradeSignItems}" 
-                                              SelectedValue="{Binding TradeSignEdit}"
-                                              IsEditable="True"></ComboBox>
+                                        <StackPanel>
+                                            <TextBlock Text="Признак сделки"/>
+                                            <ComboBox ItemsSource="{Binding TradeSignItems}"
+                                                      SelectedValue="{Binding TradeSignEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <CheckBox Content="Закупка на складе" 
-                                              IsThreeState="False"
-                                              IsChecked="{Binding ToWarehouseEdit}"></CheckBox>
+                                        <StackPanel>
+                                            <CheckBox Content="Закупка на складе"
+                                                      IsChecked="{Binding ToWarehouseEdit}"/>
                                         </StackPanel>
-                                        <StackPanel Width="120">
-                                            <CheckBox Content="Бронь" 
-                                              IsThreeState="False"
-                                              IsChecked="{Binding ToReserveEdit}"></CheckBox>
+                                        <StackPanel>
+                                            <CheckBox Content="Бронь"
+                                                      IsChecked="{Binding ToReserveEdit}"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>
@@ -187,7 +189,7 @@
 
                 <TabItem Header="Остальное">
                     <StackPanel>
-                        <StackPanel Width="120">
+                        <StackPanel>
                             <Button Background="Red" Content="Импорт данных Процессора (файл)"></Button>
                             <Button Background="Red" Content="Импорт данных Процессора (сайт)"></Button>
                             <Button Background="Red" Content="Экспорт в excel"></Button>

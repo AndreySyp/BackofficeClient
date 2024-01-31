@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="BackofficeClient.Resources.UserControls.CURD"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	         xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BackofficeClient.Resources.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <StackPanel Style="{StaticResource ResourceKey=CURD}">
+            <Button Command="{Binding ShowAddWindowCommnad}"
+                    ToolTip="Добавить заявку">
+                <fa:ImageAwesome Icon="PlusSquare"/>
+            </Button>
+            <Button Command="{Binding DeleteCommnad}"
+
+                    CommandParameter="{Binding Value, ElementName=ElementName}"
+                    ToolTip="Удалить заявку">
+                <fa:ImageAwesome Icon="MinusSquare"/>
+            </Button>
+            <Button Command="{Binding SaveDataCommand}"
+                    CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                    ToolTip="Сохранить изменения">
+                <fa:ImageAwesome Icon="FloppyOutline"/>
+            </Button>
+            <Button Command="{Binding FillingEditFields}"
+                    CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
+                    ToolTip="Сбросить изменнеия">
+                <fa:ImageAwesome Icon="Dropbox"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+
+</UserControl>
