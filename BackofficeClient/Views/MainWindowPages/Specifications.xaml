@@ -26,8 +26,7 @@
             <ColumnDefinition Width="1.5*" MaxWidth="200" MinWidth="130"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}"
-                  a:Extension.SelectedItems="{Binding SelectedItems}">
+        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>

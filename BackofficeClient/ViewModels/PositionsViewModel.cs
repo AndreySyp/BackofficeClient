@@ -1,9 +1,13 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using BackofficeClient.Models.Database;
+using BackofficeClient.Models.Database.Views;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Data.Common;
+using System.Reflection.Metadata;
 
 namespace BackofficeClient.ViewModels;
 
-public class PositionsViewModel : ViewModelBase
+public class PositionsViewModel : ViewModelBase, INterface1
 {
 
     #region Объекты для привязки
@@ -16,14 +20,14 @@ public class PositionsViewModel : ViewModelBase
     public ObservableCollection<NewClass> FilteredItems
     {
         get => filteredItems;
-        set { filteredItems = value; OnPropertyChanged("FilteredItems"); }
+        set { filteredItems = value; OnPropertyChanged(); }
     }
 
     private bool isLoading = false;
     public bool IsLoading
     {
         get => isLoading;
-        set { isLoading = value; OnPropertyChanged("IsLoading"); }
+        set { isLoading = value; OnPropertyChanged(); }
     }
 
     #region Поиск
@@ -32,84 +36,84 @@ public class PositionsViewModel : ViewModelBase
     public string? RequestNumberFilter
     {
         get => requestNumberFilter;
-        set { requestNumberFilter = value; OnPropertyChanged("RequestNumberFilter"); }
+        set { requestNumberFilter = value; OnPropertyChanged(); }
     }
 
     private string? positionNumberFilter;
     public string? PositionNumberFilter
     {
         get => positionNumberFilter;
-        set { positionNumberFilter = value; OnPropertyChanged("PositionNumberFilter"); }
+        set { positionNumberFilter = value; OnPropertyChanged(); }
     }
 
     private string? procedureGpbFilter;
     public string? ProcedureGpbFilter
     {
         get => procedureGpbFilter;
-        set { procedureGpbFilter = value; OnPropertyChanged("ProcedureGpbFilter"); }
+        set { procedureGpbFilter = value; OnPropertyChanged(); }
     }
 
     private string? responsibleFilter;
     public string? ResponsibleFilter
     {
         get => responsibleFilter;
-        set { responsibleFilter = value; OnPropertyChanged("ResponsibleFilter"); }
+        set { responsibleFilter = value; OnPropertyChanged(); }
     }
 
     private string? nameMtrFilter;
     public string? NameMtrFilter
     {
         get => nameMtrFilter;
-        set { nameMtrFilter = value; OnPropertyChanged("NameMtrFilter"); }
+        set { nameMtrFilter = value; OnPropertyChanged(); }
     }
 
     private string? currencyFilter;
     public string? CurrencyFilter
     {
         get => currencyFilter;
-        set { currencyFilter = value; OnPropertyChanged("CurrencyFilter"); }
+        set { currencyFilter = value; OnPropertyChanged(); }
     }
 
     private string? basisFilter;
     public string? BasisFilter
     {
         get => basisFilter;
-        set { basisFilter = value; OnPropertyChanged("BasisFilter"); }
+        set { basisFilter = value; OnPropertyChanged(); }
     }
 
     private string? groupMtrFilter;
     public string? GroupMtrFilter
     {
         get => groupMtrFilter;
-        set { groupMtrFilter = value; OnPropertyChanged("GroupMtrFilter"); }
+        set { groupMtrFilter = value; OnPropertyChanged(); }
     }
 
     private string? winnerFilter;
     public string? WinnerFilter
     {
         get => winnerFilter;
-        set { winnerFilter = value; OnPropertyChanged("WinnerFilter"); }
+        set { winnerFilter = value; OnPropertyChanged(); }
     }
 
     private string? stateFilter;
     public string? StateFilter
     {
         get => stateFilter;
-        set { stateFilter = value; OnPropertyChanged("StateFilter"); }
+        set { stateFilter = value; OnPropertyChanged(); }
     }
 
     private DateTime? lastChangeBeginFilter;
     public DateTime? LastChangeBeginFilter
     {
         get => lastChangeBeginFilter;
-        set { lastChangeBeginFilter = value; OnPropertyChanged("LastChangeBeginFilter"); }
+        set { lastChangeBeginFilter = value; OnPropertyChanged(); }
     }
 
     private DateTime? lastChangeEndFilter;
     public DateTime? LastChangeEndFilter
     {
         get => lastChangeEndFilter;
-        set { lastChangeEndFilter = value; OnPropertyChanged("LastChangeEndFilter"); }
+        set { lastChangeEndFilter = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -122,49 +126,49 @@ public class PositionsViewModel : ViewModelBase
     public string? NameMtrEdit
     {
         get => nameMtrEdit;
-        set { nameMtrEdit = value; OnPropertyChanged("NameMtrEdit"); }
+        set { nameMtrEdit = value; OnPropertyChanged(); }
     }
 
     private string? basisEdit;
     public string? BasisEdit
     {
         get => basisEdit;
-        set { basisEdit = value; OnPropertyChanged("BasisEdit"); }
+        set { basisEdit = value; OnPropertyChanged(); }
     }
 
     private string? positionNumberEdit;
     public string? PositionNumberEdit
     {
         get => positionNumberEdit;
-        set { positionNumberEdit = value; OnPropertyChanged("PositionNumberEdit"); }
+        set { positionNumberEdit = value; OnPropertyChanged(); }
     }
 
     private string? docNtdEdit;
     public string? DocNtdEdit
     {
         get => docNtdEdit;
-        set { docNtdEdit = value; OnPropertyChanged("DocNtdEdit"); }
+        set { docNtdEdit = value; OnPropertyChanged(); }
     }
 
     private decimal? amountEdit;
     public decimal? AmountEdit
     {
         get => amountEdit;
-        set { amountEdit = value; OnPropertyChanged("AmountEdit"); }
+        set { amountEdit = value; OnPropertyChanged(); }
     }
 
     private string? measureEdit;
     public string? MeasureEdit
     {
         get => measureEdit;
-        set { measureEdit = value; OnPropertyChanged("MeasureEdit"); }
+        set { measureEdit = value; OnPropertyChanged(); }
     }
 
     private string? manufacturerEdit;
     public string? ManufacturerEdit
     {
         get => manufacturerEdit;
-        set { manufacturerEdit = value; OnPropertyChanged("ManufacturerEdit"); }
+        set { manufacturerEdit = value; OnPropertyChanged(); }
     }
     #endregion
 
@@ -174,77 +178,77 @@ public class PositionsViewModel : ViewModelBase
     public string? GroupMtrEdit
     {
         get => groupMtrEdit;
-        set { groupMtrEdit = value; OnPropertyChanged("GroupMtrEdit"); }
+        set { groupMtrEdit = value; OnPropertyChanged(); }
     }
 
     private string? procedureGpbEdit;
     public string? ProcedureGpbEdit
     {
         get => procedureGpbEdit;
-        set { procedureGpbEdit = value; OnPropertyChanged("ProcedureGpbEdit"); }
+        set { procedureGpbEdit = value; OnPropertyChanged(); }
     }
 
     private string? winnerEdit;
     public string? WinnerEdit
     {
         get => winnerEdit;
-        set { winnerEdit = value; OnPropertyChanged("WinnerEdit"); }
+        set { winnerEdit = value; OnPropertyChanged(); }
     }
 
     private string? currencyEdit;
     public string? CurrencyEdit
     {
         get => currencyEdit;
-        set { currencyEdit = value; OnPropertyChanged("CurrencyEdit"); }
+        set { currencyEdit = value; OnPropertyChanged(); }
     }
 
     private string? responsibleEdit;
     public string? ResponsibleEdit
     {
         get => responsibleEdit;
-        set { responsibleEdit = value; OnPropertyChanged("ResponsibleEdit"); }
+        set { responsibleEdit = value; OnPropertyChanged(); }
     }
 
     private string? timingEdit;
     public string? TimingEdit
     {
         get => timingEdit;
-        set { timingEdit = value; OnPropertyChanged("TimingEdit"); }
+        set { timingEdit = value; OnPropertyChanged(); }
     }
 
     private int? timingMaxEdit;
     public int? TimingMaxEdit
     {
         get => timingMaxEdit;
-        set { timingMaxEdit = value; OnPropertyChanged("TimingMaxEdit"); }
+        set { timingMaxEdit = value; OnPropertyChanged(); }
     }
 
     private decimal? incPriceEdit;
     public decimal? IncPriceEdit
     {
         get => incPriceEdit;
-        set { incPriceEdit = value; OnPropertyChanged("IncPriceEdit"); }
+        set { incPriceEdit = value; OnPropertyChanged(); }
     }
 
     private decimal? incPriceNdsEdit;
     public decimal? IncPriceNdsEdit
     {
         get => incPriceNdsEdit;
-        set { incPriceNdsEdit = value; OnPropertyChanged("IncPriceNdsEdit"); }
+        set { incPriceNdsEdit = value; OnPropertyChanged(); }
     }
 
     private decimal? incPriceCurrencyEdit;
     public decimal? IncPriceCurrencyEdit
     {
         get => incPriceCurrencyEdit;
-        set { incPriceCurrencyEdit = value; OnPropertyChanged("IncPriceCurrencyEdit"); }
+        set { incPriceCurrencyEdit = value; OnPropertyChanged(); }
     }
 
     private decimal? incPriceNdsCurrencyEdit;
     public decimal? IncPriceNdsCurrencyEdit
     {
         get => incPriceNdsCurrencyEdit;
-        set { incPriceNdsCurrencyEdit = value; OnPropertyChanged("IncPriceNdsCurrencyEdit"); }
+        set { incPriceNdsCurrencyEdit = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -255,50 +259,57 @@ public class PositionsViewModel : ViewModelBase
 
     #region Команды
 
-    public AsyncRelayCommand DataLoadingCommand => new(async () =>
+    public AsyncRelayCommand<object> FillingEditFields => new(async (parameter) =>
     {
         await Task.Run(() =>
         {
-            using DatabaseContext db = new();
-            IsLoading = true;
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
 
-            // LEGACY В одной таблице id инт в другой текст, что это ***********
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            AllItems = new(db.VPositions.ToList().Join(
-                    db.Positions.ToList(),
-                    v => long.Parse(v.PositionId),
-                    p => p.PositionId,
-                    (v, p) => new NewClass(v.PositionId, v.RequestNum, v.RequestDate, v.PositionNum, v.MtrName, v.GroupMtr, v.DocNtd, v.Amount, v.Measure, v.DeliveryTime, v.Basis, v.Condition, v.Nmck, v.Currency, v.ProcedureGpb, v.ProcedureGpb4, v.SupState, v.Person, v.DateCustomerQuery, v.DateDocs, v.DateAgreement, v.DateAs, v.SupName, v.Timing, v.TimingMax, v.IncPrice, v.IncPriceNds, v.Manufacturer, v.IncPriceCur, v.IncPriceCurNds, v.ExchangeRate, v.OutPrice, v.OutPriceNds, v.OutPriceCur, v.OutPriceCurNds, p.UpdatedAt, p.SupObject))
-                    .OrderBy(x => x.RequestNum)
-                    .ThenBy(x => x.ProcedureGpb)
-                    .ThenBy(x => x.PositionNum));
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+            var selectedItem = SelectedItems[0];
+            if (SelectedItems.Count == 1)
+            {
+                NameMtrEdit = selectedItem.MtrName;
+                BasisEdit = selectedItem.Basis;
+                PositionNumberEdit = selectedItem.PositionNum;
+                DocNtdEdit = selectedItem.DocNtd;
+                AmountEdit = selectedItem.Amount;
+                MeasureEdit = selectedItem.Measure;
+                ManufacturerEdit = selectedItem.Manufacturer;
+            }
+            else
+            {
+                NameMtrEdit = null;
+                BasisEdit = null;
+                PositionNumberEdit = null;
+                DocNtdEdit = null;
+                AmountEdit = null;
+                MeasureEdit = null;
+                ManufacturerEdit = null;
+            }
 
-            FilteredItems = AllItems;
+            GroupMtrEdit = selectedItem.GroupMtr;
+            ProcedureGpbEdit = selectedItem.ProcedureGpb;
+            WinnerEdit = selectedItem.SupName;
+            CurrencyEdit = selectedItem.Currency;
+            ResponsibleEdit = selectedItem.Person;
+            IncPriceEdit = selectedItem.IncPrice;
+            IncPriceNdsEdit = selectedItem.IncPriceNds;
+            IncPriceCurrencyEdit = selectedItem.IncPriceCur;
+            IncPriceNdsCurrencyEdit = selectedItem.IncPriceCurNds;
+            TimingEdit = selectedItem.Timing;
+            TimingMaxEdit = selectedItem.TimingMax;
         });
-    });
-
-    public RelayCommand ClearFilterCommand => new(() =>
-    {
-        RequestNumberFilter = null;
-        PositionNumberFilter = null;
-        ProcedureGpbFilter = null;
-        ResponsibleFilter = null;
-        NameMtrFilter = null;
-        CurrencyFilter = null;
-        BasisFilter = null;
-        GroupMtrFilter = null;
-        WinnerFilter = null;
-        StateFilter = null;
-        LastChangeBeginFilter = null;
-        LastChangeEndFilter = null;
     });
 
     public AsyncRelayCommand DataFilteredCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            if (AllItems == null || AllItems.Count == 0)
+            if (AllItems == null)
             {
                 DataLoadingCommand.Execute(null);
             }
@@ -307,7 +318,7 @@ public class PositionsViewModel : ViewModelBase
                 return;
             }
 
-            IEnumerable<NewClass> filteredItems = AllItems.ToList();
+            IEnumerable<NewClass> filteredItems = AllItems.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
             {
@@ -362,48 +373,104 @@ public class PositionsViewModel : ViewModelBase
         });
     });
 
-    public RelayCommand FillingEditFields => new(() =>
+    public AsyncRelayCommand ClearFilterCommand => new(async () =>
     {
-        if (SelectedItems == null)
+        await Task.Run(() =>
         {
-            return;
-        }
-
-        var selectedItem = SelectedItems[0];
-
-        if (SelectedItems.Count == 1)
-        {
-            NameMtrEdit = selectedItem.MtrName;
-            BasisEdit = selectedItem.Basis;
-            PositionNumberEdit = selectedItem.PositionNum;
-            DocNtdEdit = selectedItem.DocNtd;
-            AmountEdit = selectedItem.Amount;
-            MeasureEdit = selectedItem.Measure;
-            ManufacturerEdit = selectedItem.Manufacturer;
-        }
-        else
-        {
-            NameMtrEdit = null;
-            BasisEdit = null;
-            PositionNumberEdit = null;
-            DocNtdEdit = null;
-            AmountEdit = null;
-            MeasureEdit = null;
-            ManufacturerEdit = null;
-        }
-
-        GroupMtrEdit = selectedItem.GroupMtr;
-        ProcedureGpbEdit = selectedItem.ProcedureGpb;
-        WinnerEdit = selectedItem.SupName;
-        CurrencyEdit = selectedItem.Currency;
-        ResponsibleEdit = selectedItem.Person;
-        IncPriceEdit = selectedItem.IncPrice;
-        IncPriceNdsEdit = selectedItem.IncPriceNds;
-        IncPriceCurrencyEdit = selectedItem.IncPriceCur;
-        IncPriceNdsCurrencyEdit = selectedItem.IncPriceCurNds;
-        TimingEdit = selectedItem.Timing;
-        TimingMaxEdit = selectedItem.TimingMax;
+            RequestNumberFilter = null;
+            PositionNumberFilter = null;
+            ProcedureGpbFilter = null;
+            ResponsibleFilter = null;
+            NameMtrFilter = null;
+            CurrencyFilter = null;
+            BasisFilter = null;
+            GroupMtrFilter = null;
+            WinnerFilter = null;
+            StateFilter = null;
+            LastChangeBeginFilter = null;
+            LastChangeEndFilter = null;
+        });
     });
+
+    public AsyncRelayCommand DataLoadingCommand => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+            IsLoading = true;
+
+            // LEGACY В одной таблице id инт в другой текст, что это ***********
+
+            AllItems = new(
+                from position in db.Positions
+                join vPosition in db.VPositions on new
+                {
+                    PositionId = position.PositionId.ToString()
+                } equals new
+                {
+                    vPosition.PositionId
+                }
+                orderby vPosition.RequestNum, vPosition.ProcedureGpb, vPosition.PositionNum
+                select new NewClass(vPosition.PositionId,
+                                    vPosition.RequestNum,
+                                    vPosition.RequestDate,
+                                    vPosition.PositionNum,
+                                    vPosition.MtrName,
+                                    vPosition.GroupMtr,
+                                    vPosition.DocNtd,
+                                    vPosition.Amount,
+                                    vPosition.Measure,
+                                    vPosition.DeliveryTime,
+                                    vPosition.Basis,
+                                    vPosition.Condition,
+                                    vPosition.Nmck,
+                                    vPosition.Currency,
+                                    vPosition.ProcedureGpb,
+                                    vPosition.ProcedureGpb4,
+                                    vPosition.SupState,
+                                    vPosition.Person,
+                                    vPosition.DateCustomerQuery,
+                                    vPosition.DateDocs,
+                                    vPosition.DateAgreement,
+                                    vPosition.DateAs,
+                                    vPosition.SupName,
+                                    vPosition.Timing,
+                                    vPosition.TimingMax,
+                                    vPosition.IncPrice,
+                                    vPosition.IncPriceNds,
+                                    vPosition.Manufacturer,
+                                    vPosition.IncPriceCur,
+                                    vPosition.IncPriceCurNds,
+                                    vPosition.ExchangeRate,
+                                    vPosition.OutPrice,
+                                    vPosition.OutPriceNds,
+                                    vPosition.OutPriceCur,
+                                    vPosition.OutPriceCurNds,
+                                    position.UpdatedAt,
+                                    position.SupObject));
+
+            FilteredItems = AllItems;
+        });
+    });
+
+
+
+
+
+
+
+
+    public AsyncRelayCommand<object> SaveDataCommand => new(async (p) =>
+    { await Task.Run(() => { return; }); });
+
+    public AsyncRelayCommand<object> DeleteCommnad => new(async (p) =>
+    { await Task.Run(() => { return; }); });
+
+    public AsyncRelayCommand ShowAddWindowCommnad => new(async () =>
+    { await Task.Run(() => { return; }); });
+
+    public AsyncRelayCommand AddCommnad => new(async () =>
+    { await Task.Run(() => { return; }); });
 
     #endregion
 
