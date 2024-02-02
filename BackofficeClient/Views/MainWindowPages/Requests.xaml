@@ -72,7 +72,7 @@
                                 <StackPanel>
                                     <TextBlock Text="Контрагент"/>
                                     <ComboBox ItemsSource="{Binding CustomerItems}" 
-                                          SelectedValue ="{Binding CustomerFilter}"/>
+                                              Text ="{Binding CustomerFilter}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Наименование заявки"/>
@@ -81,12 +81,12 @@
                                 <StackPanel>
                                     <TextBlock Text="Направление ЦЗС"/>
                                     <ComboBox ItemsSource="{Binding DirectionItems}" 
-                                          SelectedValue="{Binding DirectioFilter}"/>
+                                              Text="{Binding DirectioFilter}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <TextBlock Text="Статус"/>
                                     <ComboBox ItemsSource="{Binding StatusItems}"
-                                          SelectedValue="{Binding StatusFilter}"/>
+                                              Text="{Binding StatusFilter}"/>
                                 </StackPanel>
                                 <StackPanel>
                                     <Button Content="Поиск" 
@@ -146,7 +146,7 @@
                                         <StackPanel>
                                             <TextBlock Text="Приоритет"/>
                                             <ComboBox ItemsSource="{Binding PriorityItems}"
-                                                      SelectedValue="{Binding PriorityEdit}"/>
+                                                      Text="{Binding PriorityEdit}"/>
                                         </StackPanel>
                                         <StackPanel>
                                             <TextBlock Text="Комментарий"/>
@@ -155,17 +155,17 @@
                                         <StackPanel>
                                             <TextBlock Text="Контрагент"/>
                                             <ComboBox ItemsSource="{Binding CustomerItems}"
-                                                      SelectedValue="{Binding CustomerEdit}"/>
+                                                      Text="{Binding CustomerEdit}"/>
                                         </StackPanel>
                                         <StackPanel>
                                             <TextBlock Text="Направление ЦЗС"/>
                                             <ComboBox ItemsSource="{Binding DirectionItems}"
-                                                      SelectedValue="{Binding DirectionEdit}"/>
+                                                      Text="{Binding DirectionEdit}"/>
                                         </StackPanel>
                                         <StackPanel>
                                             <TextBlock Text="Признак сделки"/>
                                             <ComboBox ItemsSource="{Binding TradeSignItems}"
-                                                      SelectedValue="{Binding TradeSignEdit}"/>
+                                                      Text="{Binding TradeSignEdit}"/>
                                         </StackPanel>
                                         <StackPanel>
                                             <CheckBox Content="Закупка на складе"

@@ -1,23 +1,21 @@
-﻿using BackofficeClient.Models.Database;
-using BackofficeClient.Models.Database.Views;
+﻿using BackofficeClient.Models.DataGrid;
+using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Reflection.Metadata;
 
 namespace BackofficeClient.ViewModels;
 
-public class PositionsViewModel : ViewModelBase, INterface1
+public class PositionsViewModel : ViewModelBase//, INterface1
 {
 
     #region Объекты для привязки
 
-    public ObservableCollection<NewClass> AllItems { get; set; } = [];
+    public ObservableCollection<Position> AllItems { get; set; } = [];
 
-    public ObservableCollection<NewClass> SelectedItems { get; set; } = [];
+    public ObservableCollection<Position> SelectedItems { get; set; } = [];
 
-    private ObservableCollection<NewClass> filteredItems = [];
-    public ObservableCollection<NewClass> FilteredItems
+    private ObservableCollection<Position> filteredItems = [];
+    public ObservableCollection<Position> FilteredItems
     {
         get => filteredItems;
         set { filteredItems = value; OnPropertyChanged(); }
@@ -255,6 +253,38 @@ public class PositionsViewModel : ViewModelBase, INterface1
 
     #endregion
 
+    #region Добавление
+
+    private string? requestAdd;
+    public string? RequestNumberAdd
+    {
+        get => requestAdd;
+        set { requestAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? mtrNameAdd;
+    public string? MtrNameAdd
+    {
+        get => mtrNameAdd;
+        set { mtrNameAdd = value; OnPropertyChanged(); }
+    }
+
+    private int? amountAdd;
+    public int? AmountAdd
+    {
+        get => amountAdd;
+        set { amountAdd = value; OnPropertyChanged(); }
+    }
+
+    private string? measureAdd;
+    public string? MeasureAdd
+    {
+        get => measureAdd;
+        set { measureAdd = value; OnPropertyChanged(); }
+    }
+
+    #endregion
+
     #endregion
 
     #region Команды
@@ -263,14 +293,14 @@ public class PositionsViewModel : ViewModelBase, INterface1
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
             if (selectedItems == null || selectedItems.Count < 1)
             {
                 return;
             }
 
-            var selectedItem = SelectedItems[0];
-            if (SelectedItems.Count == 1)
+            var selectedItem = selectedItems[0];
+            if (selectedItems.Count == 1)
             {
                 NameMtrEdit = selectedItem.MtrName;
                 BasisEdit = selectedItem.Basis;
@@ -305,6 +335,80 @@ public class PositionsViewModel : ViewModelBase, INterface1
         });
     });
 
+    public AsyncRelayCommand<object> SaveDataCommand => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
+
+            using DatabaseContext db = new();
+            foreach (var update in from selectedItem in selectedItems
+                                   let update = db.Positions.FirstOrDefault(r => r.PositionId.ToString() == selectedItem.PositionId)
+                                   select update)
+            {
+                if (update == null)
+                {
+                    return;
+                }
+
+                update.Currency = CurrencyEdit ?? "RUB";
+                update.GroupMtr = GroupMtrEdit;
+                update.ProcedureGpb = ProcedureGpbEdit;
+                update.SupName = WinnerEdit;
+                update.Timing = TimingEdit;
+                update.TimingMax = TimingMaxEdit;
+                update.IncPrice = IncPriceEdit;
+                update.IncPriceCur = IncPriceCurrencyEdit;
+                update.IncPriceNds = IncPriceNdsEdit;
+                update.IncPriceCurNds = IncPriceNdsCurrencyEdit;
+                update.Person = ResponsibleEdit;
+
+                if (selectedItems.Count == 1)
+                {
+                    update.MtrName = NameMtrEdit;
+                    update.DocNtd = DocNtdEdit;
+                    update.Amount = AmountEdit;
+                    update.Measure = MeasureEdit;
+                    update.Basis = BasisEdit;
+                    update.PositionNum = PositionNumberEdit;
+                    update.Manufacturer = ManufacturerEdit;
+                }
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
+
+    });
+
+    public AsyncRelayCommand<object> DeleteCommnad => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
+            if (selectedItems == null || selectedItems.Count < 1)
+            {
+                return;
+            }
+
+            using DatabaseContext db = new();
+            foreach (var delete in from selectedItem in selectedItems
+                                   let delete = db.Positions.FirstOrDefault(request => request.PositionId.ToString() == selectedItem.PositionId)
+                                   where delete != null
+                                   select delete)
+            {
+                db.Positions.Remove(delete);
+            }
+
+            db.SaveChanges();
+            DataLoadingCommand.Execute(null);
+        });
+    });
+
     public AsyncRelayCommand DataFilteredCommand => new(async () =>
     {
         await Task.Run(() =>
@@ -318,7 +422,7 @@ public class PositionsViewModel : ViewModelBase, INterface1
                 return;
             }
 
-            IEnumerable<NewClass> filteredItems = AllItems.AsEnumerable();
+            IEnumerable<Position> filteredItems = AllItems.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
             {
@@ -411,7 +515,7 @@ public class PositionsViewModel : ViewModelBase, INterface1
                     vPosition.PositionId
                 }
                 orderby vPosition.RequestNum, vPosition.ProcedureGpb, vPosition.PositionNum
-                select new NewClass(vPosition.PositionId,
+                select new Position(vPosition.PositionId,
                                     vPosition.RequestNum,
                                     vPosition.RequestDate,
                                     vPosition.PositionNum,
@@ -453,111 +557,47 @@ public class PositionsViewModel : ViewModelBase, INterface1
         });
     });
 
-
-
-
-
-
-
-
-    public AsyncRelayCommand<object> SaveDataCommand => new(async (p) =>
-    { await Task.Run(() => { return; }); });
-
-    public AsyncRelayCommand<object> DeleteCommnad => new(async (p) =>
-    { await Task.Run(() => { return; }); });
-
-    public AsyncRelayCommand ShowAddWindowCommnad => new(async () =>
-    { await Task.Run(() => { return; }); });
-
     public AsyncRelayCommand AddCommnad => new(async () =>
-    { await Task.Run(() => { return; }); });
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+
+            Models.Database.Position add = new()
+            {
+                RequestNum = RequestNumberAdd,
+                MtrName = MtrNameAdd,
+                Amount = AmountAdd,
+                Measure = MeasureAdd,
+            };
+
+            var asd = db.Positions.FirstOrDefault(x => x.RequestNum == add.RequestNum);
+            if (asd == null)
+            {
+                db.Positions.Add(add);
+            }
+            else
+            {
+                // Feature оповещение что заявка уже существует
+            }
+            db.SaveChanges();
+
+            DataFilteredCommand.Execute(null);
+        });
+    });
+
+    public RelayCommand ShowAddWindowCommnad => new(() =>
+    {
+        _ = new AddPosition()
+        {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
+    });
 
     #endregion
 
     public PositionsViewModel()
     {
 
-    }
-}
-
-public class NewClass
-{
-    public string? PositionId { get; }
-    public string? RequestNum { get; }
-    public DateOnly? RequestDate { get; }
-    public string? PositionNum { get; }
-    public string? MtrName { get; }
-    public string? GroupMtr { get; }
-    public string? DocNtd { get; }
-    public decimal? Amount { get; }
-    public string? Measure { get; }
-    public string? DeliveryTime { get; }
-    public string? Basis { get; }
-    public string? Condition { get; }
-    public string? Nmck { get; }
-    public string? Currency { get; }
-    public string? ProcedureGpb { get; }
-    public string? ProcedureGpb4 { get; }
-    public string? SupState { get; }
-    public string? Person { get; }
-    public string? DateCustomerQuery { get; }
-    public string? DateDocs { get; }
-    public string? DateAgreement { get; }
-    public string? DateAs { get; }
-    public string? SupName { get; }
-    public string? Timing { get; }
-    public int? TimingMax { get; }
-    public decimal? IncPrice { get; }
-    public decimal? IncPriceNds { get; }
-    public string? Manufacturer { get; }
-    public decimal? IncPriceCur { get; }
-    public decimal? IncPriceCurNds { get; }
-    public decimal? ExchangeRate { get; }
-    public decimal? OutPrice { get; }
-    public decimal? OutPriceNds { get; }
-    public decimal? OutPriceCur { get; }
-    public decimal? OutPriceCurNds { get; }
-    public DateTime? UpdatedAt { get; }
-    public string? SupObject { get; }
-
-    public NewClass(string? positionId, string? requestNum, DateOnly? requestDate, string? positionNum, string? mtrName, string? groupMtr, string? docNtd, decimal? amount, string? measure, string? deliveryTime, string? basis, string? condition, string? nmck, string? currency, string? procedureGpb, string? procedureGpb4, string? supState, string? person, string? dateCustomerQuery, string? dateDocs, string? dateAgreement, string? dateAs, string? supName, string? timing, int? timingMax, decimal? incPrice, decimal? incPriceNds, string? manufacturer, decimal? incPriceCur, decimal? incPriceCurNds, decimal? exchangeRate, decimal? outPrice, decimal? outPriceNds, decimal? outPriceCur, decimal? outPriceCurNds, DateTime? updatedAt, string? supObject)
-    {
-        PositionId = positionId;
-        RequestNum = requestNum;
-        RequestDate = requestDate;
-        PositionNum = positionNum;
-        MtrName = mtrName;
-        GroupMtr = groupMtr;
-        DocNtd = docNtd;
-        Amount = amount;
-        Measure = measure;
-        DeliveryTime = deliveryTime;
-        Basis = basis;
-        Condition = condition;
-        Nmck = nmck;
-        Currency = currency;
-        ProcedureGpb = procedureGpb;
-        ProcedureGpb4 = procedureGpb4;
-        SupState = supState;
-        Person = person;
-        DateCustomerQuery = dateCustomerQuery;
-        DateDocs = dateDocs;
-        DateAgreement = dateAgreement;
-        DateAs = dateAs;
-        SupName = supName;
-        Timing = timing;
-        TimingMax = timingMax;
-        IncPrice = incPrice;
-        IncPriceNds = incPriceNds;
-        Manufacturer = manufacturer;
-        IncPriceCur = incPriceCur;
-        IncPriceCurNds = incPriceCurNds;
-        ExchangeRate = exchangeRate;
-        OutPrice = outPrice;
-        OutPriceNds = outPriceNds;
-        OutPriceCur = outPriceCur;
-        OutPriceCurNds = outPriceCurNds;
-        UpdatedAt = updatedAt;
-        SupObject = supObject;
     }
 }

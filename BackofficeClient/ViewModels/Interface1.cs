@@ -20,11 +20,6 @@ public interface INterface1
     public AsyncRelayCommand<object> DeleteCommnad { get; }
 
     /// <summary>
-    /// Показать окно для добавления
-    /// </summary>
-    public AsyncRelayCommand ShowAddWindowCommnad { get; }
-
-    /// <summary>
     /// Очистка фильтров в поиске
     /// </summary>
     public AsyncRelayCommand ClearFilterCommand { get; }
@@ -35,12 +30,12 @@ public interface INterface1
     public AsyncRelayCommand DataLoadingCommand { get; }
 
     /// <summary>
-    /// Фильтрация данных в поиске
-    /// </summary>
-    public AsyncRelayCommand DataFilteredCommand { get; }
-
-    /// <summary>
     /// Добавление данных
     /// </summary>
     public AsyncRelayCommand AddCommnad { get; }
+
+    /// <summary>
+    /// Показать окно для добавления
+    /// </summary>
+    public RelayCommand ShowAddWindowCommnad { get; }
 }

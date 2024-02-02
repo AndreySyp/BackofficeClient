@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace BackofficeClient.Views.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для AddRequest.xaml
+    /// Логика взаимодействия для AddPosition.xaml
     /// </summary>
-    public partial class AddRequest : Window
+    public partial class AddPosition : Window
     {
-        public AddRequest()
+        public AddPosition()
         {
             InitializeComponent();
             Show();

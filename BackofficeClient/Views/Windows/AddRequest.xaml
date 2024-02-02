@@ -17,7 +17,7 @@
             <StackPanel Width="120">
                 <TextBlock Text="Заказчик"></TextBlock>
                 <ComboBox ItemsSource="{Binding CustomerItems}" 
-                          SelectedValue="{Binding CustomerEdit}"
+                          Text="{Binding CustomerAdd}"
                           IsEditable="True"/>
 
             </StackPanel>
@@ -40,7 +40,7 @@
             <StackPanel Width="120">
                 <TextBlock Text="Приоритет"></TextBlock>
                 <ComboBox ItemsSource="{Binding PriorityItems}" 
-                          SelectedValue="{Binding PriorityEdit}"
+                          Text="{Binding PriorityEdit}"
                           IsEditable="True"></ComboBox>
             </StackPanel>
             

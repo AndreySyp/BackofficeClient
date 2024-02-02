@@ -273,26 +273,26 @@ public class RequestsViewModel : ViewModelBase, INterface1
                     return;
                 }
 
-                update.RequestComment = update.RequestComment.OldOrNew(CommentEdit);
-                update.PersonManager = update.PersonManager.OldOrNew(DirectionEdit);
-                update.ToWarehouse = update.ToWarehouse.OldOrNew(ToWarehouseEdit);
-                update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
-                update.Customer = update.Customer.OldOrNew(CustomerEdit);
-                update.Priority = update.Priority.OldOrNew(PriorityEdit);
-                update.TradeSign = update.TradeSign.OldOrNewNotNull(TradeSignEdit);
+                update.RequestComment = CommentEdit;
+                update.PersonManager = DirectionEdit;
+                update.ToWarehouse = ToWarehouseEdit;
+                update.ToReserve = ToReserveEdit;
+                update.Customer = CustomerEdit;
+                update.Priority = PriorityEdit;
+                update.TradeSign = TradeSignEdit;
 
                 if (selectedItems.Count == 1)
                 {
-                    update.RequestNum = update.RequestNum.OldOrNew(NumberEdit);
-                    update.RequestName = update.RequestName.OldOrNew(NameEdit);
-                    update.ToReserve = update.ToReserve.OldOrNew(ToReserveEdit);
-                    update.RequestDate = update.RequestDate.OldOrNew(DateEdit.ToDateOnly());
-
+                    update.RequestNum = NumberEdit;
+                    update.RequestName = NameEdit;
+                    update.ToReserve = ToReserveEdit;
+                    update.RequestDate = DateEdit.ToDateOnly();
                 }
             }
 
             db.SaveChanges();
             DataLoadingCommand.Execute(null);
+            DataFilteredCommand.Execute(null);
         });
     });
 
@@ -317,19 +317,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
             db.SaveChanges();
             DataLoadingCommand.Execute(null);
-        });
-    });
-
-    public AsyncRelayCommand ShowAddWindowCommnad => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            var dlg = new AddRequest()
-            {
-                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
-            };
-
-            dlg.Show();
+            DataFilteredCommand.Execute(null);
         });
     });
 
@@ -454,11 +442,18 @@ public class RequestsViewModel : ViewModelBase, INterface1
             }
             db.SaveChanges();
 
+            DataLoadingCommand.Execute(null);
             DataFilteredCommand.Execute(null);
         });
     });
 
-
+    public RelayCommand ShowAddWindowCommnad => new(() =>
+    {
+        _ = new AddRequest()
+        {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
+    });
     #endregion
 
     public void LoadComboBoxItems()

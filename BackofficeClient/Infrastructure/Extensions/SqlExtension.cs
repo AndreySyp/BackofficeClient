@@ -7,6 +7,15 @@ public static class SqlExtension
         return string.IsNullOrWhiteSpace(@new) ? old : @new;
     }
 
+    public static int? OldOrNew(this int? old, int? @new)
+    {
+        return @new == null ? old : @new;
+    }
+    public static decimal? OldOrNew(this decimal? old, decimal? @new)
+    {
+        return @new == null ? old : @new;
+    }
+
     public static bool OldOrNew(this bool old, bool? @new)
     {
         return @new == null ? old : (bool)@new;
