@@ -5,7 +5,8 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
     mc:Ignorable="d"
-      
+     
+    xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
 	xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
 	xmlns:extension="clr-namespace:BackofficeClient.Infrastructure.Extensions" 
 	xmlns:fa="http://schemas.fontawesome.io/icons/"
@@ -36,7 +37,7 @@
         </Grid.RowDefinitions>
 
         <DataGrid Style="{StaticResource Main-Grid}"
-                  ItemsSource="{Binding FilteredItems}"
+                  ItemsSource="{Binding DataItems}"
                   Name="dataGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -55,7 +56,7 @@
         <StackPanel Style="{StaticResource ResourceKey=Load-Panel}">
             <fa:ImageAwesome Icon="Spinner" 
                              Spin="{Binding IsLoading}"/>
-            <Button Content="Загрузить" 
+            <Button Content="Поиск" 
                     Command="{Binding DataLoadingCommand}"/>
         </StackPanel>
 
@@ -65,10 +66,8 @@
                     <ScrollViewer>
                         <StackPanel>
                             <StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Номер заявки"/>
-                                    <TextBox Text="{Binding NumberFilter}"/>
-                                </StackPanel>
+                                <uc:StackTextBox Header="Номер заявки" Items="{Binding RequestNumberFilter}"/>
+
                                 <StackPanel>
                                     <TextBlock Text="Контрагент"/>
                                     <ComboBox ItemsSource="{Binding CustomerItems}" 
@@ -89,11 +88,10 @@
                                               Text="{Binding StatusFilter}"/>
                                 </StackPanel>
                                 <StackPanel>
-                                    <Button Content="Поиск" 
-                                        Command="{Binding DataFilteredCommand}"/>
                                     <Button Content="Очистить фильтр" 
                                         Command="{Binding ClearFilterCommand}"/>
                                 </StackPanel>
+
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

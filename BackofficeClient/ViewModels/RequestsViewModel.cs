@@ -13,13 +13,11 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #region Общие
 
-    public ObservableCollection<Request> AllItems { get; set; } = [];
-
-    private ObservableCollection<Request> filteredItems = [];
-    public ObservableCollection<Request> FilteredItems
+    private ObservableCollection<Request> dataItems = [];
+    public ObservableCollection<Request> DataItems
     {
-        get => filteredItems;
-        set { filteredItems = value; OnPropertyChanged(); }
+        get => dataItems;
+        set { dataItems = value; OnPropertyChanged(); }
     }
 
     private bool isLoading = false;
@@ -33,11 +31,11 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #region Поиск
 
-    private string? numberFilter;
-    public string? NumberFilter
+    private string? requestNumberFilter;
+    public string? RequestNumberFilter
     {
-        get => numberFilter;
-        set { numberFilter = value; OnPropertyChanged(); }
+        get => requestNumberFilter;
+        set { requestNumberFilter = value; OnPropertyChanged(); }
     }
 
     private string? customerFilter;
@@ -292,7 +290,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
             db.SaveChanges();
             DataLoadingCommand.Execute(null);
-            DataFilteredCommand.Execute(null);
         });
     });
 
@@ -317,47 +314,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
             db.SaveChanges();
             DataLoadingCommand.Execute(null);
-            DataFilteredCommand.Execute(null);
-        });
-    });
-
-    public AsyncRelayCommand DataFilteredCommand => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            if (AllItems == null)
-            {
-                DataLoadingCommand.Execute(null);
-            }
-            if (AllItems == null)
-            {
-                return;
-            }
-
-            IEnumerable<Request> filteredItems = AllItems.AsEnumerable();
-
-            if (!string.IsNullOrWhiteSpace(NumberFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.RequestNum == NumberFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(CustomerFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.Customer == CustomerFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(NameFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.RequestName == NameFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(DirectioFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.PersonManager == DirectioFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(StatusFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.SupState == StatusFilter);
-            }
-
-            FilteredItems = new(filteredItems);
         });
     });
 
@@ -365,7 +321,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
     {
         await Task.Run(() =>
         {
-            NumberFilter = null;
+            RequestNumberFilter = null;
             CustomerFilter = null;
             NameFilter = null;
             DirectioFilter = null;
@@ -379,9 +335,10 @@ public class RequestsViewModel : ViewModelBase, INterface1
         {
             using DatabaseContext db = new();
             IsLoading = true;
+            var c = RequestNumberFilter;
 
             // Legacy request join v_request
-            AllItems = new(
+            DataItems = new(
             from requests in db.Requests
             join tradeSigns in db.TradeSigns on new
             {
@@ -391,6 +348,11 @@ public class RequestsViewModel : ViewModelBase, INterface1
                 TradeSign = tradeSigns.TradeSign1
             }
             join viewRequests in db.VRequestForms on requests.RequestId equals viewRequests.RequestId
+            where string.IsNullOrWhiteSpace(RequestNumberFilter) || requests.RequestNum == RequestNumberFilter
+            where string.IsNullOrWhiteSpace(CustomerFilter) || requests.Customer == CustomerFilter
+            where string.IsNullOrWhiteSpace(NameFilter) || requests.RequestName == NameFilter
+            where string.IsNullOrWhiteSpace(DirectioFilter) || requests.PersonManager == DirectioFilter
+            where string.IsNullOrWhiteSpace(StatusFilter) || requests.SupState == StatusFilter
             orderby requests.RequestDate
             select new Request(viewRequests.RequestId,
                                 viewRequests.RequestNum,
@@ -410,8 +372,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
                                 tradeSigns.TradeSignFullname,
                                 requests.ToWarehouse,
                                 requests.ToReserve));
-
-            FilteredItems = AllItems;
         });
     });
 
@@ -443,7 +403,6 @@ public class RequestsViewModel : ViewModelBase, INterface1
             db.SaveChanges();
 
             DataLoadingCommand.Execute(null);
-            DataFilteredCommand.Execute(null);
         });
     });
 
@@ -454,6 +413,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
         };
     });
+
     #endregion
 
     public void LoadComboBoxItems()
