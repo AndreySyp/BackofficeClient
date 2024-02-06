@@ -1,17 +1,20 @@
 ﻿using BackofficeClient.Infrastructure.Extensions;
 using BackofficeClient.Models.DataGrid;
+using BackofficeClient.Models.Interfaces;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 namespace BackofficeClient.ViewModels;
 
-public class RequestsViewModel : ViewModelBase, INterface1
+public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
 {
 
     #region Объекты для привязки
 
     #region Общие
+
+    List<Request>? SelectedItems = [];
 
     private ObservableCollection<Request> dataItems = [];
     public ObservableCollection<Request> DataItems
@@ -213,18 +216,28 @@ public class RequestsViewModel : ViewModelBase, INterface1
     #endregion
 
     #region Команды
-    public AsyncRelayCommand<object> FillingEditFields => new(async (parameter) =>
+
+    public AsyncRelayCommand<object> SelectDataCommand => new(async (parameter) =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
+            SelectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            FillingEditFieldsCommand.Execute(null);
+        });
+    });
+
+    public AsyncRelayCommand FillingEditFieldsCommand => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            if (SelectedItems == null || SelectedItems.Count < 1)
             {
                 return;
             }
 
-            var selectedItem = selectedItems[0];
-            if (selectedItems.Count == 1)
+            List<Request> t = SelectedItems;
+            var selectedItem = SelectedItems[0];
+            if (SelectedItems.Count == 1)
             {
                 NumberEdit = selectedItem.RequestNum;
                 NameEdit = selectedItem.RequestName;
@@ -251,18 +264,17 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public AsyncRelayCommand<object> SaveDataCommand => new(async (parameter) =>
+    public AsyncRelayCommand SaveDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
+            if (SelectedItems == null || SelectedItems.Count < 1)
             {
                 return;
             }
 
             using DatabaseContext db = new();
-            foreach (var update in from selectedItem in selectedItems
+            foreach (var update in from selectedItem in SelectedItems
                                    let update = db.Requests.FirstOrDefault(r => r.RequestId == selectedItem.RequestId)
                                    select update)
             {
@@ -279,7 +291,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
                 update.Priority = PriorityEdit;
                 update.TradeSign = TradeSignEdit;
 
-                if (selectedItems.Count == 1)
+                if (SelectedItems.Count == 1)
                 {
                     update.RequestNum = NumberEdit;
                     update.RequestName = NameEdit;
@@ -293,18 +305,17 @@ public class RequestsViewModel : ViewModelBase, INterface1
         });
     });
 
-    public AsyncRelayCommand<object> DeleteCommnad => new(async (parameter) =>
+    public AsyncRelayCommand DeleteCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
+            if (SelectedItems == null || SelectedItems.Count < 1)
             {
                 return;
             }
 
             using DatabaseContext db = new();
-            foreach (var delete in from selectedItem in selectedItems
+            foreach (var delete in from selectedItem in SelectedItems
                                    let delete = db.Requests.FirstOrDefault(request => request.RequestId == selectedItem.RequestId)
                                    where delete != null
                                    select delete)
@@ -372,6 +383,7 @@ public class RequestsViewModel : ViewModelBase, INterface1
                                 tradeSigns.TradeSignFullname,
                                 requests.ToWarehouse,
                                 requests.ToReserve));
+            ;
         });
     });
 
@@ -416,6 +428,10 @@ public class RequestsViewModel : ViewModelBase, INterface1
 
     #endregion
 
+    public void FillingEditFields()
+    {
+
+    }
     public void LoadComboBoxItems()
     {
 #pragma warning disable CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.

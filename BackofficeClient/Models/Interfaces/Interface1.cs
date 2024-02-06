@@ -1,33 +1,30 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-namespace BackofficeClient.ViewModels;
+namespace BackofficeClient.Models.Interfaces;
 
 public interface INterface1
 {
     /// <summary>
     /// Заполнение полей редактирования
     /// </summary>
-    public AsyncRelayCommand<object> FillingEditFields { get; }
+    public AsyncRelayCommand FillingEditFieldsCommand { get; }
+    public AsyncRelayCommand<object> SelectDataCommand { get; }
 
     /// <summary>
     /// Сохранение изменений
     /// </summary>
-    public AsyncRelayCommand<object> SaveDataCommand { get; }
+    public AsyncRelayCommand SaveDataCommand { get; }
 
     /// <summary>
     /// Удаление данных
     /// </summary>
-    public AsyncRelayCommand<object> DeleteCommnad { get; }
+    public AsyncRelayCommand DeleteCommnad { get; }
 
     /// <summary>
     /// Очистка фильтров в поиске
     /// </summary>
     public AsyncRelayCommand ClearFilterCommand { get; }
 
-    /// <summary>
-    /// Загрузка данных
-    /// </summary>
-    public AsyncRelayCommand DataLoadingCommand { get; }
 
     /// <summary>
     /// Добавление данных

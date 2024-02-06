@@ -9,7 +9,6 @@
     xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
 	xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
 	xmlns:extension="clr-namespace:BackofficeClient.Infrastructure.Extensions" 
-	xmlns:fa="http://schemas.fontawesome.io/icons/"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
     d:DesignHeight="450" 
@@ -31,17 +30,13 @@
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="2*" MaxWidth="200" MinWidth="130"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
 
         <DataGrid Style="{StaticResource Main-Grid}"
                   ItemsSource="{Binding DataItems}"
                   Name="dataGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
+                    <i:InvokeCommandAction Command="{Binding SelectDataCommand}"
                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
                 </i:EventTrigger>
 
@@ -53,12 +48,6 @@
             </i:Interaction.Triggers>
         </DataGrid>
 
-        <StackPanel Style="{StaticResource ResourceKey=Load-Panel}">
-            <fa:ImageAwesome Icon="Spinner" 
-                             Spin="{Binding IsLoading}"/>
-            <Button Content="Поиск" 
-                    Command="{Binding DataLoadingCommand}"/>
-        </StackPanel>
 
         <Grid Style="{StaticResource ResourceKey=Main-Menu-Interactions}">
             <TabControl>
@@ -79,7 +68,7 @@
                                 <uc:StackComboBox Header="Статус" 
                                                   Text="{Binding StatusFilter}"
                                                   ItemsSource="{Binding StatusItems}"/>
-                                
+
                                 <StackPanel>
                                     <Button Content="Очистить фильтр" 
                                         Command="{Binding ClearFilterCommand}"/>
@@ -93,79 +82,39 @@
                 <TabItem Header="Редакирование">
                     <ScrollViewer>
                         <StackPanel>
-                            <StackPanel Style="{StaticResource ResourceKey=CURD}">
-                                <Button Command="{Binding ShowAddWindowCommnad}"
-                                        ToolTip="Добавить заявку">
-                                    <fa:ImageAwesome Icon="PlusSquare"/>
-                                </Button>
-                                <Button Command="{Binding DeleteCommnad}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Удалить заявку">
-                                    <fa:ImageAwesome Icon="MinusSquare"/>
-                                </Button>
-                                    <Button Command="{Binding SaveDataCommand}"
-                                            CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                            ToolTip="Сохранить изменения">
-                                    <fa:ImageAwesome Icon="FloppyOutline"/>
-                                </Button>
-                                <Button Command="{Binding FillingEditFields}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Сбросить изменнеия">
-                                    <fa:ImageAwesome Icon="Dropbox"/>
-                                </Button>
-                            </StackPanel>
+                            <uc:CURD/>
 
                             <StackPanel>
                                 <Expander Header="Одиночное редактирование" IsExpanded="False">
                                     <StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Номер заявки"/>
-                                            <TextBox Text="{Binding NumberEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Дата заявки"/>
-                                            <DatePicker SelectedDate="{Binding DateEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Наименование"/>
-                                            <TextBox Text="{Binding NameEdit}"/>
-                                        </StackPanel>
+                                        <uc:StackTextBox Header="Номер заявки" 
+                                                         Text="{Binding NumberEdit}"/>
+                                        <uc:StackDatePicker Header="Дата заявки" 
+                                                            SelectedDate="09.09.09"/>
+                                        <uc:StackTextBox Header="Наименование" 
+                                                         Text="{Binding NameEdit}"/>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Header="Множественное редактирование" IsExpanded="True">
                                     <StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Приоритет"/>
-                                            <ComboBox ItemsSource="{Binding PriorityItems}"
-                                                      Text="{Binding PriorityEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Комментарий"/>
-                                            <TextBox Text="{Binding CommentEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Контрагент"/>
-                                            <ComboBox ItemsSource="{Binding CustomerItems}"
-                                                      Text="{Binding CustomerEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Направление ЦЗС"/>
-                                            <ComboBox ItemsSource="{Binding DirectionItems}"
-                                                      Text="{Binding DirectionEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Признак сделки"/>
-                                            <ComboBox ItemsSource="{Binding TradeSignItems}"
-                                                      Text="{Binding TradeSignEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <CheckBox Content="Закупка на складе"
-                                                      IsChecked="{Binding ToWarehouseEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <CheckBox Content="Бронь"
-                                                      IsChecked="{Binding ToReserveEdit}"/>
-                                        </StackPanel>
+                                        <uc:StackComboBox Header="Приоритет" 
+                                                          Text="{Binding PriorityEdit}"
+                                                          ItemsSource="{Binding PriorityItems}"/>
+                                        <uc:StackTextBox Header="Комментарий" 
+                                                         Text="{Binding CommentEdit}"/>
+                                        <uc:StackComboBox Header="Контрагент" 
+                                                          Text="{Binding CustomerEdit}"
+                                                          ItemsSource="{Binding CustomerItems}"/>
+                                        <uc:StackComboBox Header="Направление ЦЗС" 
+                                                          Text="{Binding DirectionEdit}"
+                                                          ItemsSource="{Binding DirectionItems}"/>
+                                        <uc:StackComboBox Header="Признак сделки" 
+                                                          Text="{Binding TradeSignEdit}"
+                                                          ItemsSource="{Binding TradeSignItems}"/>
+                                        <uc:StackCheckBox Header="Закупка на складе" 
+                                                          IsChecked="{Binding ToWarehouseEdit}"/>
+                                        <uc:StackCheckBox Header="Бронь" 
+                                                          IsChecked="{Binding ToReserveEdit}"/>
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>

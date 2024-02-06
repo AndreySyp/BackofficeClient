@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style x:Key="Main-Menu-Interactions" TargetType="Grid">
-        <Setter Property="Grid.Row" Value="1"/>
         <Setter Property="Grid.Column" Value="1"/>
         <Style.Resources>
 

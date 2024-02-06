@@ -14,7 +14,7 @@ public partial class StackComboBox : UserControl
             "ItemsSource",
             typeof(IEnumerable),
             typeof(StackComboBox),
-            new FrameworkPropertyMetadata(string.Empty,
+            new FrameworkPropertyMetadata(null,
             new PropertyChangedCallback(OnItemsSourceChanged)));
 
     public static readonly DependencyProperty TextProperty =
@@ -22,7 +22,7 @@ public partial class StackComboBox : UserControl
             "Text",
             typeof(string),
             typeof(StackComboBox),
-            new FrameworkPropertyMetadata(string.Empty,
+            new FrameworkPropertyMetadata(null,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                 new PropertyChangedCallback(OnTextChanged)));
 

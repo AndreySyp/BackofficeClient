@@ -8,6 +8,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" 
+	    xmlns:fa="http://schemas.fontawesome.io/icons/"
         MinHeight="200" MinWidth="400"
         Height="450" Width="800">
 
@@ -31,6 +32,13 @@
             <Button Background="Red" Content="Поставки" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Договоры" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
             <Button Background="Red" Content="Контрагенты" Margin="2,2,2,2" Height="30" MinWidth="60" Width="auto"></Button>
+        </StackPanel>
+        
+        <StackPanel Style="{StaticResource ResourceKey=Load-Panel}">
+            <fa:ImageAwesome Icon="Spinner" 
+                             Spin="{Binding IsLoading}"/>
+            <Button Content="Поиск" 
+                    Command="{Binding LoadCommnad}"/>
         </StackPanel>
 
         <Frame Grid.Row="1" Content="{Binding CurrentPage}" NavigationUIVisibility="Hidden"></Frame>

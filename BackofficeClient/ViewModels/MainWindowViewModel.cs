@@ -1,4 +1,5 @@
-﻿using BackofficeClient.Views.MainWindowPages;
+﻿using BackofficeClient.Models.Interfaces;
+using BackofficeClient.Views.MainWindowPages;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,7 +12,17 @@ public class MainWindowViewModel : ViewModelBase
     public Page? CurrentPage
     {
         get => _CurrentPage;
-        set { _CurrentPage = value; OnPropertyChanged(); }
+        set
+        {
+            _CurrentPage = value;
+
+            if (_CurrentPage?.DataContext is IDataLoad s)
+            {
+                s.DataLoadingCommand.Execute(null);
+            }
+
+            OnPropertyChanged();
+        }
     }
 
     private readonly Page pageRequests = new Requests();
@@ -25,6 +36,15 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand PageProceduresClick => new RelayCommand(() => CurrentPage = pageProcedures);
     public ICommand PageAgreementConditionsClick => new RelayCommand(() => CurrentPage = pageAgreementConditions);
     public ICommand PageSpecificationsClick => new RelayCommand(() => CurrentPage = pageSpecifications);
+
+
+    public RelayCommand LoadCommnad => new(() =>
+    {
+        if (CurrentPage?.DataContext is IDataLoad s)
+        {
+            s.DataLoadingCommand.Execute(null);
+        }
+    });
 
     public MainWindowViewModel()
     {

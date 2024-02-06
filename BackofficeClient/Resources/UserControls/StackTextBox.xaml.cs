@@ -13,9 +13,9 @@ public partial class StackTextBox : UserControl
             "Text",
             typeof(string),
             typeof(StackTextBox),
-            new FrameworkPropertyMetadata(string.Empty,
+            new FrameworkPropertyMetadata(null,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                new PropertyChangedCallback(OnTextChanged2)));
+                new PropertyChangedCallback(OnTextChanged)));
 
     public string? Header { get; set; }
 
@@ -30,7 +30,7 @@ public partial class StackTextBox : UserControl
         InitializeComponent();
     }
 
-    private static void OnTextChanged2(DependencyObject @object, DependencyPropertyChangedEventArgs @event)
+    private static void OnTextChanged(DependencyObject @object, DependencyPropertyChangedEventArgs @event)
     {
         if (@object is not StackTextBox control)
         {
