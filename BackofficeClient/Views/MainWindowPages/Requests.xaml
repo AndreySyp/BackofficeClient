@@ -66,27 +66,20 @@
                     <ScrollViewer>
                         <StackPanel>
                             <StackPanel>
-                                <uc:StackTextBox Header="Номер заявки" Items="{Binding RequestNumberFilter}"/>
-
-                                <StackPanel>
-                                    <TextBlock Text="Контрагент"/>
-                                    <ComboBox ItemsSource="{Binding CustomerItems}" 
-                                              Text ="{Binding CustomerFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Наименование заявки"/>
-                                    <TextBox Text="{Binding NameFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Направление ЦЗС"/>
-                                    <ComboBox ItemsSource="{Binding DirectionItems}" 
-                                              Text="{Binding DirectioFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Статус"/>
-                                    <ComboBox ItemsSource="{Binding StatusItems}"
-                                              Text="{Binding StatusFilter}"/>
-                                </StackPanel>
+                                <uc:StackTextBox Header="Номер заявки" 
+                                                 Text="{Binding RequestNumberFilter}"/>
+                                <uc:StackComboBox Header="Контрагент" 
+                                                  Text="{Binding CustomerFilter}"
+                                                  ItemsSource="{Binding CustomerItems}"/>
+                                <uc:StackTextBox Header="Наименование заявки" 
+                                                 Text="{Binding NameFilter}"/>
+                                <uc:StackComboBox Header="Направление ЦЗС" 
+                                                  Text="{Binding DirectioFilter}"
+                                                  ItemsSource="{Binding DirectionItems}"/>
+                                <uc:StackComboBox Header="Статус" 
+                                                  Text="{Binding StatusFilter}"
+                                                  ItemsSource="{Binding StatusItems}"/>
+                                
                                 <StackPanel>
                                     <Button Content="Очистить фильтр" 
                                         Command="{Binding ClearFilterCommand}"/>

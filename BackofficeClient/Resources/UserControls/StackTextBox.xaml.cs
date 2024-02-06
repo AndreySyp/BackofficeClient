@@ -8,35 +8,34 @@ namespace BackofficeClient.Resources.UserControls;
 /// </summary>
 public partial class StackTextBox : UserControl
 {
+    public static readonly DependencyProperty TextProperty =
+        DependencyProperty.Register(
+            "Text",
+            typeof(string),
+            typeof(StackTextBox),
+            new FrameworkPropertyMetadata(string.Empty,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                new PropertyChangedCallback(OnTextChanged2)));
+
+    public string? Header { get; set; }
+
+    public string? Text
+    {
+        get { return (string?)GetValue(TextProperty); }
+        set { SetValue(TextProperty, value); }
+    }
+
     public StackTextBox()
     {
         InitializeComponent();
     }
 
-    public string? Header { get; set; }
-
-    public string? Items
+    private static void OnTextChanged2(DependencyObject @object, DependencyPropertyChangedEventArgs @event)
     {
-        get { return (string?)GetValue(ItemsProperty); }
-        set { SetValue(ItemsProperty, value); }
-    }
-
-    public static readonly DependencyProperty ItemsProperty =
-        DependencyProperty.Register(
-            "Items",
-            typeof(string),
-            typeof(StackTextBox),
-            new FrameworkPropertyMetadata(string.Empty,
-                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
-                new PropertyChangedCallback(OnTextChanged)));
-
-    private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        if (d is not StackTextBox stackTextBox)
+        if (@object is not StackTextBox control)
         {
             return;
         }
-        string? a = e.NewValue as string;
-        stackTextBox.Items = a;
+        control.Text = @event.NewValue as string;
     }
 }
