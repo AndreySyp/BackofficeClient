@@ -16,9 +16,9 @@ public class MainWindowViewModel : ViewModelBase
         {
             _CurrentPage = value;
 
-            if (_CurrentPage?.DataContext is IDataLoad s)
+            if (_CurrentPage?.DataContext is ILoadData s)
             {
-                s.DataLoadingCommand.Execute(null);
+                s.LoadDataCommand.Execute(null);
             }
 
             OnPropertyChanged();
@@ -38,11 +38,18 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand PageSpecificationsClick => new RelayCommand(() => CurrentPage = pageSpecifications);
 
 
+    private bool isLoading = false;
+    public bool IsLoading
+    {
+        get => isLoading;
+        set { isLoading = value; OnPropertyChanged(); }
+    }
+
     public RelayCommand LoadCommnad => new(() =>
     {
-        if (CurrentPage?.DataContext is IDataLoad s)
+        if (CurrentPage?.DataContext is ILoadData s)
         {
-            s.DataLoadingCommand.Execute(null);
+            s.LoadDataCommand.Execute(null);
         }
     });
 

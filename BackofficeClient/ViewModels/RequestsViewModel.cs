@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace BackofficeClient.ViewModels;
 
-public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
+public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData//<Request>
 {
 
     #region Объекты для привязки
@@ -21,13 +21,6 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
     {
         get => dataItems;
         set { dataItems = value; OnPropertyChanged(); }
-    }
-
-    private bool isLoading = false;
-    public bool IsLoading
-    {
-        get => isLoading;
-        set { isLoading = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -217,54 +210,40 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
 
     #region Команды
 
-    public AsyncRelayCommand<object> SelectDataCommand => new(async (parameter) =>
+    #region CUFD
+
+    public AsyncRelayCommand CreateDataCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
-            SelectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
-            FillingEditFieldsCommand.Execute(null);
-        });
-    });
+            using DatabaseContext db = new();
 
-    public AsyncRelayCommand FillingEditFieldsCommand => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            if (SelectedItems == null || SelectedItems.Count < 1)
+            Models.Database.Request request = new()
             {
-                return;
-            }
+                RequestNum = NumberAdd,
+                Customer = CustomerAdd,
+                RequestDate = DateAdd.ToDateOnly(),
+                RequestName = NameAdd,
+                RequestComment = CommentAdd,
+                Priority = PriorityAdd,
+            };
 
-            List<Request> t = SelectedItems;
-            var selectedItem = SelectedItems[0];
-            if (SelectedItems.Count == 1)
+            var check = db.Requests.FirstOrDefault(x => x.RequestNum == request.RequestNum);
+            if (check == null)
             {
-                NumberEdit = selectedItem.RequestNum;
-                NameEdit = selectedItem.RequestName;
-
-                if (selectedItem.RequestDate != null)
-                {
-                    DateEdit = selectedItem.RequestDate.ToDateTime();
-                }
+                db.Requests.Add(request);
             }
             else
             {
-                NumberEdit = null;
-                NameEdit = null;
-                DateEdit = null;
+                // Feature оповещение что заявка уже существует
             }
+            db.SaveChanges();
 
-            PriorityEdit = selectedItem.Priority;
-            CommentEdit = selectedItem.RequestComment;
-            CustomerEdit = selectedItem.Customer;
-            DirectionEdit = selectedItem.PersonManager;
-            TradeSignEdit = selectedItem.TradeSign;
-            ToWarehouseEdit = selectedItem.ToWarehouse;
-            ToReserveEdit = selectedItem.ToReserve;
+            LoadDataCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand SaveDataCommand => new(async () =>
+    public AsyncRelayCommand UpdateDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -278,11 +257,6 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
                                    let update = db.Requests.FirstOrDefault(r => r.RequestId == selectedItem.RequestId)
                                    select update)
             {
-                if (update == null)
-                {
-                    return;
-                }
-
                 update.RequestComment = CommentEdit;
                 update.PersonManager = DirectionEdit;
                 update.ToWarehouse = ToWarehouseEdit;
@@ -301,11 +275,45 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
             }
 
             db.SaveChanges();
-            DataLoadingCommand.Execute(null);
+            LoadDataCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand DeleteCommnad => new(async () =>
+    public AsyncRelayCommand FillingFieldsCommand => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            if (SelectedItems == null || SelectedItems.Count < 1)
+            {
+                return;
+            }
+
+            var selectedItem = SelectedItems[0];
+
+            PriorityEdit = selectedItem.Priority;
+            CommentEdit = selectedItem.RequestComment;
+            CustomerEdit = selectedItem.Customer;
+            DirectionEdit = selectedItem.PersonManager;
+            TradeSignEdit = selectedItem.TradeSign;
+            ToWarehouseEdit = selectedItem.ToWarehouse;
+            ToReserveEdit = selectedItem.ToReserve;
+
+            if (SelectedItems.Count == 1)
+            {
+                NumberEdit = selectedItem.RequestNum;
+                NameEdit = selectedItem.RequestName;
+                DateEdit = selectedItem.RequestDate.ToDateTime();
+            }
+            else
+            {
+                NumberEdit = null;
+                NameEdit = null;
+                DateEdit = null;
+            }
+        });
+    });
+
+    public AsyncRelayCommand DeleteDataCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -324,28 +332,27 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
             }
 
             db.SaveChanges();
-            DataLoadingCommand.Execute(null);
+            LoadDataCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand ClearFilterCommand => new(async () =>
+    public RelayCommand ShowCreateWindowCommnad => new(() =>
     {
-        await Task.Run(() =>
+        _ = new AddRequest()
         {
-            RequestNumberFilter = null;
-            CustomerFilter = null;
-            NameFilter = null;
-            DirectioFilter = null;
-            StatusFilter = null;
-        });
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
     });
 
-    public AsyncRelayCommand DataLoadingCommand => new(async () =>
+    #endregion
+
+    #region Load
+
+    public AsyncRelayCommand LoadDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
             using DatabaseContext db = new();
-            IsLoading = true;
             var c = RequestNumberFilter;
 
             // Legacy request join v_request
@@ -387,51 +394,35 @@ public class RequestsViewModel : ViewModelBase, INterface1, IDataLoad//<Request>
         });
     });
 
-    public AsyncRelayCommand AddCommnad => new(async () =>
+    public AsyncRelayCommand ClearFilterCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            using DatabaseContext db = new();
-
-            Models.Database.Request request = new()
-            {
-                RequestNum = NumberAdd,
-                Customer = CustomerAdd,
-                RequestDate = DateAdd.ToDateOnly(),
-                RequestName = NameAdd,
-                RequestComment = CommentAdd,
-                Priority = PriorityAdd,
-            };
-
-            var asd = db.Requests.FirstOrDefault(x => x.RequestNum == request.RequestNum);
-            if (asd == null)
-            {
-                db.Requests.Add(request);
-            }
-            else
-            {
-                // Feature оповещение что заявка уже существует
-            }
-            db.SaveChanges();
-
-            DataLoadingCommand.Execute(null);
+            RequestNumberFilter = null;
+            CustomerFilter = null;
+            NameFilter = null;
+            DirectioFilter = null;
+            StatusFilter = null;
         });
-    });
-
-    public RelayCommand ShowAddWindowCommnad => new(() =>
-    {
-        _ = new AddRequest()
-        {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
-        };
     });
 
     #endregion
 
-    public void FillingEditFields()
-    {
+    #region DataGridCommand
 
-    }
+    public AsyncRelayCommand<object> SelectDataCommand => new(async (parameter) =>
+    {
+        await Task.Run(() =>
+        {
+            SelectedItems = (parameter as System.Collections.IList)?.Cast<Request>().ToList();
+            FillingFieldsCommand.Execute(null);
+        });
+    });
+
+    #endregion
+
+    #endregion
+
     public void LoadComboBoxItems()
     {
 #pragma warning disable CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.

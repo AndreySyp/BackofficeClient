@@ -17,7 +17,7 @@
                             MethodName="GetDataGridSettingColumns"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext}">
 
 
         <DataGrid Style="{StaticResource Main-Grid}"
@@ -25,8 +25,8 @@
                   Name="dataGrid">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
-                                           CommandParameter="{Binding SelectedItems}"/>
+                    <i:InvokeCommandAction Command="{Binding SelectDataCommand}"
+                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
                 </i:EventTrigger>
 
                 <i:EventTrigger EventName="AutoGeneratingColumn" 

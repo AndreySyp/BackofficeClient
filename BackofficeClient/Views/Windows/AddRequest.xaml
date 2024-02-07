@@ -4,6 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+        
+        xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
+        
         d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
         mc:Ignorable="d"
         Title="AddRequest" Height="300" Width="300">
@@ -13,39 +16,24 @@
     </Window.DataContext>
 
     <Grid>
-        <StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Заказчик"></TextBlock>
-                <ComboBox ItemsSource="{Binding CustomerItems}" 
-                          Text="{Binding CustomerAdd}"
-                          IsEditable="True"/>
-
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Номер заявки"></TextBlock>
-                <TextBox Text="{Binding NumberAdd}"></TextBox>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Дата заявки"></TextBlock>
-                <DatePicker SelectedDate="{Binding DateAdd}"></DatePicker>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Наименование заявки"></TextBlock>
-                <TextBox Text="{Binding NameAdd}"></TextBox>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="комментарий"></TextBlock>
-                <TextBox Text="{Binding CommentAdd}"></TextBox>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Приоритет"></TextBlock>
-                <ComboBox ItemsSource="{Binding PriorityItems}" 
-                          Text="{Binding PriorityEdit}"
-                          IsEditable="True"></ComboBox>
-            </StackPanel>
+        <StackPanel Style="{StaticResource ResourceKey=Add-Window}">
+            <uc:StackComboBox Header="Заказчик"
+                              Text="{Binding CustomerAdd}"
+                              ItemsSource="{Binding CustomerItems}"/>
+            <uc:StackTextBox Header="Номер заявки"
+                             Text="{Binding NumberAdd}"/>
+            <uc:StackDatePicker Header="Дата заявки"
+                                SelectedDate="{Binding DateAdd}"/>
+            <uc:StackTextBox Header="Наименование заявки"
+                             Text="{Binding NameAdd}"/>
+            <uc:StackTextBox Header="Комментарий"
+                             Text="{Binding CommentAdd}"/>
+            <uc:StackComboBox Header="Приоритет"
+                              Text="{Binding PriorityEdit}"
+                              ItemsSource="{Binding PriorityItems}"/>
             
             <StackPanel Width="120">
-                <Button Content="Добавить" Command="{Binding AddCommnad}"/>
+                <Button Content="Добавить" Command="{Binding CreateDataCommnad}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

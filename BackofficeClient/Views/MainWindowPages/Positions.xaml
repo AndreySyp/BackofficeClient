@@ -27,7 +27,7 @@
     </Page.Resources>
 
     <Grid Background="White"  >
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="2*" MaxWidth="200" MinWidth="130"/>
         </Grid.ColumnDefinitions>
@@ -254,7 +254,7 @@
                     </StackPanel>
                 </TabItem>
             </TabControl>
-        </Grid>
+        </Grid>-->
 
     </Grid>
 </Page>

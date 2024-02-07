@@ -3,12 +3,17 @@ using System.Collections.ObjectModel;
 
 namespace BackofficeClient.Models.Interfaces;
 
-interface IDataLoad//<T>
+interface ILoadData//<T>
 {
     //abstract public ObservableCollection<T> DataItems { get; set; }
 
     /// <summary>
     /// Загрузка данных
     /// </summary>
-    public AsyncRelayCommand DataLoadingCommand { get; }
+    public AsyncRelayCommand LoadDataCommand { get; }
+
+    /// <summary>
+    /// Очистка фильтров в поиске
+    /// </summary>
+    public AsyncRelayCommand ClearFilterCommand { get; }
 }

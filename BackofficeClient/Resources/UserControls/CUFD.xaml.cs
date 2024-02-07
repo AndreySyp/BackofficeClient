@@ -16,12 +16,11 @@ using System.Windows.Shapes;
 namespace BackofficeClient.Resources.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для CURD.xaml
+    /// Логика взаимодействия для CUFD.xaml
     /// </summary>
-    public partial class CURD : UserControl
+    public partial class CUFD : UserControl
     {
-        public Binding ASD = new("Value") { ElementName = "dataGrid" };
-        public CURD()
+        public CUFD()
         {
             InitializeComponent();
         }

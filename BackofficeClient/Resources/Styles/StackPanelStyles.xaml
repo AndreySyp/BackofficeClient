@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	                xmlns:fa="http://schemas.fontawesome.io/icons/">
 
-    <Style x:Key="CURD" TargetType="StackPanel">
+    <Style x:Key="CUFD" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Horizontal"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Style.Resources>
@@ -11,7 +11,7 @@
                 <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
                 <Setter Property="MaxHeight" Value="30"/>
                 <Style.Resources>
-                    
+
                     <Style TargetType="fa:ImageAwesome">
                         <Setter Property="Height" Value="20"/>
                         <Setter Property="Width" Value="20"/>
@@ -37,5 +37,22 @@
 
         </Style.Resources>
     </Style>
+
+    <Style x:Key="Add-Window" TargetType="StackPanel">
+        <Style.Resources>
+
+            <Style TargetType="StackPanel">
+                <Setter Property="Width" Value="120"/>
+                <Style.Resources>
+
+                    <Style TargetType="ComboBox">
+                        <Setter Property="IsEditable" Value="True"/>
+                    </Style>
+
+                </Style.Resources>
+            </Style>
+
+        </Style.Resources>
+     </Style>
 
 </ResourceDictionary>
