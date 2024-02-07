@@ -6,9 +6,9 @@
       xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       mc:Ignorable="d" 
       
+      xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
       xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
 	  xmlns:extension="clr-namespace:BackofficeClient.Infrastructure.Extensions" 
-      xmlns:fa="http://schemas.fontawesome.io/icons/"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
       d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
       d:DesignHeight="450" 
@@ -27,38 +27,12 @@
     </Page.Resources>
 
     <Grid Background="White"  >
-        <!--<Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="2*" MaxWidth="200" MinWidth="130"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
 
-        <DataGrid Style="{StaticResource Main-Grid}"
-                  ItemsSource="{Binding FilteredItems}"
-                  Name="dataGrid">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"
-                                           CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"/>
-                </i:EventTrigger>
-
-                <i:EventTrigger EventName="AutoGeneratingColumn" 
-                                SourceObject="{Binding ElementName=dataGrid}">
-                    <i:InvokeCommandAction Command="{Binding Source={StaticResource SettingColumns}}" 
-                                           PassEventArgsToCommand="True"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </DataGrid>
-
-        <StackPanel Style="{StaticResource ResourceKey=Load-Panel}">
-            <fa:ImageAwesome Icon="Spinner" 
-                             Spin="{Binding IsLoading}"/>
-            <Button Content="Загрузить" 
-                    Command="{Binding DataLoadingCommand}"/>
-        </StackPanel>
+        <uc:СustomizedMainDataGrid/>
 
         <Grid Style="{StaticResource ResourceKey=Main-Menu-Interactions}">
             <TabControl >
@@ -66,53 +40,30 @@
                     <ScrollViewer>
                         <StackPanel>
                             <StackPanel>
+                                <uc:StackTextBox Header="Номер заявки" 
+                                                 Text="{Binding RequestNumberFilter}"/>
+                                <uc:StackTextBox Header="Номер позиции" 
+                                                 Text="{Binding PositionNumberFilter}"/>
+                                <uc:StackTextBox Header="Процедура ЭТП" 
+                                                 Text="{Binding ProcedureGpbFilter}"/>
+                                <uc:StackTextBox Header="Ответственный" 
+                                                 Text="{Binding ResponsibleFilter}"/>
+                                <uc:StackTextBox Header="Наименование МТР" 
+                                                 Text="{Binding NameMtrFilter}"/>
+                                <uc:StackTextBox Header="Валюта" 
+                                                 Text="{Binding CurrencyFilter}"/>
+                                <uc:StackTextBox Header="Базис поставки" 
+                                                 Text="{Binding BasisFilter}"/>
+                                <uc:StackTextBox Header="Группа МТР" 
+                                                 Text="{Binding GroupMtrFilter}"/>
+                                <uc:StackTextBox Header="Победитель/Поставщик" 
+                                                 Text="{Binding WinnerFilter}"/>
+                                <uc:StackTextBox Header="Текущий статус" 
+                                                 Text="{Binding StateFilter}"/>
+                                <uc:StackDoubleDatePicker Header="Полседнее изменение" 
+                                                          SelectedDateStart="{Binding LastChangeBeginFilter}"
+                                                          SelectedDateEnd="{Binding LastChangeEndFilter}"/>
                                 <StackPanel>
-                                    <TextBlock Text="Номер заявки"/>
-                                    <TextBox Text="{Binding RequestNumberFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Номер позиции"/>
-                                    <TextBox Text="{Binding PositionNumberFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Процедура ЭТП"/>
-                                    <TextBox Text="{Binding ProcedureGpbFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Ответственный"/>
-                                    <TextBox Text="{Binding ResponsibleFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Наименование МТР"/>
-                                    <TextBox Text="{Binding NameMtrFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Валюта"/>
-                                    <TextBox Text="{Binding CurrencyFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Базис поставки"/>
-                                    <TextBox Text="{Binding BasisFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Группа МТР"/>
-                                    <TextBox Text="{Binding GroupMtrFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Победитель/Поставщик"/>
-                                    <TextBox Text="{Binding WinnerFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Текущий статус"/>
-                                    <TextBox Text="{Binding StateFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Полседнее изменение"/>
-                                    <TextBox Text="{Binding LastChangeBeginFilter}"/>
-                                    <TextBox Text="{Binding LastChangeEndFilter}"/>
-                                </StackPanel>
-                                <StackPanel>
-                                    <Button Content="Поиск" Command="{Binding DataFilteredCommand}"/>
                                     <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"/>
                                 </StackPanel>
                             </StackPanel>
@@ -123,107 +74,50 @@
                 <TabItem Header="Редакирование" >
                     <ScrollViewer>
                         <StackPanel>
-                            <StackPanel Style="{StaticResource ResourceKey=CURD}">
-                                <Button Command="{Binding ShowAddWindowCommnad}"
-                                        ToolTip="Добавить заявку">
-                                    <fa:ImageAwesome Icon="PlusSquare"/>
-                                </Button>
-                                <Button Command="{Binding DeleteCommnad}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Удалить заявку">
-                                    <fa:ImageAwesome Icon="MinusSquare"/>
-                                </Button>
-                                <Button Command="{Binding SaveDataCommand}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Сохранить изменения">
-                                    <fa:ImageAwesome Icon="FloppyOutline"/>
-                                </Button>
-                                <Button Command="{Binding FillingEditFields}"
-                                        CommandParameter="{Binding ElementName=dataGrid, Path=SelectedItems}"
-                                        ToolTip="Сбросить изменнеия">
-                                    <fa:ImageAwesome Icon="Dropbox"/>
-                                </Button>
-                            </StackPanel>
-
+                            <uc:CUFD/>
                             <StackPanel>
                                 <Expander Header="Одиночное редактирование" IsExpanded="False">
                                     <StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Наименование МТР"/>
-                                            <TextBox Text="{Binding NameMtrEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Документ изготовления (НТД: ГОСТ/ТУ, ТЗ и т.п."/>
-                                            <TextBox Text="{Binding DocNtdEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Количество"/>
-                                            <TextBox Text="{Binding AmountEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Единица измерения"/>
-                                            <TextBox Text="{Binding MeasureEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Базис"/>
-                                            <TextBox Text="{Binding BasisEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Номер позиции"/>
-                                            <TextBox Text="{Binding PositionNumberEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Изготовитель"/>
-                                            <TextBox Text="{Binding ManufacturerEdit}"/>
-                                        </StackPanel>
+                                        <uc:StackTextBox Header="Наименование МТР" 
+                                                         Text="{Binding NameMtrEdit}"/>
+                                        <uc:StackTextBox Header="Документ изготовления (НТД: ГОСТ/ТУ, ТЗ и т.п." 
+                                                         Text="{Binding DocNtdEdit}"/>
+                                        <uc:StackTextBox Header="Количество" 
+                                                         Text="{Binding AmountEdit}"/>
+                                        <uc:StackTextBox Header="Единица измерения" 
+                                                         Text="{Binding MeasureEdit}"/>
+                                        <uc:StackTextBox Header="Базис" 
+                                                         Text="{Binding BasisEdit}"/>
+                                        <uc:StackTextBox Header="Номер позиции" 
+                                                         Text="{Binding PositionNumberEdit}"/>
+                                        <uc:StackTextBox Header="Изготовитель" 
+                                                         Text="{Binding ManufacturerEdit}"/>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Header="Множественное редактирование" IsExpanded="True">
                                     <StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Группа МТР"/>
-                                            <TextBox Text="{Binding GroupMtrEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Процедура ЭТП"/>
-                                            <TextBox Text="{Binding ProcedureGpbEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Победитель/Поставщик"/>
-                                            <TextBox Text="{Binding WinnerEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Срок поставки"/>
-                                            <TextBox Text="{Binding TimingEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Максимальный срок поставки"/>
-                                            <TextBox Text="{Binding TimingMaxEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Валюта"/>
-                                            <TextBox Text="{Binding CurrencyEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Вх. ст. товара, руб. без НДС"/>
-                                            <TextBox Text="{Binding IncPriceEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Ст. в валюте, без НДС"/>
-                                            <TextBox Text="{Binding IncPriceCurrencyEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Вх. ст. товара, руб. с НДС"/>
-                                            <TextBox Text="{Binding IncPriceNdsEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Ст. в валюте, с НДС"/>
-                                            <TextBox Text="{Binding IncPriceNdsCurrencyEdit}"/>
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <TextBlock Text="Ответственный"/>
-                                            <TextBox Text="{Binding ResponsibleEdit}"/>
-                                        </StackPanel>
+                                        <uc:StackTextBox Header="Группа МТР" 
+                                                         Text="{Binding GroupMtrEdit}"/>
+                                        <uc:StackTextBox Header="Процедура ЭТП" 
+                                                         Text="{Binding ProcedureGpbEdit}"/>
+                                        <uc:StackTextBox Header="Победитель/Поставщик" 
+                                                         Text="{Binding WinnerEdit}"/>
+                                        <uc:StackTextBox Header="Срок поставки" 
+                                                         Text="{Binding TimingEdit}"/>
+                                        <uc:StackTextBox Header="Максимальный срок поставки" 
+                                                         Text="{Binding TimingMaxEdit}"/>
+                                        <uc:StackTextBox Header="Валюта" 
+                                                         Text="{Binding CurrencyEdit}"/>
+                                        <uc:StackTextBox Header="Вх. ст. товара, руб. без НДС" 
+                                                         Text="{Binding IncPriceEdit}"/>
+                                        <uc:StackTextBox Header="Ст. в валюте, без НДС" 
+                                                         Text="{Binding IncPriceCurrencyEdit}"/>
+                                        <uc:StackTextBox Header="Вх. ст. товара, руб. с НДС" 
+                                                         Text="{Binding IncPriceNdsEdit}"/>
+                                        <uc:StackTextBox Header="Ст. в валюте, с НДС" 
+                                                         Text="{Binding IncPriceNdsCurrencyEdit}"/>
+                                        <uc:StackTextBox Header="Ответственный" 
+                                                         Text="{Binding ResponsibleEdit}"/>
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>
@@ -248,13 +142,11 @@
                         <StackPanel Width="120">
                             <Button Background="Red" Content="Выгрузка ткп по шблону" ></Button>
                             <Button Background="Red" Content="Экспорт данных в файл" ></Button>
-
                         </StackPanel>
-
                     </StackPanel>
                 </TabItem>
             </TabControl>
-        </Grid>-->
+        </Grid>
 
     </Grid>
 </Page>

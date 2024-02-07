@@ -68,11 +68,11 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
 
     #region Одиночное
 
-    private string? numberEdit;
-    public string? NumberEdit
+    private string? requestNumberEdit;
+    public string? RequestNumberEdit
     {
-        get => numberEdit;
-        set { numberEdit = value; OnPropertyChanged(); }
+        get => requestNumberEdit;
+        set { requestNumberEdit = value; OnPropertyChanged(); }
     }
 
     private DateTime? dateEdit;
@@ -148,11 +148,11 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
 
     #region Добавление
 
-    private string? numberAdd;
-    public string? NumberAdd
+    private string? requestNumberAdd;
+    public string? RequestNumberAdd
     {
-        get => numberAdd;
-        set { numberAdd = value; OnPropertyChanged(); }
+        get => requestNumberAdd;
+        set { requestNumberAdd = value; OnPropertyChanged(); }
     }
 
     private string? customerAdd;
@@ -218,9 +218,9 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
         {
             using DatabaseContext db = new();
 
-            Models.Database.Request request = new()
+            Models.Database.Request create = new()
             {
-                RequestNum = NumberAdd,
+                RequestNum = RequestNumberAdd,
                 Customer = CustomerAdd,
                 RequestDate = DateAdd.ToDateOnly(),
                 RequestName = NameAdd,
@@ -228,17 +228,17 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
                 Priority = PriorityAdd,
             };
 
-            var check = db.Requests.FirstOrDefault(x => x.RequestNum == request.RequestNum);
+            var check = db.Requests.FirstOrDefault(x => x.RequestNum == create.RequestNum);
             if (check == null)
             {
-                db.Requests.Add(request);
+                db.Requests.Add(create);
             }
             else
             {
                 // Feature оповещение что заявка уже существует
             }
-            db.SaveChanges();
 
+            db.SaveChanges();
             LoadDataCommand.Execute(null);
         });
     });
@@ -267,7 +267,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
 
                 if (SelectedItems.Count == 1)
                 {
-                    update.RequestNum = NumberEdit;
+                    update.RequestNum = RequestNumberEdit;
                     update.RequestName = NameEdit;
                     update.ToReserve = ToReserveEdit;
                     update.RequestDate = DateEdit.ToDateOnly();
@@ -288,25 +288,25 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
                 return;
             }
 
-            var selectedItem = SelectedItems[0];
+            var fill = SelectedItems[0];
 
-            PriorityEdit = selectedItem.Priority;
-            CommentEdit = selectedItem.RequestComment;
-            CustomerEdit = selectedItem.Customer;
-            DirectionEdit = selectedItem.PersonManager;
-            TradeSignEdit = selectedItem.TradeSign;
-            ToWarehouseEdit = selectedItem.ToWarehouse;
-            ToReserveEdit = selectedItem.ToReserve;
+            PriorityEdit = fill.Priority;
+            CommentEdit = fill.RequestComment;
+            CustomerEdit = fill.Customer;
+            DirectionEdit = fill.PersonManager;
+            TradeSignEdit = fill.TradeSign;
+            ToWarehouseEdit = fill.ToWarehouse;
+            ToReserveEdit = fill.ToReserve;
 
             if (SelectedItems.Count == 1)
             {
-                NumberEdit = selectedItem.RequestNum;
-                NameEdit = selectedItem.RequestName;
-                DateEdit = selectedItem.RequestDate.ToDateTime();
+                RequestNumberEdit = fill.RequestNum;
+                NameEdit = fill.RequestName;
+                DateEdit = fill.RequestDate.ToDateTime();
             }
             else
             {
-                NumberEdit = null;
+                RequestNumberEdit = null;
                 NameEdit = null;
                 DateEdit = null;
             }
@@ -353,7 +353,6 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
         await Task.Run(() =>
         {
             using DatabaseContext db = new();
-            var c = RequestNumberFilter;
 
             // Legacy request join v_request
             DataItems = new(

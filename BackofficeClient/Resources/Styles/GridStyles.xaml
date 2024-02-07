@@ -14,6 +14,7 @@
                             <Style TargetType="ScrollViewer">
                                 <Setter Property="Height" 
                                     Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Grid}}, Path=Height}"/>
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
                                 <Style.Resources>
 
                                     <Style TargetType="StackPanel">

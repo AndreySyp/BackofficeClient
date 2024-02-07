@@ -21,7 +21,7 @@
                               Text="{Binding CustomerAdd}"
                               ItemsSource="{Binding CustomerItems}"/>
             <uc:StackTextBox Header="Номер заявки"
-                             Text="{Binding NumberAdd}"/>
+                             Text="{Binding RequestNumberAdd}"/>
             <uc:StackDatePicker Header="Дата заявки"
                                 SelectedDate="{Binding DateAdd}"/>
             <uc:StackTextBox Header="Наименование заявки"

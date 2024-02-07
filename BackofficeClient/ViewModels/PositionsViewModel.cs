@@ -1,31 +1,24 @@
 ﻿using BackofficeClient.Models.DataGrid;
+using BackofficeClient.Models.Interfaces;
+using BackofficeClient.Views.MainWindowPages;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 namespace BackofficeClient.ViewModels;
 
-public class PositionsViewModel : ViewModelBase//, INterface1
+public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData//, INterface1
 {
 
     #region Объекты для привязки
 
-    public ObservableCollection<Position> AllItems { get; set; } = [];
+    public List<Position>? SelectedItems { get; set; } = [];
 
-    public ObservableCollection<Position> SelectedItems { get; set; } = [];
-
-    private ObservableCollection<Position> filteredItems = [];
-    public ObservableCollection<Position> FilteredItems
+    private ObservableCollection<Position> dataItems = [];
+    public ObservableCollection<Position> DataItems
     {
-        get => filteredItems;
-        set { filteredItems = value; OnPropertyChanged(); }
-    }
-
-    private bool isLoading = false;
-    public bool IsLoading
-    {
-        get => isLoading;
-        set { isLoading = value; OnPropertyChanged(); }
+        get => dataItems;
+        set { dataItems = value; OnPropertyChanged(); }
     }
 
     #region Поиск
@@ -289,72 +282,48 @@ public class PositionsViewModel : ViewModelBase//, INterface1
 
     #region Команды
 
-    public AsyncRelayCommand<object> FillingEditFields => new(async (parameter) =>
+    #region CUFD
+
+    public AsyncRelayCommand CreateDataCommnad => new(async () =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
-            {
-                return;
-            }
+            using DatabaseContext db = new();
 
-            var selectedItem = selectedItems[0];
-            if (selectedItems.Count == 1)
+            Models.Database.Request? request = db.Requests.FirstOrDefault(x => x.RequestNum == RequestNumberAdd);
+            Models.Database.Position create = new()
             {
-                NameMtrEdit = selectedItem.MtrName;
-                BasisEdit = selectedItem.Basis;
-                PositionNumberEdit = selectedItem.PositionNum;
-                DocNtdEdit = selectedItem.DocNtd;
-                AmountEdit = selectedItem.Amount;
-                MeasureEdit = selectedItem.Measure;
-                ManufacturerEdit = selectedItem.Manufacturer;
-            }
-            else
-            {
-                NameMtrEdit = null;
-                BasisEdit = null;
-                PositionNumberEdit = null;
-                DocNtdEdit = null;
-                AmountEdit = null;
-                MeasureEdit = null;
-                ManufacturerEdit = null;
-            }
+                RequestId = request?.RequestId,
+                SupState = "Новая", // Legacy
+                MtrName = MtrNameAdd,
+                Amount = AmountAdd,
+                Measure = MeasureAdd,
 
-            GroupMtrEdit = selectedItem.GroupMtr;
-            ProcedureGpbEdit = selectedItem.ProcedureGpb;
-            WinnerEdit = selectedItem.SupName;
-            CurrencyEdit = selectedItem.Currency;
-            ResponsibleEdit = selectedItem.Person;
-            IncPriceEdit = selectedItem.IncPrice;
-            IncPriceNdsEdit = selectedItem.IncPriceNds;
-            IncPriceCurrencyEdit = selectedItem.IncPriceCur;
-            IncPriceNdsCurrencyEdit = selectedItem.IncPriceCurNds;
-            TimingEdit = selectedItem.Timing;
-            TimingMaxEdit = selectedItem.TimingMax;
+                RequestNum = RequestNumberAdd,
+            };
+
+            db.Positions.Add(create);
+
+            db.SaveChanges();
+            LoadDataCommand.Execute(null);
+
         });
     });
 
-    public AsyncRelayCommand<object> SaveDataCommand => new(async (parameter) =>
+    public AsyncRelayCommand UpdateDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
+            if (SelectedItems == null || SelectedItems.Count < 1)
             {
                 return;
             }
 
             using DatabaseContext db = new();
-            foreach (var update in from selectedItem in selectedItems
+            foreach (var update in from selectedItem in SelectedItems
                                    let update = db.Positions.FirstOrDefault(r => r.PositionId.ToString() == selectedItem.PositionId)
                                    select update)
             {
-                if (update == null)
-                {
-                    return;
-                }
-
                 update.Currency = CurrencyEdit ?? "RUB";
                 update.GroupMtr = GroupMtrEdit;
                 update.ProcedureGpb = ProcedureGpbEdit;
@@ -367,7 +336,7 @@ public class PositionsViewModel : ViewModelBase//, INterface1
                 update.IncPriceCurNds = IncPriceNdsCurrencyEdit;
                 update.Person = ResponsibleEdit;
 
-                if (selectedItems.Count == 1)
+                if (SelectedItems.Count == 1)
                 {
                     update.MtrName = NameMtrEdit;
                     update.DocNtd = DocNtdEdit;
@@ -380,23 +349,67 @@ public class PositionsViewModel : ViewModelBase//, INterface1
             }
 
             db.SaveChanges();
-            DataLoadingCommand.Execute(null);
+            LoadDataCommand.Execute(null);
         });
-
     });
 
-    public AsyncRelayCommand<object> DeleteCommnad => new(async (parameter) =>
+    public AsyncRelayCommand FillingFieldsCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            var selectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
-            if (selectedItems == null || selectedItems.Count < 1)
+            if (SelectedItems == null || SelectedItems.Count < 1)
+            {
+                return;
+            }
+
+            var fill = SelectedItems[0];
+
+            GroupMtrEdit = fill.GroupMtr;
+            ProcedureGpbEdit = fill.ProcedureGpb;
+            WinnerEdit = fill.SupName;
+            CurrencyEdit = fill.Currency;
+            ResponsibleEdit = fill.Person;
+            IncPriceEdit = fill.IncPrice;
+            IncPriceNdsEdit = fill.IncPriceNds;
+            IncPriceCurrencyEdit = fill.IncPriceCur;
+            IncPriceNdsCurrencyEdit = fill.IncPriceCurNds;
+            TimingEdit = fill.Timing;
+            TimingMaxEdit = fill.TimingMax;
+
+            if (SelectedItems.Count == 1)
+            {
+                NameMtrEdit = fill.MtrName;
+                BasisEdit = fill.Basis;
+                PositionNumberEdit = fill.PositionNum;
+                DocNtdEdit = fill.DocNtd;
+                AmountEdit = fill.Amount;
+                MeasureEdit = fill.Measure;
+                ManufacturerEdit = fill.Manufacturer;
+            }
+            else
+            {
+                NameMtrEdit = null;
+                BasisEdit = null;
+                PositionNumberEdit = null;
+                DocNtdEdit = null;
+                AmountEdit = null;
+                MeasureEdit = null;
+                ManufacturerEdit = null;
+            }
+        });
+    });
+
+    public AsyncRelayCommand DeleteDataCommnad => new(async () =>
+    {
+        await Task.Run(() =>
+        {
+            if (SelectedItems == null || SelectedItems.Count < 1)
             {
                 return;
             }
 
             using DatabaseContext db = new();
-            foreach (var delete in from selectedItem in selectedItems
+            foreach (var delete in from selectedItem in SelectedItems
                                    let delete = db.Positions.FirstOrDefault(request => request.PositionId.ToString() == selectedItem.PositionId)
                                    where delete != null
                                    select delete)
@@ -405,75 +418,91 @@ public class PositionsViewModel : ViewModelBase//, INterface1
             }
 
             db.SaveChanges();
-            DataLoadingCommand.Execute(null);
+            LoadDataCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand DataFilteredCommand => new(async () =>
+    public RelayCommand ShowCreateWindowCommnad => new(() =>
+    {
+        _ = new AddPosition()
+        {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
+        };
+    });
+
+
+    #endregion
+
+    #region Load
+
+    public AsyncRelayCommand LoadDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
-            if (AllItems == null)
-            {
-                DataLoadingCommand.Execute(null);
-            }
-            if (AllItems == null)
-            {
-                return;
-            }
 
-            IEnumerable<Position> filteredItems = AllItems.AsEnumerable();
+            // LEGACY В одной таблице id инт в другой текст, что это ***********
 
-            if (!string.IsNullOrWhiteSpace(RequestNumberFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.RequestNum == RequestNumberFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(PositionNumberFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.PositionNum == PositionNumberFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(ProcedureGpbFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.ProcedureGpb == ProcedureGpbFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(ResponsibleFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.Person == ResponsibleFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(NameMtrFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.MtrName == NameMtrFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(CurrencyFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.Currency == CurrencyFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(BasisFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.Basis == BasisFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(GroupMtrFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.GroupMtr == GroupMtrFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(WinnerFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.SupName == WinnerFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(StateFilter))
-            {
-                filteredItems = filteredItems.Where(x => x.SupState == StateFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(LastChangeBeginFilter.ToString()))
-            {
-                filteredItems = filteredItems.Where(x => x.UpdatedAt >= LastChangeBeginFilter);
-            }
-            if (!string.IsNullOrWhiteSpace(LastChangeEndFilter.ToString()))
-            {
-                filteredItems = filteredItems.Where(x => x.UpdatedAt <= LastChangeEndFilter);
-            }
+            using DatabaseContext db = new();
 
-            FilteredItems = new(filteredItems);
+            DataItems = new(
+                    from position in db.Positions
+                    join vPosition in db.VPositions on new
+                    {
+                        PositionId = position.PositionId.ToString()
+                    } equals new
+                    {
+                        vPosition.PositionId
+                    }
+                    where string.IsNullOrWhiteSpace(RequestNumberFilter) || position.RequestNum == RequestNumberFilter
+                    where string.IsNullOrWhiteSpace(PositionNumberFilter) || position.PositionNum == PositionNumberFilter
+                    where string.IsNullOrWhiteSpace(ProcedureGpbFilter) || position.ProcedureGpb == ProcedureGpbFilter
+                    where string.IsNullOrWhiteSpace(ResponsibleFilter) || position.Person == ResponsibleFilter
+                    where string.IsNullOrWhiteSpace(NameMtrFilter) || position.MtrName == NameMtrFilter
+                    where string.IsNullOrWhiteSpace(CurrencyFilter) || position.Currency == CurrencyFilter
+                    where string.IsNullOrWhiteSpace(BasisFilter) || position.Basis == BasisFilter
+                    where string.IsNullOrWhiteSpace(GroupMtrFilter) || position.GroupMtr == GroupMtrFilter
+                    where string.IsNullOrWhiteSpace(WinnerFilter) || position.SupName == WinnerFilter
+                    where string.IsNullOrWhiteSpace(StateFilter) || position.SupState == StateFilter
+                    where string.IsNullOrWhiteSpace(LastChangeBeginFilter.ToString()) || position.UpdatedAt >= LastChangeBeginFilter
+                    where string.IsNullOrWhiteSpace(LastChangeEndFilter.ToString()) || position.UpdatedAt <= LastChangeEndFilter
+                    orderby vPosition.RequestNum, vPosition.ProcedureGpb, vPosition.PositionNum
+                    select new Position(vPosition.PositionId,
+                                        vPosition.RequestNum,
+                                        vPosition.RequestDate,
+                                        vPosition.PositionNum,
+                                        vPosition.MtrName,
+                                        vPosition.GroupMtr,
+                                        vPosition.DocNtd,
+                                        vPosition.Amount,
+                                        vPosition.Measure,
+                                        vPosition.DeliveryTime,
+                                        vPosition.Basis,
+                                        vPosition.Condition,
+                                        vPosition.Nmck,
+                                        vPosition.Currency,
+                                        vPosition.ProcedureGpb,
+                                        vPosition.ProcedureGpb4,
+                                        vPosition.SupState,
+                                        vPosition.Person,
+                                        vPosition.DateCustomerQuery,
+                                        vPosition.DateDocs,
+                                        vPosition.DateAgreement,
+                                        vPosition.DateAs,
+                                        vPosition.SupName,
+                                        vPosition.Timing,
+                                        vPosition.TimingMax,
+                                        vPosition.IncPrice,
+                                        vPosition.IncPriceNds,
+                                        vPosition.Manufacturer,
+                                        vPosition.IncPriceCur,
+                                        vPosition.IncPriceCurNds,
+                                        vPosition.ExchangeRate,
+                                        vPosition.OutPrice,
+                                        vPosition.OutPriceNds,
+                                        vPosition.OutPriceCur,
+                                        vPosition.OutPriceCurNds,
+                                        position.UpdatedAt,
+                                        position.SupObject));
         });
     });
 
@@ -496,103 +525,20 @@ public class PositionsViewModel : ViewModelBase//, INterface1
         });
     });
 
-    public AsyncRelayCommand DataLoadingCommand => new(async () =>
+    #endregion
+
+    #region DataGridCommand
+
+    public AsyncRelayCommand<object> SelectDataCommand => new(async (parameter) =>
     {
         await Task.Run(() =>
         {
-            using DatabaseContext db = new();
-            IsLoading = true;
-
-            // LEGACY В одной таблице id инт в другой текст, что это ***********
-
-            AllItems = new(
-                from position in db.Positions
-                join vPosition in db.VPositions on new
-                {
-                    PositionId = position.PositionId.ToString()
-                } equals new
-                {
-                    vPosition.PositionId
-                }
-                orderby vPosition.RequestNum, vPosition.ProcedureGpb, vPosition.PositionNum
-                select new Position(vPosition.PositionId,
-                                    vPosition.RequestNum,
-                                    vPosition.RequestDate,
-                                    vPosition.PositionNum,
-                                    vPosition.MtrName,
-                                    vPosition.GroupMtr,
-                                    vPosition.DocNtd,
-                                    vPosition.Amount,
-                                    vPosition.Measure,
-                                    vPosition.DeliveryTime,
-                                    vPosition.Basis,
-                                    vPosition.Condition,
-                                    vPosition.Nmck,
-                                    vPosition.Currency,
-                                    vPosition.ProcedureGpb,
-                                    vPosition.ProcedureGpb4,
-                                    vPosition.SupState,
-                                    vPosition.Person,
-                                    vPosition.DateCustomerQuery,
-                                    vPosition.DateDocs,
-                                    vPosition.DateAgreement,
-                                    vPosition.DateAs,
-                                    vPosition.SupName,
-                                    vPosition.Timing,
-                                    vPosition.TimingMax,
-                                    vPosition.IncPrice,
-                                    vPosition.IncPriceNds,
-                                    vPosition.Manufacturer,
-                                    vPosition.IncPriceCur,
-                                    vPosition.IncPriceCurNds,
-                                    vPosition.ExchangeRate,
-                                    vPosition.OutPrice,
-                                    vPosition.OutPriceNds,
-                                    vPosition.OutPriceCur,
-                                    vPosition.OutPriceCurNds,
-                                    position.UpdatedAt,
-                                    position.SupObject));
-
-            FilteredItems = AllItems;
+            SelectedItems = (parameter as System.Collections.IList)?.Cast<Position>().ToList();
+            FillingFieldsCommand.Execute(null);
         });
     });
 
-    public AsyncRelayCommand AddCommnad => new(async () =>
-    {
-        await Task.Run(() =>
-        {
-            using DatabaseContext db = new();
-
-            Models.Database.Position add = new()
-            {
-                RequestNum = RequestNumberAdd,
-                MtrName = MtrNameAdd,
-                Amount = AmountAdd,
-                Measure = MeasureAdd,
-            };
-
-            var asd = db.Positions.FirstOrDefault(x => x.RequestNum == add.RequestNum);
-            if (asd == null)
-            {
-                db.Positions.Add(add);
-            }
-            else
-            {
-                // Feature оповещение что заявка уже существует
-            }
-            db.SaveChanges();
-
-            DataFilteredCommand.Execute(null);
-        });
-    });
-
-    public RelayCommand ShowAddWindowCommnad => new(() =>
-    {
-        _ = new AddPosition()
-        {
-            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
-        };
-    });
+    #endregion
 
     #endregion
 

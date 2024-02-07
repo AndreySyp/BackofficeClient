@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:BackofficeClient.Views.Windows"
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+        xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
         
         d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
         Title="AddPosition" Height="200" Width="300">
@@ -15,27 +16,17 @@
     </Window.DataContext>
 
     <Grid>
-        <StackPanel>
+        <StackPanel Style="{StaticResource ResourceKey=Add-Window}">
+            <uc:StackTextBox Header="Заявка"
+                             Text="{Binding RequestNumberAdd}"/>
+            <uc:StackTextBox Header="Наименование МТР"
+                             Text="{Binding MtrNameAdd}"/>
+            <uc:StackTextBox Header="Количество"
+                             Text="{Binding AmountAdd}"/>
+            <uc:StackTextBox Header="Еденица измерения"
+                             Text="{Binding MeasureAdd}"/>
             <StackPanel Width="120">
-                <TextBlock Text="Заявка"></TextBlock>
-                <ComboBox SelectedValue="{Binding RequestNumberAdd}"
-                          IsEditable="True"/>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Наименование МТР"></TextBlock>
-                <TextBox Text="{Binding MtrNameAdd}"></TextBox>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Количество"></TextBlock>
-                <TextBox Text="{Binding AmountAdd}"></TextBox>
-            </StackPanel>
-            <StackPanel Width="120">
-                <TextBlock Text="Еденица измерения"></TextBlock>
-                <TextBox Text="{Binding MeasureAdd}"></TextBox>
-            </StackPanel>
-            
-            <StackPanel Width="120">
-                <Button Content="Добавить" Command="{Binding AddCommnad}"/>
+                <Button Content="Добавить" Command="{Binding CreateDataCommnad}"/>
             </StackPanel>
         </StackPanel>
     </Grid>
