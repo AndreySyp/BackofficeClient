@@ -1,22 +1,23 @@
 ﻿using BackofficeClient.Infrastructure.Extensions;
+using BackofficeClient.Models;
 using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Models.Interfaces;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
-namespace BackofficeClient.ViewModels;
+namespace BackofficeClient.ViewModels.PagesViewModels;
 
-public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData//<Request>
+public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData, ILoadComboBox
 {
 
     #region Объекты для привязки
 
     #region Общие
 
-    List<Request>? SelectedItems = [];
-
     private ObservableCollection<Request> dataItems = [];
+    private List<Request>? SelectedItems = [];
+
     public ObservableCollection<Request> DataItems
     {
         get => dataItems;
@@ -28,38 +29,39 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
     #region Поиск
 
     private string? requestNumberFilter;
+    private string? customerFilter;
+    private string? directionFilter;
+    private string? statusFilter;
+    private string? nameFilter;
+
     public string? RequestNumberFilter
     {
         get => requestNumberFilter;
         set { requestNumberFilter = value; OnPropertyChanged(); }
     }
 
-    private string? customerFilter;
     public string? CustomerFilter
     {
         get => customerFilter;
         set { customerFilter = value; OnPropertyChanged(); }
     }
 
-    private string? nameFilter;
-    public string? NameFilter
+    public string? DirectionFilter
     {
-        get => nameFilter;
-        set { nameFilter = value; OnPropertyChanged(); }
+        get => directionFilter;
+        set { directionFilter = value; OnPropertyChanged(); }
     }
 
-    private string? directioFilter;
-    public string? DirectioFilter
-    {
-        get => directioFilter;
-        set { directioFilter = value; OnPropertyChanged(); }
-    }
-
-    private string? statusFilter;
     public string? StatusFilter
     {
         get => statusFilter;
         set { statusFilter = value; OnPropertyChanged(); }
+    }
+
+    public string? NameFilter
+    {
+        get => nameFilter;
+        set { nameFilter = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -69,73 +71,77 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
     #region Одиночное
 
     private string? requestNumberEdit;
+    private string? nameEdit;
+
+    private DateTime? dateEdit;
+
     public string? RequestNumberEdit
     {
         get => requestNumberEdit;
         set { requestNumberEdit = value; OnPropertyChanged(); }
     }
 
-    private DateTime? dateEdit;
-    public DateTime? DateEdit
-    {
-        get => dateEdit;
-        set { dateEdit = value; OnPropertyChanged(); }
-    }
-
-    private string? nameEdit;
     public string? NameEdit
     {
         get => nameEdit;
         set { nameEdit = value; OnPropertyChanged(); }
     }
 
+    public DateTime? DateEdit
+    {
+        get => dateEdit;
+        set { dateEdit = value; OnPropertyChanged(); }
+    }
+
     #endregion
 
     #region Множественное
 
-    private string? priorityEdit;
-    public string? PriorityEdit
-    {
-        get => priorityEdit;
-        set { priorityEdit = value; OnPropertyChanged(); }
-    }
-
-    private string? commentEdit;
-    public string? CommentEdit
-    {
-        get => commentEdit;
-        set { commentEdit = value; OnPropertyChanged(); }
-    }
-
-    private string? customerEdit;
-    public string? CustomerEdit
-    {
-        get => customerEdit;
-        set { customerEdit = value; OnPropertyChanged(); }
-    }
-
     private string? directionEdit;
+    private string? tradeSignEdit;
+    private string? priorityEdit;
+    private string? customerEdit;
+    private string? commentEdit;
+
+    private bool toWarehouseEdit;
+    private bool toReserveEdit;
+
     public string? DirectionEdit
     {
         get => directionEdit;
         set { directionEdit = value; OnPropertyChanged(); }
     }
 
-    private string? tradeSignEdit;
     public string? TradeSignEdit
     {
         get => tradeSignEdit;
         set { tradeSignEdit = value; OnPropertyChanged(); }
     }
 
-    private bool toWarehouseEdit;
+    public string? PriorityEdit
+    {
+        get => priorityEdit;
+        set { priorityEdit = value; OnPropertyChanged(); }
+    }
+
+    public string? CustomerEdit
+    {
+        get => customerEdit;
+        set { customerEdit = value; OnPropertyChanged(); }
+    }
+
+    public string? CommentEdit
+    {
+        get => commentEdit;
+        set { commentEdit = value; OnPropertyChanged(); }
+    }
+
     public bool ToWarehouseEdit
     {
         get => toWarehouseEdit;
         set { toWarehouseEdit = value; OnPropertyChanged(); }
     }
 
-    private bool toReserveEdit;
     public bool ToReserveEdit
     {
         get => toReserveEdit;
@@ -149,60 +155,88 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
     #region Добавление
 
     private string? requestNumberAdd;
+    private string? customerAdd;
+    private string? priorityAdd;
+    private string? commentAdd;
+    private string? nameAdd;
+
+    private DateTime? dateAdd;
+
     public string? RequestNumberAdd
     {
         get => requestNumberAdd;
         set { requestNumberAdd = value; OnPropertyChanged(); }
     }
 
-    private string? customerAdd;
     public string? CustomerAdd
     {
         get => customerAdd;
         set { customerAdd = value; OnPropertyChanged(); }
     }
 
-    private DateTime? dateAdd;
-    public DateTime? DateAdd
-    {
-        get => dateAdd;
-        set { dateAdd = value; OnPropertyChanged(); }
-    }
-
-    private string? nameAdd;
-    public string? NameAdd
-    {
-        get => nameAdd;
-        set { nameAdd = value; OnPropertyChanged(); }
-    }
-
-    private string? commentAdd;
-    public string? CommentAdd
-    {
-        get => commentAdd;
-        set { commentAdd = value; OnPropertyChanged(); }
-    }
-
-    private string? priorityAdd;
     public string? PriorityAdd
     {
         get => priorityAdd;
         set { priorityAdd = value; OnPropertyChanged(); }
     }
 
+    public string? CommentAdd
+    {
+        get => commentAdd;
+        set { commentAdd = value; OnPropertyChanged(); }
+    }
+
+    public string? NameAdd
+    {
+        get => nameAdd;
+        set { nameAdd = value; OnPropertyChanged(); }
+    }
+
+    public DateTime? DateAdd
+    {
+        get => dateAdd;
+        set { dateAdd = value; OnPropertyChanged(); }
+    }
+
     #endregion
 
     #region ComboBox
 
-    public ObservableCollection<string>? PriorityItems { get; private set; }
+    private ObservableCollection<string>? tradeSignItems;
+    private ObservableCollection<string>? directionItems;
+    private ObservableCollection<string>? priorityItems;
+    private ObservableCollection<string>? customerItems;
+    private ObservableCollection<string>? statusItems;
 
-    public ObservableCollection<string>? CustomerItems { get; private set; }
+    public ObservableCollection<string>? TradeSignItems
+    {
+        get => tradeSignItems;
+        private set { tradeSignItems = value; OnPropertyChanged(); }
+    }
 
-    public ObservableCollection<string>? DirectionItems { get; private set; }
+    public ObservableCollection<string>? DirectionItems
+    {
+        get => directionItems;
+        private set { directionItems = value; OnPropertyChanged(); }
+    }
 
-    public ObservableCollection<string>? StatusItems { get; private set; }
+    public ObservableCollection<string>? PriorityItems
+    {
+        get => priorityItems;
+        private set { priorityItems = value; OnPropertyChanged(); }
+    }
 
-    public ObservableCollection<string>? TradeSignItems { get; private set; }
+    public ObservableCollection<string>? CustomerItems
+    {
+        get => customerItems;
+        private set { customerItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? StatusItems
+    {
+        get => statusItems;
+        private set { statusItems = value; OnPropertyChanged(); }
+    }
 
     #endregion
 
@@ -212,7 +246,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
 
     #region CUFD
 
-    public AsyncRelayCommand CreateDataCommnad => new(async () =>
+    public AsyncRelayCommand CreateDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -313,7 +347,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
         });
     });
 
-    public AsyncRelayCommand DeleteDataCommnad => new(async () =>
+    public AsyncRelayCommand DeleteDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -336,7 +370,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
         });
     });
 
-    public RelayCommand ShowCreateWindowCommnad => new(() =>
+    public RelayCommand ShowCreateWindowCommand => new(() =>
     {
         _ = new AddRequest()
         {
@@ -368,7 +402,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
             where string.IsNullOrWhiteSpace(RequestNumberFilter) || requests.RequestNum == RequestNumberFilter
             where string.IsNullOrWhiteSpace(CustomerFilter) || requests.Customer == CustomerFilter
             where string.IsNullOrWhiteSpace(NameFilter) || requests.RequestName == NameFilter
-            where string.IsNullOrWhiteSpace(DirectioFilter) || requests.PersonManager == DirectioFilter
+            where string.IsNullOrWhiteSpace(DirectionFilter) || requests.PersonManager == DirectionFilter
             where string.IsNullOrWhiteSpace(StatusFilter) || requests.SupState == StatusFilter
             orderby requests.RequestDate
             select new Request(viewRequests.RequestId,
@@ -400,7 +434,7 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
             RequestNumberFilter = null;
             CustomerFilter = null;
             NameFilter = null;
-            DirectioFilter = null;
+            DirectionFilter = null;
             StatusFilter = null;
         });
     });
@@ -422,50 +456,44 @@ public class RequestsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadDa
 
     #endregion
 
-    public void LoadComboBoxItems()
+    #region Функции
+
+    #region ComboBoxLoad
+
+    public async void ComboBoxStaticItemsLoad()
     {
-#pragma warning disable CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
-        using DatabaseContext db = new();
-
-        IEnumerable<string?> priority = db.Requests
-            .Select(r => r.Priority)
-            .Where(r => !string.IsNullOrWhiteSpace(r))
-            .Distinct();
-        PriorityItems = new(priority);
-
-        IEnumerable<string?> customer = db.Requests
-            .Select(r => r.Customer)
-            .Where(r => !string.IsNullOrWhiteSpace(r))
-            .Distinct()
-            .OrderBy(r => r);
-        CustomerItems = new(customer);
-
-        IEnumerable<string?> directionFilter = db.Requests
-            .Select(r => r.PersonManager)
-            .Where(r => !string.IsNullOrWhiteSpace(r))
-            .Distinct()
-            .OrderBy(r => r);
-        DirectionItems = new(directionFilter);
-
-        IEnumerable<string?> statusFilter = db.Requests
-            .Select(r => r.RequestState)
-            .Where(r => !string.IsNullOrWhiteSpace(r))
-            .Distinct()
-            .OrderBy(r => r);
-        StatusItems = new(statusFilter);
-
-        IEnumerable<string?> tradeSignItems = db.Requests
-            .Select(r => r.TradeSign)
-            .Where(r => !string.IsNullOrWhiteSpace(r))
-            .Distinct()
-            .OrderBy(r => r);
-        TradeSignItems = new(tradeSignItems);
-#pragma warning restore CS8620 // Аргумент запрещено использовать для параметра из-за различий в отношении допустимости значений NULL для ссылочных типов.
-
+        await Task.Run(() =>
+        {
+            PriorityItems = new(ComboBoxItems.PriorityItems);
+            TradeSignItems = new(ComboBoxItems.TradeSignItems);
+            DirectionItems = new(ComboBoxItems.DirectionItems);
+            StatusItems = new(ComboBoxItems.CurrencyItems);
+        });
     }
+
+    public async void ComboBoxDynamicItemsLoad()
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+#pragma warning disable CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            IEnumerable<string> customer = db.Requests
+                .Select(r => r.Customer)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+#pragma warning restore CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            CustomerItems = new(customer);
+        });
+    }
+
+    #endregion
+
+    #endregion
 
     public RequestsViewModel()
     {
-        LoadComboBoxItems();
+        ComboBoxStaticItemsLoad();
+        ComboBoxDynamicItemsLoad();
     }
 }

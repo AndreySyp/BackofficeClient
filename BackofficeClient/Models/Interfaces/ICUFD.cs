@@ -7,7 +7,7 @@ interface ICUFD
     /// <summary>
     /// Добавление данных
     /// </summary>
-    public AsyncRelayCommand CreateDataCommnad { get; }
+    public AsyncRelayCommand CreateDataCommand { get; }
 
     /// <summary>
     /// Изменение данных
@@ -22,11 +22,11 @@ interface ICUFD
     /// <summary>
     /// Удаление данных
     /// </summary>
-    public AsyncRelayCommand DeleteDataCommnad { get; }
+    public AsyncRelayCommand DeleteDataCommand { get; }
 
     /// <summary>
     /// Отображение окна для добавления
     /// </summary>
-    public RelayCommand ShowCreateWindowCommnad { get; }
+    public RelayCommand ShowCreateWindowCommand { get; }
 
 }

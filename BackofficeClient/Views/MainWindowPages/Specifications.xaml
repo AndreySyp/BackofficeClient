@@ -10,14 +10,14 @@
       Title="Specifications"
       
       xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
-      d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
+      d:DataContext="{d:DesignInstance Type=viewmodels:SpecificationsViewModel}"
       xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
       xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
       xmlns:fa="http://schemas.fontawesome.io/icons/"
       >
 
     <Page.DataContext>
-        <viewmodels:PositionsViewModel/>
+        <viewmodels:SpecificationsViewModel/>
     </Page.DataContext>
 
     <Grid Background="White">

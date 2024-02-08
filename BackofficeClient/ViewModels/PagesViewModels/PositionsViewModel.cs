@@ -1,110 +1,116 @@
-﻿using BackofficeClient.Models.DataGrid;
+﻿using BackofficeClient.Models;
+using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Models.Interfaces;
-using BackofficeClient.Views.MainWindowPages;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
-namespace BackofficeClient.ViewModels;
+namespace BackofficeClient.ViewModels.PagesViewModels;
 
-public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData//, INterface1
+public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData, ILoadComboBox
 {
 
     #region Объекты для привязки
 
-    public List<Position>? SelectedItems { get; set; } = [];
+    #region Общие
 
     private ObservableCollection<Position> dataItems = [];
+    private List<Position>? SelectedItems = [];
+
     public ObservableCollection<Position> DataItems
     {
         get => dataItems;
         set { dataItems = value; OnPropertyChanged(); }
     }
 
+    #endregion
+
     #region Поиск
 
-    private string? requestNumberFilter;
-    public string? RequestNumberFilter
-    {
-        get => requestNumberFilter;
-        set { requestNumberFilter = value; OnPropertyChanged(); }
-    }
-
     private string? positionNumberFilter;
+    private string? requestNumberFilter;
+    private string? procedureGpbFilter;
+    private string? responsibleFilter;
+    private string? currencyFilter;
+    private string? groupMtrFilter;
+    private string? nameMtrFilter;
+    private string? winnerFilter;
+    private string? basisFilter;
+    private string? stateFilter;
+
+    private DateTime? lastChangeEndFilter;
+    private DateTime? lastChangeBeginFilter;
+
     public string? PositionNumberFilter
     {
         get => positionNumberFilter;
         set { positionNumberFilter = value; OnPropertyChanged(); }
     }
 
-    private string? procedureGpbFilter;
+    public string? RequestNumberFilter
+    {
+        get => requestNumberFilter;
+        set { requestNumberFilter = value; OnPropertyChanged(); }
+    }
+
     public string? ProcedureGpbFilter
     {
         get => procedureGpbFilter;
         set { procedureGpbFilter = value; OnPropertyChanged(); }
     }
 
-    private string? responsibleFilter;
     public string? ResponsibleFilter
     {
         get => responsibleFilter;
         set { responsibleFilter = value; OnPropertyChanged(); }
     }
 
-    private string? nameMtrFilter;
-    public string? NameMtrFilter
-    {
-        get => nameMtrFilter;
-        set { nameMtrFilter = value; OnPropertyChanged(); }
-    }
-
-    private string? currencyFilter;
     public string? CurrencyFilter
     {
         get => currencyFilter;
         set { currencyFilter = value; OnPropertyChanged(); }
     }
 
-    private string? basisFilter;
-    public string? BasisFilter
-    {
-        get => basisFilter;
-        set { basisFilter = value; OnPropertyChanged(); }
-    }
-
-    private string? groupMtrFilter;
     public string? GroupMtrFilter
     {
         get => groupMtrFilter;
         set { groupMtrFilter = value; OnPropertyChanged(); }
     }
 
-    private string? winnerFilter;
+    public string? NameMtrFilter
+    {
+        get => nameMtrFilter;
+        set { nameMtrFilter = value; OnPropertyChanged(); }
+    }
+
     public string? WinnerFilter
     {
         get => winnerFilter;
         set { winnerFilter = value; OnPropertyChanged(); }
     }
 
-    private string? stateFilter;
+    public string? BasisFilter
+    {
+        get => basisFilter;
+        set { basisFilter = value; OnPropertyChanged(); }
+    }
+
     public string? StateFilter
     {
         get => stateFilter;
         set { stateFilter = value; OnPropertyChanged(); }
     }
 
-    private DateTime? lastChangeBeginFilter;
-    public DateTime? LastChangeBeginFilter
-    {
-        get => lastChangeBeginFilter;
-        set { lastChangeBeginFilter = value; OnPropertyChanged(); }
-    }
-
-    private DateTime? lastChangeEndFilter;
     public DateTime? LastChangeEndFilter
     {
         get => lastChangeEndFilter;
         set { lastChangeEndFilter = value; OnPropertyChanged(); }
+    }
+
+    public DateTime? LastChangeBeginFilter
+    {
+        get => lastChangeBeginFilter;
+        set { lastChangeBeginFilter = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -248,32 +254,95 @@ public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadD
 
     #region Добавление
 
-    private string? requestAdd;
+    private string? requestNumberAdd;
+    private string? mtrNameAdd;
+    private string? measureAdd;
+
+    private int? amountAdd;
+
     public string? RequestNumberAdd
     {
-        get => requestAdd;
-        set { requestAdd = value; OnPropertyChanged(); }
+        get => requestNumberAdd;
+        set { requestNumberAdd = value; OnPropertyChanged(); }
     }
 
-    private string? mtrNameAdd;
     public string? MtrNameAdd
     {
         get => mtrNameAdd;
         set { mtrNameAdd = value; OnPropertyChanged(); }
     }
 
-    private int? amountAdd;
+    public string? MeasureAdd
+    {
+        get => measureAdd;
+        set { measureAdd = value; OnPropertyChanged(); }
+    }
+
     public int? AmountAdd
     {
         get => amountAdd;
         set { amountAdd = value; OnPropertyChanged(); }
     }
 
-    private string? measureAdd;
-    public string? MeasureAdd
+    #endregion
+
+    #region ComboBox
+
+    private ObservableCollection<string>? requestNumberItems;
+    private ObservableCollection<string>? procedureGpbItems;
+    private ObservableCollection<string>? groupMtrItems;
+    private ObservableCollection<string>? currencyItems;
+    private ObservableCollection<string>? measureItems;
+    private ObservableCollection<string>? winnerItems;
+    private ObservableCollection<string>? statusItems;
+    private ObservableCollection<string>? personItems;
+
+    public ObservableCollection<string>? RequestNumberItems
     {
-        get => measureAdd;
-        set { measureAdd = value; OnPropertyChanged(); }
+        get => requestNumberItems;
+        private set { requestNumberItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? ProcedureGpbItems
+    {
+        get => procedureGpbItems;
+        private set { procedureGpbItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? GroupMtrItems
+    {
+        get => groupMtrItems;
+        private set { groupMtrItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? CurrencyItems
+    {
+        get => currencyItems;
+        private set { currencyItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? WinnerItems
+    {
+        get => winnerItems;
+        private set { winnerItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? MeasureItems
+    {
+        get => measureItems;
+        private set { measureItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? StatusItems
+    {
+        get => statusItems;
+        private set { statusItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? PersonItems
+    {
+        get => personItems;
+        private set { personItems = value; OnPropertyChanged(); }
     }
 
     #endregion
@@ -284,7 +353,7 @@ public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadD
 
     #region CUFD
 
-    public AsyncRelayCommand CreateDataCommnad => new(async () =>
+    public AsyncRelayCommand CreateDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -399,7 +468,7 @@ public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadD
         });
     });
 
-    public AsyncRelayCommand DeleteDataCommnad => new(async () =>
+    public AsyncRelayCommand DeleteDataCommand => new(async () =>
     {
         await Task.Run(() =>
         {
@@ -422,14 +491,13 @@ public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadD
         });
     });
 
-    public RelayCommand ShowCreateWindowCommnad => new(() =>
+    public RelayCommand ShowCreateWindowCommand => new(() =>
     {
         _ = new AddPosition()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner,
         };
     });
-
 
     #endregion
 
@@ -542,8 +610,61 @@ public class PositionsViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadD
 
     #endregion
 
+    #region Функции
+
+    public async void ComboBoxStaticItemsLoad()
+    {
+        await Task.Run(() =>
+        {
+            StatusItems = new(ComboBoxItems.StatusItems);
+            CurrencyItems = new(ComboBoxItems.CurrencyItems);
+            PersonItems = new(ComboBoxItems.PersonItems);
+            MeasureItems = new(ComboBoxItems.MeasureItems);
+        });
+    }
+
+    public async void ComboBoxDynamicItemsLoad()
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+#pragma warning disable CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            IEnumerable<string> procedureGpbItems = db.Positions
+                .Select(r => r.ProcedureGpb)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+
+            IEnumerable<string> groupMtrItems = db.Positions
+                .Select(r => r.GroupMtr)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+
+            IEnumerable<string> winnerItems = db.Positions
+                .Select(r => r.SupName)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+
+            IEnumerable<string> requestNumberItems = db.Positions
+                .Select(r => r.RequestNum)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+#pragma warning restore CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            ProcedureGpbItems = new(procedureGpbItems);
+            GroupMtrItems = new(groupMtrItems);
+            WinnerItems = new(winnerItems);
+            RequestNumberItems = new(requestNumberItems);
+        });
+    }
+
+    #endregion
+
     public PositionsViewModel()
     {
-
+        ComboBoxStaticItemsLoad();
+        ComboBoxDynamicItemsLoad();
     }
 }

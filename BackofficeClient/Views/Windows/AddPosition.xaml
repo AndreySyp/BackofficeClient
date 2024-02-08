@@ -3,30 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BackofficeClient.Views.Windows"
         mc:Ignorable="d"
-        xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
-        xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
         
-        d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
-        Title="AddPosition" Height="200" Width="300">
+        xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
+        xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
+        d:DataContext="{d:DesignInstance Type=vm:PositionsViewModel}"
+        d:DesignHeight="200" 
+        d:DesignWidth="300"
+        Title="AddPosition">
     
     <Window.DataContext>
-        <viewmodels:PositionsViewModel/>
+        <vm:PositionsViewModel/>
     </Window.DataContext>
 
     <Grid>
         <StackPanel Style="{StaticResource ResourceKey=Add-Window}">
-            <uc:StackTextBox Header="Заявка"
-                             Text="{Binding RequestNumberAdd}"/>
+            <uc:StackComboBox Header="Заявка"
+                              Text="{Binding RequestNumberAdd}"
+                              ItemsSource="{Binding RequestNumberItems}"/>
             <uc:StackTextBox Header="Наименование МТР"
                              Text="{Binding MtrNameAdd}"/>
             <uc:StackTextBox Header="Количество"
                              Text="{Binding AmountAdd}"/>
-            <uc:StackTextBox Header="Еденица измерения"
-                             Text="{Binding MeasureAdd}"/>
+            <uc:StackComboBox Header="Еденица измерения"
+                              Text="{Binding MeasureAdd}"
+                              ItemsSource="{Binding MeasureItems}"/>
             <StackPanel Width="120">
-                <Button Content="Добавить" Command="{Binding CreateDataCommnad}"/>
+                <Button Content="Добавить" Command="{Binding CreateDataCommand}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

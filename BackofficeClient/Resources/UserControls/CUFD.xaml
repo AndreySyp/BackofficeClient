@@ -9,11 +9,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel Style="{StaticResource ResourceKey=CUFD}">
-            <Button Command="{Binding ShowCreateWindowCommnad}"
+            <Button Command="{Binding ShowCreateWindowCommand}"
                     ToolTip="Добавить заявку">
                 <fa:ImageAwesome Icon="PlusSquare"/>
             </Button>
-            <Button Command="{Binding DeleteDataCommnad}"
+            <Button Command="{Binding DeleteDataCommand}"
                     ToolTip="Удалить заявку">
                 <fa:ImageAwesome Icon="MinusSquare"/>
             </Button>

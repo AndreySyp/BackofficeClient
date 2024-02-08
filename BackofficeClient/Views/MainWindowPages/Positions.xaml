@@ -3,28 +3,18 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
       mc:Ignorable="d" 
       
       xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
-      xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
-	  xmlns:extension="clr-namespace:BackofficeClient.Infrastructure.Extensions" 
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
-      d:DataContext="{d:DesignInstance Type=viewmodels:PositionsViewModel}"
+      xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
+      d:DataContext="{d:DesignInstance Type=vm:PositionsViewModel}"
       d:DesignHeight="450" 
       d:DesignWidth="800"
-      Title="Positions"
-      >
+      Title="Positions">
 
     <Page.DataContext>
-        <viewmodels:PositionsViewModel/>
+        <vm:PositionsViewModel/>
     </Page.DataContext>
-
-    <Page.Resources>
-        <ObjectDataProvider x:Key="SettingColumns"
-                         ObjectType="{x:Type extension:DataGridExtension}"
-                         MethodName="GetDataGridSettingColumns"/>
-    </Page.Resources>
 
     <Grid Background="White"  >
         <Grid.ColumnDefinitions>
@@ -40,26 +30,32 @@
                     <ScrollViewer>
                         <StackPanel>
                             <StackPanel>
-                                <uc:StackTextBox Header="Номер заявки" 
-                                                 Text="{Binding RequestNumberFilter}"/>
+                                <uc:StackComboBox Header="Номер заявки" 
+                                                  Text="{Binding RequestNumberFilter}"
+                                                  ItemsSource="{Binding RequestNumberItems}"/>
                                 <uc:StackTextBox Header="Номер позиции" 
                                                  Text="{Binding PositionNumberFilter}"/>
-                                <uc:StackTextBox Header="Процедура ЭТП" 
-                                                 Text="{Binding ProcedureGpbFilter}"/>
-                                <uc:StackTextBox Header="Ответственный" 
-                                                 Text="{Binding ResponsibleFilter}"/>
+                                <uc:StackComboBox Header="Процедура ЭТП" 
+                                                  Text="{Binding ProcedureGpbFilter}"
+                                                  ItemsSource="{Binding ProcedureGpbItems}"/>
+                                <uc:StackComboBox Header="Ответственный" 
+                                                  Text="{Binding ResponsibleFilter}"
+                                                  ItemsSource="{Binding PersonItems}"/>
                                 <uc:StackTextBox Header="Наименование МТР" 
                                                  Text="{Binding NameMtrFilter}"/>
-                                <uc:StackTextBox Header="Валюта" 
-                                                 Text="{Binding CurrencyFilter}"/>
+                                <uc:StackComboBox Header="Валюта" 
+                                                  Text="{Binding CurrencyFilter}"
+                                                  ItemsSource="{Binding CurrencyItems}"/>
                                 <uc:StackTextBox Header="Базис поставки" 
                                                  Text="{Binding BasisFilter}"/>
-                                <uc:StackTextBox Header="Группа МТР" 
-                                                 Text="{Binding GroupMtrFilter}"/>
+                                <uc:StackComboBox Header="Группа МТР" 
+                                                  Text="{Binding GroupMtrFilter}"
+                                                  ItemsSource="{Binding GroupMtrItems}"/>
                                 <uc:StackTextBox Header="Победитель/Поставщик" 
                                                  Text="{Binding WinnerFilter}"/>
-                                <uc:StackTextBox Header="Текущий статус" 
-                                                 Text="{Binding StateFilter}"/>
+                                <uc:StackComboBox Header="Текущий статус" 
+                                                  Text="{Binding StateFilter}"
+                                                  ItemsSource="{Binding StatusItems}"/>
                                 <uc:StackDoubleDatePicker Header="Полседнее изменение" 
                                                           SelectedDateStart="{Binding LastChangeBeginFilter}"
                                                           SelectedDateEnd="{Binding LastChangeEndFilter}"/>
@@ -84,8 +80,9 @@
                                                          Text="{Binding DocNtdEdit}"/>
                                         <uc:StackTextBox Header="Количество" 
                                                          Text="{Binding AmountEdit}"/>
-                                        <uc:StackTextBox Header="Единица измерения" 
-                                                         Text="{Binding MeasureEdit}"/>
+                                        <uc:StackComboBox Header="Единица измерения" 
+                                                         Text="{Binding MeasureEdit}"
+                                                          ItemsSource="{Binding MeasureItems}"/>
                                         <uc:StackTextBox Header="Базис" 
                                                          Text="{Binding BasisEdit}"/>
                                         <uc:StackTextBox Header="Номер позиции" 
@@ -96,18 +93,22 @@
                                 </Expander>
                                 <Expander Header="Множественное редактирование" IsExpanded="True">
                                     <StackPanel>
-                                        <uc:StackTextBox Header="Группа МТР" 
-                                                         Text="{Binding GroupMtrEdit}"/>
-                                        <uc:StackTextBox Header="Процедура ЭТП" 
-                                                         Text="{Binding ProcedureGpbEdit}"/>
-                                        <uc:StackTextBox Header="Победитель/Поставщик" 
-                                                         Text="{Binding WinnerEdit}"/>
+                                        <uc:StackComboBox Header="Группа МТР" 
+                                                         Text="{Binding GroupMtrEdit}"
+                                                          ItemsSource="{Binding GroupMtrItems}"/>
+                                        <uc:StackComboBox Header="Процедура ЭТП" 
+                                                         Text="{Binding ProcedureGpbEdit}"
+                                                          ItemsSource="{Binding ProcedureGpbItems}"/>
+                                        <uc:StackComboBox Header="Победитель/Поставщик" 
+                                                          Text="{Binding WinnerEdit}"
+                                                          ItemsSource="{Binding WinnerItems}"/>
                                         <uc:StackTextBox Header="Срок поставки" 
                                                          Text="{Binding TimingEdit}"/>
                                         <uc:StackTextBox Header="Максимальный срок поставки" 
                                                          Text="{Binding TimingMaxEdit}"/>
-                                        <uc:StackTextBox Header="Валюта" 
-                                                         Text="{Binding CurrencyEdit}"/>
+                                        <uc:StackComboBox Header="Валюта" 
+                                                          Text="{Binding CurrencyEdit}"
+                                                          ItemsSource="{Binding CurrencyItems}"/>
                                         <uc:StackTextBox Header="Вх. ст. товара, руб. без НДС" 
                                                          Text="{Binding IncPriceEdit}"/>
                                         <uc:StackTextBox Header="Ст. в валюте, без НДС" 
@@ -116,8 +117,9 @@
                                                          Text="{Binding IncPriceNdsEdit}"/>
                                         <uc:StackTextBox Header="Ст. в валюте, с НДС" 
                                                          Text="{Binding IncPriceNdsCurrencyEdit}"/>
-                                        <uc:StackTextBox Header="Ответственный" 
-                                                         Text="{Binding ResponsibleEdit}"/>
+                                        <uc:StackComboBox Header="Ответственный" 
+                                                          Text="{Binding ResponsibleEdit}"
+                                                          ItemsSource="{Binding PersonItems}"/>
                                     </StackPanel>
                                 </Expander>
                             </StackPanel>

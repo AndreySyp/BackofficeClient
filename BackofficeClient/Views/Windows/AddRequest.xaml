@@ -3,16 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
+        mc:Ignorable="d"
         
         xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
-        
-        d:DataContext="{d:DesignInstance Type=viewmodels:RequestsViewModel}"
-        mc:Ignorable="d"
-        Title="AddRequest" Height="300" Width="300">
+        xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
+        d:DataContext="{d:DesignInstance Type=vm:RequestsViewModel}"
+        d:DesignHeight="300"
+        d:DesignWidth="300"
+        Title="AddRequest">
 
     <Window.DataContext>
-        <viewmodels:RequestsViewModel/>
+        <vm:RequestsViewModel/>
     </Window.DataContext>
 
     <Grid>
@@ -33,7 +34,7 @@
                               ItemsSource="{Binding PriorityItems}"/>
             
             <StackPanel Width="120">
-                <Button Content="Добавить" Command="{Binding CreateDataCommnad}"/>
+                <Button Content="Добавить" Command="{Binding CreateDataCommand}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -2,21 +2,20 @@
 using BackofficeClient.Views.MainWindowPages;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace BackofficeClient.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public Page? _CurrentPage;
+    public Page? currentPage;
     public Page? CurrentPage
     {
-        get => _CurrentPage;
+        get => currentPage;
         set
         {
-            _CurrentPage = value;
+            currentPage = value;
 
-            if (_CurrentPage?.DataContext is ILoadData s)
+            if (currentPage?.DataContext is ILoadData s)
             {
                 s.LoadDataCommand.Execute(null);
             }
@@ -31,11 +30,15 @@ public class MainWindowViewModel : ViewModelBase
     private readonly Page pageAgreementConditions = new AgreementConditions();
     private readonly Page pageSpecifications = new Specifications();
 
-    public ICommand PageRequestsClick => new RelayCommand(() => CurrentPage = pageRequests);
-    public ICommand PagePositionsClick => new RelayCommand(() => CurrentPage = pagePositions);
-    public ICommand PageProceduresClick => new RelayCommand(() => CurrentPage = pageProcedures);
-    public ICommand PageAgreementConditionsClick => new RelayCommand(() => CurrentPage = pageAgreementConditions);
-    public ICommand PageSpecificationsClick => new RelayCommand(() => CurrentPage = pageSpecifications);
+    public RelayCommand PageRequestsClick => new(() => CurrentPage = pageRequests);
+
+    public RelayCommand PagePositionsClick => new(() => CurrentPage = pagePositions);
+
+    public RelayCommand PageProceduresClick => new(() => CurrentPage = pageProcedures);
+
+    public RelayCommand PageAgreementConditionsClick => new(() => CurrentPage = pageAgreementConditions);
+
+    public RelayCommand PageSpecificationsClick => new(() => CurrentPage = pageSpecifications);
 
 
     private bool isLoading = false;
@@ -45,7 +48,7 @@ public class MainWindowViewModel : ViewModelBase
         set { isLoading = value; OnPropertyChanged(); }
     }
 
-    public RelayCommand LoadCommnad => new(() =>
+    public RelayCommand LoadCommand => new(() =>
     {
         if (CurrentPage?.DataContext is ILoadData s)
         {
