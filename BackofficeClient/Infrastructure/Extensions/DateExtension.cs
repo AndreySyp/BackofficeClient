@@ -2,7 +2,7 @@
 
 public static class DateExtension
 {
-    public static DateTime ToDateTime(this DateOnly? dateOnly)
+    public static DateTime? ToDateTime(this DateOnly? dateOnly)
     {
         if (dateOnly == null)
         {

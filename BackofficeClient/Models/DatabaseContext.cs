@@ -25,6 +25,10 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<TradeSign> TradeSigns { get; set; }
 
+    public virtual DbSet<VProcedure> VProcedures { get; set; }
+
+    public virtual DbSet<Procedure> Procedures { get; set; }
+
 #if DEBUG
     private static readonly string str = "Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111; User Id= asamoilov; ";
 #else
@@ -2294,6 +2298,35 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.SupState)
                 .HasComment("Статус заявки")
                 .HasColumnName("sup_state");
+        });
+
+        modelBuilder.Entity<VProcedure>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_procedure", "src");
+
+            entity.Property(e => e.GroupMtr).HasColumnName("group_mtr");
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.LastTkpLink).HasColumnName("last_tkp_link");
+            entity.Property(e => e.ProcedureDateEnd).HasColumnName("Дата окончания приема заявок");
+            entity.Property(e => e.ProcedureDateBeg).HasColumnName("Дата публикации");
+            entity.Property(e => e.DealDate).HasColumnName("Дата регистрации сделки");
+            entity.Property(e => e.Nr).HasColumnName("Количество заявок");
+            entity.Property(e => e.Np).HasColumnName("Количество позиций");
+            entity.Property(e => e.ProcedureName).HasColumnName("Наименование процедуры");
+            entity.Property(e => e.RequestNum).HasColumnName("Номер заявки");
+            entity.Property(e => e.ProcedureGpb).HasColumnName("Процедура ГПБ");
+            entity.Property(e => e.ProcedureGpb4).HasColumnName("Процедура ГПБ на 4");
+            entity.Property(e => e.SupState).HasColumnName("Статус закупки");
+            entity.Property(e => e.SumIncPriceNds).HasColumnName("Сумма с НДС");
+
+            entity.Property(e => e.Members).HasColumnName("Участники");
+            entity.Property(e => e.SupName).HasColumnName("Победители");
+            entity.Property(e => e.ProcedureComment).HasColumnName("Комментарий");
+            entity.Property(e => e.Person).HasColumnName("Ответственные");
+            entity.Property(e => e.SumIncPrice).HasColumnName("Сумма");
+
         });
 
         OnModelCreatingPartial(modelBuilder);
