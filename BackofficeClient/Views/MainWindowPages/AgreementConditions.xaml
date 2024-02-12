@@ -1,118 +1,98 @@
 ﻿<Page x:Class="BackofficeClient.Views.MainWindowPages.AgreementConditions"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:BackofficeClient.Views.MainWindowPages"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="AgreementConditions"
-            xmlns:viewmodels="clr-namespace:BackofficeClient.ViewModels" 
-      d:DataContext="{d:DesignInstance Type=viewmodels:AgreementConditionsViewModel}"
-      xmlns:a="clr-namespace:BackofficeClient.Views.MainWindowPages"
-      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:fa="http://schemas.fontawesome.io/icons/"
-      >
+      
+      xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
+      xmlns:vm="clr-namespace:BackofficeClient.ViewModels" 
+      d:DataContext="{d:DesignInstance Type=vm:AgreementConditionsViewModel}"
+      d:DesignHeight="450" 
+      d:DesignWidth="800"
+      Title="AgreementConditions">
+
 
     <Page.DataContext>
-        <viewmodels:AgreementConditionsViewModel/>
+        <vm:AgreementConditionsViewModel/>
     </Page.DataContext>
 
     <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
-            <ColumnDefinition Width="1.5*" MaxWidth="200" MinWidth="130"></ColumnDefinition>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*" MaxWidth="200" MinWidth="130"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredItems}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FillingEditFields}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </DataGrid>
+        <uc:СustomizedMainDataGrid/>
 
-        <StackPanel Grid.Column="1">
-            <StackPanel Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right">
-                <fa:ImageAwesome Icon="Spinner" Spin="{Binding IsLoading}" SpinDuration="4" Height="20" Width="20"/>
-                <Button Content="Загрузить" Command="{Binding DataLoadingCommand}"></Button>
-            </StackPanel>
-
+        <Grid Style="{StaticResource ResourceKey=Main-Menu-Interactions}">
             <TabControl>
                 <TabItem Header="Поиск">
-                    <StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Номер заявки" ></TextBlock>
-                            <TextBox Text=""></TextBox>
+                    <ScrollViewer>
+                        <StackPanel>
+                            <StackPanel>
+                                <uc:StackTextBox Header="Номер заявки" 
+                                                 Text=""/>
+                                <uc:StackTextBox Header="Процедура ЭТП" 
+                                                 Text=""/>
+                                <uc:StackTextBox Header="Рег. Номер" 
+                                                 Text=""/>
+                                <uc:StackComboBox Header="Статус" 
+                                                  Text=""
+                                                  ItemsSource="{Binding n}"/>
+                                <uc:StackDatePicker Header="Дата изменения" 
+                                                    SelectedDate=""/>
+                                <uc:StackTextBox Header="Идентификатор сделки" 
+                                                  Text=""/>
+                                <uc:StackComboBox Header="Напрвление ЦЗС" 
+                                                  Text=""
+                                                  ItemsSource="{Binding n}"/>
+                                <uc:StackComboBox Header="Ответственный" 
+                                                  Text=""
+                                                  ItemsSource="{Binding n}"/>
+
+                                <StackPanel>
+                                    <Button Content="Очистить фильтр" 
+                                        Command="{Binding ClearFilterCommand}"/>
+                                </StackPanel>
+
+                            </StackPanel>
                         </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Процедура ЭТП" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Рег. Номер" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Статус" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Дата изменения" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Идентификатор сделки" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Напрвление ЦЗС" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        <StackPanel Width="120">
-                            <TextBlock Text="Ответственный" ></TextBlock>
-                            <TextBox Text=""></TextBox>
-                        </StackPanel>
-                        
-                        <StackPanel Width="120">
-                            <Button Content="Поиск" Command="{Binding DataFilteredCommand}"></Button>
-                            <Button Content="Очистить фильтр" Command="{Binding ClearFilterCommand}"></Button>
-                        </StackPanel>
-                    </StackPanel>
+                    </ScrollViewer>
                 </TabItem>
 
                 <TabItem Header="Редакирование">
-                    <StackPanel>
-                        <Expander Header="Одиночное редактирование" IsExpanded="False">
+                    <ScrollViewer>
+                        <StackPanel>
+                            <uc:CUFD/>
                             <StackPanel>
-                                <Button Background="Red" Content="Редактировать условия выбранной сделки"></Button>
+                                <Expander Header="Одиночное редактирование" IsExpanded="False">
+                                    <StackPanel>
+                                        <StackPanel>
+                                            <Button Background="Red" Content="Редактировать условия выбранной сделки"></Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander Header="Множественное редактирование" IsExpanded="True">
+                                    <StackPanel>
+                                        <uc:StackComboBox Header="Корректировка статуса сделки" 
+                                                          Text=""
+                                                          ItemsSource="{Binding n}"/>
+                                        <uc:StackDatePicker Header="Корректировка Даты сделки" 
+                                                            SelectedDate="{Binding n}"/>
+                                        <uc:StackComboBox Header="Изменение Ответсвенного по сделке" 
+                                                          Text=""
+                                                          ItemsSource="{Binding n}"/>
+                                    </StackPanel>
+                                </Expander>
                             </StackPanel>
-                        </Expander>
-                        <Expander Header="Множественное редактирование" IsExpanded="True">
-                            <StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Корректировка статуса сделки" ></TextBlock>
-                                    <TextBox Text=""></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Корректировка Даты сделки" ></TextBlock>
-                                    <TextBox Text=""></TextBox>
-                                </StackPanel>
-                                <StackPanel Width="120">
-                                    <TextBlock Text="Изменение Ответсвенного по сделке" ></TextBlock>
-                                    <TextBox Text=""></TextBox>
-                                </StackPanel>
-                            </StackPanel>
-                        </Expander>
-                        <StackPanel Width="120">
-                            <Button Background="Red" Content="Сохранить изменения"></Button>
-                            <Button Content="Сбросить" Command="{Binding FillingEditFields}"></Button>
                         </StackPanel>
-                    </StackPanel>
+                    </ScrollViewer>
                 </TabItem>
 
-                <TabItem Background="Red" Header="Экспорт/Импорт">
+                <TabItem Header="Экспорт/Импорт">
                     <StackPanel>
-                        <StackPanel Width="120">
+                        <StackPanel>
                             <Button Background="Red" Content="Импорт данных(Условия сделок)" Command=""></Button>
                             <Button Background="Red" Content="Свод по поставкам" Command=""></Button>
                             <Button Background="Red" Content="Перечень сделок" Command=""></Button>
@@ -123,9 +103,7 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
-
             </TabControl>
-        </StackPanel>
-
+        </Grid>
     </Grid>
 </Page>

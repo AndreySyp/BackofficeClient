@@ -29,6 +29,12 @@ public partial class DatabaseContext : DbContext
 
     public virtual DbSet<Procedure> Procedures { get; set; }
 
+    public virtual DbSet<VDeal> VDeals { get; set; }
+
+    public virtual DbSet<Deal> Deals { get; set; }
+
+    public virtual DbSet<Supplier> Suppliers { get; set; }
+
 #if DEBUG
     private static readonly string str = "Server=localhost; Port=5432; User Id=postgres; Database=request_report; ApplicationName = 'BackOfficeDBClient'; Password=1111; User Id= asamoilov; ";
 #else
@@ -2328,6 +2334,194 @@ public partial class DatabaseContext : DbContext
             entity.Property(e => e.SumIncPrice).HasColumnName("Сумма");
 
         });
+
+        modelBuilder.Entity<VDeal>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("v_deal", "cnt");
+
+            entity.Property(e => e.Agent).HasColumnName("agent");
+            entity.Property(e => e.AgentDateType).HasColumnName("agent_date_type");
+            entity.Property(e => e.AgentDaysAmount).HasColumnName("agent_days_amount");
+            entity.Property(e => e.AgentDaysType).HasColumnName("agent_days_type");
+            entity.Property(e => e.AgnetDoc).HasColumnName("agnet_doc");
+            entity.Property(e => e.CashGapDaysAvg).HasColumnName("cash_gap_days_avg");
+            entity.Property(e => e.Comment).HasColumnName("comment");
+            entity.Property(e => e.CommissionPercent)
+                .HasPrecision(28, 4)
+                .HasComment("Комиссия, %")
+                .HasColumnName("commission_percent");
+            entity.Property(e => e.CreatedAtHhmm).HasColumnName("created_at_hhmm");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.Currency)
+                .HasMaxLength(3)
+                .HasColumnName("currency");
+            entity.Property(e => e.Customer).HasColumnName("customer");
+            entity.Property(e => e.CustomerDateType).HasColumnName("customer_date_type");
+            entity.Property(e => e.CustomerDaysAmount).HasColumnName("customer_days_amount");
+            entity.Property(e => e.CustomerDaysType).HasColumnName("customer_days_type");
+            entity.Property(e => e.CustomerDoc).HasColumnName("customer_doc");
+            entity.Property(e => e.CustomerPriceCurNds).HasColumnName("customer_price_cur_nds");
+            entity.Property(e => e.CustomerPriceNds).HasColumnName("customer_price_nds");
+            entity.Property(e => e.DealCreatedAtXls).HasColumnName("deal_created_at_xls");
+            entity.Property(e => e.DealId).HasColumnName("deal_id");
+            entity.Property(e => e.DealName).HasColumnName("deal_name");
+            entity.Property(e => e.DealState)
+                .HasComment("Статус")
+                .HasColumnName("deal_state");
+            entity.Property(e => e.DealUpdatedAt).HasColumnName("deal_updated_at");
+            entity.Property(e => e.DealUpdatedAtXls).HasColumnName("deal_updated_at_xls");
+            entity.Property(e => e.DeliveryDateFact)
+                .HasComment("Дата поставки фактическая")
+                .HasColumnName("delivery_date_fact");
+            entity.Property(e => e.DeliveryDatePlan)
+                .HasComment("Дата поставки плановая")
+                .HasColumnName("delivery_date_plan");
+            entity.Property(e => e.DocDate).HasColumnName("doc_date");
+            entity.Property(e => e.DocNum).HasColumnName("doc_num");
+            entity.Property(e => e.DocRequestNum).HasColumnName("doc_request_num");
+            entity.Property(e => e.ExchangeRate).HasColumnName("exchange_rate");
+            entity.Property(e => e.ExpenseAgent)
+                .HasComment("Д/з Агентское в-е")
+                .HasColumnName("expense_agent");
+            entity.Property(e => e.ExpenseIc)
+                .HasComment("Д/з ИК")
+                .HasColumnName("expense_ic");
+            entity.Property(e => e.ExpenseLogistic)
+                .HasComment("Д/з Логистика")
+                .HasColumnName("expense_logistic");
+            entity.Property(e => e.ExpenseOther)
+                .HasComment("Д/з Прочие")
+                .HasColumnName("expense_other");
+            entity.Property(e => e.ExpenseTotal).HasColumnName("expense_total");
+            entity.Property(e => e.GroupMtr).HasColumnName("group_mtr");
+            entity.Property(e => e.IsComplicated)
+                .HasComment("Сложная сделка")
+                .HasColumnName("is_complicated");
+            entity.Property(e => e.IsObsAccount)
+                .HasComment("ОБС счет")
+                .HasColumnName("is_obs_account");
+            entity.Property(e => e.IsSended1cdoc)
+                .HasComment("Отправлено в 1С-Документооборот")
+                .HasColumnName("is_sended_1cdoc");
+            entity.Property(e => e.MarginPercent)
+                .HasPrecision(28, 4)
+                .HasComment("Маржинальность сделки, %")
+                .HasColumnName("margin_percent");
+            entity.Property(e => e.Person).HasColumnName("person");
+            entity.Property(e => e.PersonManager)
+                .HasComment("Направление ЦЗС")
+                .HasColumnName("person_manager");
+            entity.Property(e => e.PersonUpdatedBy).HasColumnName("person_updated_by");
+            entity.Property(e => e.PriceDsPercent)
+                .HasPrecision(28, 4)
+                .HasComment("Стоимость ДС, %")
+                .HasColumnName("price_ds_percent");
+            entity.Property(e => e.ProcedureGpb).HasColumnName("procedure_gpb");
+            entity.Property(e => e.ProcedureId).HasColumnName("procedure_id");
+            entity.Property(e => e.ProductionTime)
+                .HasComment("Срок изготовления, дн")
+                .HasColumnName("production_time");
+            entity.Property(e => e.Scheme).HasColumnName("scheme");
+            entity.Property(e => e.StrRequestNum).HasColumnName("str_request_num");
+            entity.Property(e => e.Supplier).HasColumnName("supplier");
+            entity.Property(e => e.SupplierDateType).HasColumnName("supplier_date_type");
+            entity.Property(e => e.SupplierDaysAmount).HasColumnName("supplier_days_amount");
+            entity.Property(e => e.SupplierDaysType).HasColumnName("supplier_days_type");
+            entity.Property(e => e.SupplierDoc).HasColumnName("supplier_doc");
+            entity.Property(e => e.SupplierPriceCurNds).HasColumnName("supplier_price_cur_nds");
+            entity.Property(e => e.SupplierPriceNds).HasColumnName("supplier_price_nds");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+        });
+
+        modelBuilder.Entity<Supplier>(entity =>
+        {
+            entity.HasKey(e => e.SupplierId).HasName("pk_ref_supplier_supplier_id");
+
+            entity.ToTable("supplier", "ref", tb => tb.HasComment("Данные по Поставщикам"));
+
+            entity.HasIndex(e => e.Supplier1, "ix_ref_supplier_supplier");
+
+            entity.Property(e => e.SupplierId)
+                .HasComment("Идентификатор")
+                .HasColumnName("supplier_id");
+            entity.Property(e => e.Affiliation)
+                .HasComment("Принадлежность поставщика")
+                .HasColumnName("affiliation");
+            entity.Property(e => e.BossFio)
+                .HasComment("ФИО Руководителя")
+                .HasColumnName("boss_fio");
+            entity.Property(e => e.BossPost)
+                .HasDefaultValueSql("'Директор'::text")
+                .HasComment("Должность руководителя")
+                .HasColumnName("boss_post");
+            entity.Property(e => e.City)
+                .HasComment("Город")
+                .HasColumnName("city");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasComment("Создано")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy)
+                .HasDefaultValueSql("CURRENT_USER")
+                .HasComment("Логин")
+                .HasColumnName("created_by");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.Inn)
+                .HasMaxLength(12)
+                .HasComment("ИНН")
+                .HasColumnName("inn");
+            entity.Property(e => e.IsAutomaticInit)
+                .HasDefaultValue(false)
+                .HasColumnName("is_automatic_init");
+            entity.Property(e => e.IsForeignSupplier)
+                .HasDefaultValue(false)
+                .HasComment("Иностранный поставщик (признак отстутствия ИНН, КПП и ОГРН в РФ)")
+                .HasColumnName("is_foreign_supplier");
+            entity.Property(e => e.Kpp)
+                .HasMaxLength(9)
+                .HasComment("КПП")
+                .HasColumnName("kpp");
+            entity.Property(e => e.Ogrn)
+                .HasMaxLength(15)
+                .HasComment("ОГРН")
+                .HasColumnName("ogrn");
+            entity.Property(e => e.OpfFull)
+                .HasComment("Полное ОПФ")
+                .HasColumnName("opf_full");
+            entity.Property(e => e.OpfShort)
+                .HasComment("Краткое ОПФ")
+                .HasColumnName("opf_short");
+            entity.Property(e => e.ProcUuid)
+                .HasComment("UUID из Процессора")
+                .HasColumnName("proc_uuid");
+            entity.Property(e => e.Supplier1)
+                .HasComment("Краткое наименование Поставщика")
+                .HasColumnName("supplier");
+            entity.Property(e => e.SupplierFullname)
+                .HasComment("Полное наименование Поставщика")
+                .HasColumnName("supplier_fullname");
+            entity.Property(e => e.SupplierNameReport)
+                .HasComment("Наименование для отчета")
+                .HasColumnName("supplier_name_report");
+            entity.Property(e => e.SupplierNoOpf)
+                .HasComment("Краткое наименование без ОПФ")
+                .HasColumnName("supplier_no_opf");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("now()")
+                .HasComment("Дата и время последнего обновления")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy)
+                .HasComment("ФИО внесшего изменения")
+                .HasColumnName("updated_by");
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }
