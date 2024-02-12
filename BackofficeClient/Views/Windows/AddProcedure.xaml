@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BackofficeClient.Views.Windows"
+        mc:Ignorable="d"
         
         xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
-        xmlns:vm="clr-namespace:BackofficeClient.ViewModels" 
+        xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
         d:DataContext="{d:DesignInstance Type=vm:ProceduresViewModel}"
-        d:DesignHeight="250" 
-        d:DesignWidth="300"
+        Height="250" 
+        Width="300"
         Title="AddPosition">
 
     <Window.DataContext>

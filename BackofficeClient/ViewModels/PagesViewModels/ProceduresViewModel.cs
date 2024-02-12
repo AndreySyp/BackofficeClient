@@ -1,13 +1,14 @@
 ﻿using BackofficeClient.Infrastructure.Extensions;
+using BackofficeClient.Models;
 using BackofficeClient.Models.DataGrid;
 using BackofficeClient.Models.Interfaces;
 using BackofficeClient.Views.Windows;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
-namespace BackofficeClient.ViewModels;
+namespace BackofficeClient.ViewModels.PagesViewModels;
 
-public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//, ICUFD, , ILoadComboBox
+public class ProceduresViewModel : ViewModelBase, ICUFD, IDataGridCommand, ILoadData, ILoadComboBox
 {
     #region Объекты для привязки
 
@@ -198,6 +199,39 @@ public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//,
 
     #endregion
 
+    #region ComboBox
+
+    private ObservableCollection<string>? priorityItems;
+    private ObservableCollection<string>? personItems;
+    private ObservableCollection<string>? winnerItems;
+    private ObservableCollection<string>? statusItems;
+
+    public ObservableCollection<string>? PriorityItems
+    {
+        get => priorityItems;
+        private set { priorityItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? PersonItems
+    {
+        get => personItems;
+        private set { personItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? WinnerItems
+    {
+        get => winnerItems;
+        private set { winnerItems = value; OnPropertyChanged(); }
+    }
+
+    public ObservableCollection<string>? StatusItems
+    {
+        get => statusItems;
+        private set { statusItems = value; OnPropertyChanged(); }
+    }
+
+    #endregion
+
     #endregion
 
     #region Команды
@@ -219,7 +253,7 @@ public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//,
             where string.IsNullOrWhiteSpace(PersonFilter) || vProcedures.Person == PersonFilter
             where string.IsNullOrWhiteSpace(WinnerFilter) || vProcedures.SupName == WinnerFilter
             where string.IsNullOrWhiteSpace(StatusFilter) || vProcedures.SupState == StatusFilter
-            where IsDealRegistrationFilter == null || (IsDealRegistrationFilter == true && vProcedures.DealDate != null) || (IsDealRegistrationFilter == false && vProcedures.DealDate == null)
+            where IsDealRegistrationFilter == null || IsDealRegistrationFilter == true && vProcedures.DealDate != null || IsDealRegistrationFilter == false && vProcedures.DealDate == null
             select new Procedure(vProcedures.Id,
             vProcedures.ProcedureGpb,
             vProcedures.ProcedureGpb4,
@@ -265,6 +299,7 @@ public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//,
         {
             SelectedItems = (parameter as System.Collections.IList)?.Cast<Procedure>().ToList();
             FillingFieldsCommand.Execute(null);
+            LotSum();
         });
     });
 
@@ -329,7 +364,7 @@ public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//,
                                    select update)
             {
                 update.ProcedureGpb = ProcedureGpbEdit;
-                update.ProcedureGpb = ProcedureGpb4Edit;
+                update.ProcedureGpb4 = ProcedureGpb4Edit;
                 update.ProcedureName = ProcedureNameEdit;
                 update.ProcedureDateBeg = PublicationDateEdit.ToDateOnly();
                 update.ProcedureDateEnd = TradingEndDateEdit.ToDateOnly();
@@ -412,4 +447,61 @@ public class ProceduresViewModel : ViewModelBase, ILoadData, IDataGridCommand//,
 
     #endregion
 
+    #region Функции
+
+    #region ComboBoxLoad
+
+    public async void ComboBoxStaticItemsLoad()
+    {
+        await Task.Run(() =>
+        {
+            PriorityItems = new(ComboBoxItems.PriorityItems);
+            PersonItems = new(ComboBoxItems.PersonItems);
+            StatusItems = new(ComboBoxItems.StatusItems);
+        });
+    }
+
+    public async void ComboBoxDynamicItemsLoad()
+    {
+        await Task.Run(() =>
+        {
+            using DatabaseContext db = new();
+#pragma warning disable CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            IEnumerable<string> customer = db.VProcedures
+                .Select(r => r.SupName)
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Distinct()
+                .OrderBy(r => r);
+#pragma warning restore CS8619 // Допустимость значения NULL для ссылочных типов в значении не соответствует целевому типу.
+            WinnerItems = new(customer);
+        });
+    }
+
+    #endregion
+
+    private void LotSum()
+    {
+        decimal sum = 0m;
+        decimal sumNds = 0m;
+
+        if (SelectedItems != null)
+        {
+            foreach (var procedure in SelectedItems)
+            {
+                sum += procedure.SumIncPrice ?? 0;
+                sumNds += procedure.SumIncPriceNds ?? 0;
+            }
+        }
+
+        LotSumEdit = sum;
+        LotSumNdsEdit = sumNds;
+    }
+
+    #endregion
+
+    public ProceduresViewModel()
+    {
+        ComboBoxStaticItemsLoad();
+        ComboBoxDynamicItemsLoad();
+    }
 }

@@ -8,8 +8,8 @@
         xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
         xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
         d:DataContext="{d:DesignInstance Type=vm:RequestsViewModel}"
-        d:DesignHeight="300"
-        d:DesignWidth="300"
+        Height="300"
+        Width="300"
         Title="AddRequest">
 
     <Window.DataContext>

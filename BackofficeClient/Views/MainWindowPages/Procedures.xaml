@@ -5,9 +5,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       mc:Ignorable="d" 
       
-      
       xmlns:uc="clr-namespace:BackofficeClient.Resources.UserControls"
-      xmlns:vm="clr-namespace:BackofficeClient.ViewModels" 
+      xmlns:vm="clr-namespace:BackofficeClient.ViewModels.PagesViewModels" 
       d:DataContext="{d:DesignInstance Type=vm:ProceduresViewModel}"
       d:DesignHeight="450" 
       d:DesignWidth="800"
@@ -38,11 +37,14 @@
                                 <uc:StackTextBox Header="Процедура ЭТП" 
                                                  Text="{Binding ProcedureGpbFilter}"/>
                                 <uc:StackComboBox Header="Ответственный" 
-                                                  Text="{Binding PersonFilter}"/>
+                                                  Text="{Binding PersonFilter}"
+                                                  ItemsSource="{Binding PersonItems}"/>
                                 <uc:StackComboBox Header="Победитель" 
-                                                  Text="{Binding WinnerFilter}"/>
-                                <uc:StackTextBox Header="Текущий статус" 
-                                                 Text="{Binding StatusFilter}"/>
+                                                  Text="{Binding WinnerFilter}"
+                                                  ItemsSource="{Binding WinnerItems}"/>
+                                <uc:StackComboBox Header="Текущий статус" 
+                                                 Text="{Binding StatusFilter}"
+                                                 ItemsSource="{Binding StatusItems}"/>
                                 <uc:StackCheckBoxNull Header="Наличие зарегестрированной сделки" 
                                                       IsChecked="{Binding IsDealRegistrationFilter}"/>
                                 <StackPanel>
@@ -83,8 +85,8 @@
 
                                         <uc:StackTextBox Header="Статус закупки" 
                                                          Text="{Binding StatusEdit}"/>
-                                        <uc:StackTextBox Header="Дата" 
-                                                         Text="{Binding DateEdit}"/>
+                                        <uc:StackDatePicker Header="Дата" 
+                                                            SelectedDate="{Binding DateEdit}"/>
                                     </StackPanel>
                                 </Expander>
                                 <Expander Header="Инф" IsExpanded="True">
